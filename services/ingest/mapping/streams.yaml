@@ -1,0 +1,44 @@
+# Value stream → framework subtree mapping (human-editable, review before emit).
+# prefix = APQC PCF v8 hierarchy-id prefix. function_unit = default tag
+# (one of: sales marketing customer_care finance procurement_scm production
+#  operations products it networks) — consultants retag in workshops.
+# max_level = deepest PCF level emitted into the baseline (3 = Process level).
+#
+# NOTE: the OTS function-unit enum has no HR unit; H2R subtrees default to
+# `operations` until the enum grows (docs/TODO-implementation-plan.md Phase 3).
+
+o2c:
+  label: Order to Cash
+  subtrees:
+    - { framework: apqc, prefix: "3.5", function_unit: sales, max_level: 3 }        # Develop and manage sales plans (incl. manage sales orders)
+    - { framework: apqc, prefix: "4.4", function_unit: operations, max_level: 3 }   # Manage logistics and warehousing
+    - { framework: apqc, prefix: "9.2", function_unit: finance, max_level: 3 }      # Perform revenue accounting (invoice → AR)
+
+p2p:
+  label: Procure to Pay
+  subtrees:
+    - { framework: apqc, prefix: "4.2", function_unit: procurement_scm, max_level: 3 }  # Procure materials and services
+    - { framework: apqc, prefix: "9.6", function_unit: finance, max_level: 3 }          # Process accounts payable and expense reimbursements
+
+c2m:
+  label: Concept to Market
+  subtrees:
+    - { framework: apqc, prefix: "2.2", function_unit: products, max_level: 3 }     # Generate and define new product/service ideas
+    - { framework: apqc, prefix: "2.3", function_unit: products, max_level: 3 }     # Develop products and services
+    - { framework: apqc, prefix: "3.3", function_unit: marketing, max_level: 3 }    # Develop and manage marketing plans
+
+h2r:
+  label: Hire to Retire
+  subtrees:
+    - { framework: apqc, prefix: "7.2", function_unit: operations, max_level: 3 }   # Recruit, source, and select employees
+    - { framework: apqc, prefix: "7.3", function_unit: operations, max_level: 3 }   # Onboarding, training, development
+    - { framework: apqc, prefix: "7.5", function_unit: operations, max_level: 3 }   # Reward and retain employees
+    - { framework: apqc, prefix: "7.6", function_unit: operations, max_level: 3 }   # Redeploy and retire employees
+    - { framework: apqc, prefix: "9.5", function_unit: finance, max_level: 3 }      # Process payroll
+
+t2r:
+  label: Trouble to Resolve
+  subtrees:
+    - { framework: apqc, prefix: "6.2", function_unit: customer_care, max_level: 3 } # Plan and manage customer service contacts
+    - { framework: apqc, prefix: "6.3", function_unit: customer_care, max_level: 3 } # Service products after sales
+    - { framework: apqc, prefix: "6.5", function_unit: customer_care, max_level: 3 } # Evaluate operations and satisfaction

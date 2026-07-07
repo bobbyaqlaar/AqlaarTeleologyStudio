@@ -1,0 +1,205 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:ManageEmployeeRequisitions_7_2_1 a owl:Class ;
+    rdfs:label "Manage employee requisitions"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:RecruitSourceCandidates_7_2_2 ;
+    dcterms:source "APQC PCF v8 7.2.1 (PCF ID 21698)" ;
+    rdfs:comment "Handling the requirements for new employees. Create and open job requisitions by clearly defining the job descriptions. Post these requirements internally and externally, and modify them as appropriate. Manage the dates of the whole requisition process."@en ;
+    rdfs:subClassOf ots:RecruitSourceAndSelectEmployees_7_2 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:AdministerPayroll_7_5_4 a owl:Class ;
+    rdfs:label "Administer Payroll"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageCollectEmployeeSuggestionsAndPerformEmployeeResearch_7_5_5 ;
+    dcterms:source "APQC PCF v8 7.5.4 (PCF ID 10497)" ;
+    rdfs:comment "Managing the sum of all financial records of salaries for an employee, including wages, bonuses, and deductions. Use a payroll management system to deal with the financial aspects of employees' salaries, allowances, deductions, gross pay, net pay, etc. Generate pay slips for a specific period."@en ;
+    rdfs:subClassOf ots:RewardAndRetainEmployees_7_5 .
+
+ots:DevelopAndManageRewardRecognitionAndMotivationPrograms_7_5_1 a owl:Class ;
+    rdfs:label "Develop and manage reward, recognition, and motivation programs"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageAndAdministerBenefits_7_5_2 ;
+    dcterms:source "APQC PCF v8 7.5.1 (PCF ID 21438)" ;
+    rdfs:comment "Developing a salary/compensation structure and plan; developing a benefits and reward plan; develop commission plan; performing competitive analyses of benefits and rewards; identifying compensation requirements based on compensation, benefits, and HR policies; administering compensation, commission, and rewards to employees; and rewarding and motivating employees."@en ;
+    rdfs:subClassOf ots:RewardAndRetainEmployees_7_5 .
+
+ots:DevelopAndTrainEmployees_7_3_4 a owl:Class ;
+    rdfs:label "Develop and train employees"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:DevelopAndManageRewardRecognitionAndMotivationPrograms_7_5_1 ;
+    dcterms:source "APQC PCF v8 7.3.4 (PCF ID 10473)" ;
+    rdfs:comment "Establish organizational development needs for employees. Creating a link between employee and organizational development needs."@en ;
+    rdfs:subClassOf ots:ManageEmployeeOnboardingTrainingAndDevelopment_7_3 .
+
+ots:ManageAndAdministerBenefits_7_5_2 a owl:Class ;
+    rdfs:label "Manage and administer benefits"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageEmployeeAssistanceAndRetention_7_5_3 ;
+    dcterms:source "APQC PCF v8 7.5.2 (PCF ID 10495)" ;
+    rdfs:comment "Managing and ensuring benefits enrollment by the employees. Process any benefit claims made by the employees. Balance the estimated amount and entitled amount of benefits."@en ;
+    rdfs:subClassOf ots:RewardAndRetainEmployees_7_5 .
+
+ots:ManageAndProcessPayrollTaxes_9_5_3 a owl:Class ;
+    rdfs:label "Manage and process payroll taxes"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC PCF v8 9.5.3 (PCF ID 10755)" ;
+    rdfs:comment "Deducting and paying taxes from employees' salaries."@en ;
+    rdfs:subClassOf ots:ProcessPayroll_9_5 .
+
+ots:ManageApplicantInformation_7_2_5 a owl:Class ;
+    rdfs:label "Manage applicant information"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageEmployeeOnboarding_7_3_1 ;
+    dcterms:source "APQC PCF v8 7.2.5 (PCF ID 10444)" ;
+    rdfs:comment "Creating and maintaining a system for managing the information of applicants. Create records for all candidates who apply. Maintain and track information through the use applicant-tracking systems."@en ;
+    rdfs:subClassOf ots:RecruitSourceAndSelectEmployees_7_2 .
+
+ots:ManageCollectEmployeeSuggestionsAndPerformEmployeeResearch_7_5_5 a owl:Class ;
+    rdfs:label "Manage/Collect employee suggestions and perform employee research"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManagePromotionAndDemotionProcess_7_6_1 ;
+    dcterms:source "APQC PCF v8 7.5.5 (PCF ID 10530)" ;
+    rdfs:comment "Procuring and handling suggestions from employees, and performing research on employees. Manage and analyze the programs that help the organization to tap into employee ideas for improving the organization's processes and/or products. Use surveys, focus groups, and other data-gathering methods to find out the attitudes, opinions, and feelings of members of an organization."@en ;
+    rdfs:subClassOf ots:RewardAndRetainEmployees_7_5 .
+
+ots:ManageEmployeeAssistanceAndRetention_7_5_3 a owl:Class ;
+    rdfs:label "Manage employee assistance and retention"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:AdministerPayroll_7_5_4 ;
+    dcterms:source "APQC PCF v8 7.5.3 (PCF ID 21439)" ;
+    rdfs:comment "Managing activities centered around delivering programs to support work/life balance for employees; developing family support systems; reviewing retention and motivation indicators; and reviewing compensation plans."@en ;
+    rdfs:subClassOf ots:RewardAndRetainEmployees_7_5 .
+
+ots:ManageEmployeeCareerDevelopment_7_3_3 a owl:Class ;
+    rdfs:label "Manage employee career development"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:DevelopAndTrainEmployees_7_3_4 ;
+    dcterms:source "APQC PCF v8 7.3.3 (PCF ID 21700)" ;
+    rdfs:comment "Establishing employee development guidelines. Lay out career paths and plans for individual employees. Manage the development of their skills to enhance their skills, ability, and knowledge."@en ;
+    rdfs:subClassOf ots:ManageEmployeeOnboardingTrainingAndDevelopment_7_3 .
+
+ots:ManageEmployeeOnboarding_7_3_1 a owl:Class ;
+    rdfs:label "Manage employee onboarding"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageEmployeePerformance_7_3_2 ;
+    dcterms:source "APQC PCF v8 7.3.1 (PCF ID 10469)" ;
+    rdfs:comment "Creating and maintaining various employee on-boarding programs typically known as induction programs in order to ensure that the new employees are effectively introduced to the organization and its existing employees. Examine and evaluate the performance of these induction programs. Execute these programs on the ground level."@en ;
+    rdfs:subClassOf ots:ManageEmployeeOnboardingTrainingAndDevelopment_7_3 .
+
+ots:ManageEmployeePerformance_7_3_2 a owl:Class ;
+    rdfs:label "Manage employee performance"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageEmployeeCareerDevelopment_7_3_3 ;
+    dcterms:source "APQC PCF v8 7.3.2 (PCF ID 10470)" ;
+    rdfs:comment "Defining individual performance objectives. Review performance in order to provide appraisals. Evaluate the efficiency and effectiveness of the current performance program. Update it regularly."@en ;
+    rdfs:subClassOf ots:ManageEmployeeOnboardingTrainingAndDevelopment_7_3 .
+
+ots:ManageNewHireReHire_7_2_4 a owl:Class ;
+    rdfs:label "Manage new hire/re-hire"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageApplicantInformation_7_2_5 ;
+    dcterms:source "APQC PCF v8 7.2.4 (PCF ID 10443)" ;
+    rdfs:comment "Creating and making job offers to the selected candidates. Fairly negotiate the job offers. Agree on terms with the candidate to complete the hiring process."@en ;
+    rdfs:subClassOf ots:RecruitSourceAndSelectEmployees_7_2 .
+
+ots:ManagePay_9_5_2 a owl:Class ;
+    rdfs:label "Manage pay"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessPayrollTaxes_9_5_3 ;
+    dcterms:source "APQC PCF v8 9.5.2 (PCF ID 10754)" ;
+    rdfs:comment "Managing the total payments made in employees payroll, including bonuses and compensation."@en ;
+    rdfs:subClassOf ots:ProcessPayroll_9_5 .
+
+ots:ManagePromotionAndDemotionProcess_7_6_1 a owl:Class ;
+    rdfs:label "Manage promotion and demotion process"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageSeparation_7_6_2 ;
+    dcterms:source "APQC PCF v8 7.6.1 (PCF ID 10512)" ;
+    rdfs:comment "Administering the process of promoting and demoting employees. Design a system for advancing or demoting an employee's rank or position. Leverage techniques such as horizontal promotion, vertical promotion, dry promotion, and involuntary/voluntary demotion."@en ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_7_6 .
+
+ots:ManageSeparation_7_6_2 a owl:Class ;
+    rdfs:label "Manage separation"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:RelocateEmployeesAndManageAssignments_7_6_3 ;
+    dcterms:source "APQC PCF v8 7.6.2 (PCF ID 10513)" ;
+    rdfs:comment "Managing the process of employee separation, including leaves of absence, resignations, discharges, and layoffs. Inform the employee of the termination. Complete paperwork for continuation of benefits. Enter employment status change into system."@en ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_7_6 .
+
+ots:RecruitSourceCandidates_7_2_2 a owl:Class ;
+    rdfs:label "Recruit/Source candidates"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ScreenAndSelectCandidates_7_2_3 ;
+    dcterms:source "APQC PCF v8 7.2.2 (PCF ID 10440)" ;
+    rdfs:comment "Recruiting new candidates for deployment across various functional areas inside the organization. Select methods for sourcing new employees. Manage relationships with third-party agencies. Stage recruitment fairs and drives. Manage employee referral programs."@en ;
+    rdfs:subClassOf ots:RecruitSourceAndSelectEmployees_7_2 .
+
+ots:RelocateEmployeesAndManageAssignments_7_6_3 a owl:Class ;
+    rdfs:label "Relocate employees and manage assignments"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ReportTime_9_5_1 ;
+    dcterms:source "APQC PCF v8 7.6.3 (PCF ID 17055)" ;
+    rdfs:comment "Managing the relocation of employees in order to carry out assignments. Manage internal business processes to transfer employees, their families, and/or entire departments of a business to a new location."@en ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_7_6 .
+
+ots:ReportTime_9_5_1 a owl:Class ;
+    rdfs:label "Report time"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManagePay_9_5_2 ;
+    dcterms:source "APQC PCF v8 9.5.1 (PCF ID 10753)" ;
+    rdfs:comment "Recording the reporting time of employees on-site. Track working days, salary calculations, holidays taken, number of hours spend in the office, billing hours, etc."@en ;
+    rdfs:subClassOf ots:ProcessPayroll_9_5 .
+
+ots:ScreenAndSelectCandidates_7_2_3 a owl:Class ;
+    rdfs:label "Screen and select candidates"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageNewHireReHire_7_2_4 ;
+    dcterms:source "APQC PCF v8 7.2.3 (PCF ID 20123)" ;
+    rdfs:comment "Evaluating and selecting potential employees through interviews, tests, etc."@en ;
+    rdfs:subClassOf ots:RecruitSourceAndSelectEmployees_7_2 .
+
+ots:ProcessPayroll_9_5 a owl:Class ;
+    rdfs:label "Process payroll"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC PCF v8 9.5 (PCF ID 10732)" ;
+    rdfs:comment "Handling reporting time, managing pay, and processing taxes from salaries. Pay employees. Withhold taxes. Confirm the correct funds are paid to the correct government agency."@en ;
+    rdfs:subClassOf ots:HireToRetire .
+
+ots:RedeployAndRetireEmployees_7_6 a owl:Class ;
+    rdfs:label "Redeploy and retire employees"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC PCF v8 7.6 (PCF ID 10413)" ;
+    rdfs:comment "Managing employee mobility and retirement. Manage the process of employee promotion and demotion. Administer separation, retirement, and leaves of absence. Outplace employees. Deploy personnel. Relocate employees in order to manage assignments."@en ;
+    rdfs:subClassOf ots:HireToRetire .
+
+ots:ManageEmployeeOnboardingTrainingAndDevelopment_7_3 a owl:Class ;
+    rdfs:label "Manage employee onboarding, training, and development"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC PCF v8 7.3 (PCF ID 20599)" ;
+    rdfs:comment "Assisting employees in developing their capabilities, and providing them counseling services. Handle the orientation and deployment of the employees. Administer the performance of employees. Administer the development and enhancement of the employees. Provide training and development programs for employees."@en ;
+    rdfs:subClassOf ots:HireToRetire .
+
+ots:HireToRetire a owl:Class ;
+    rdfs:label "Hire to retire"@en .
+
+ots:RecruitSourceAndSelectEmployees_7_2 a owl:Class ;
+    rdfs:label "Recruit, source, and select employees"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC PCF v8 7.2 (PCF ID 10410)" ;
+    rdfs:comment "Determining and handling employee requirements. Recruit or source the candidates as per the requirements. Screen and select the most appropriate candidates. Take care of the newly hired and re-hired employees. Maintain records of information for all applicants."@en ;
+    rdfs:subClassOf ots:HireToRetire .
+
+ots:RewardAndRetainEmployees_7_5 a owl:Class ;
+    rdfs:label "Reward and retain employees"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC PCF v8 7.5 (PCF ID 10412)" ;
+    rdfs:comment "Creating frameworks for rewarding and recognizing employees with the objective of retaining them. Create and manage programs for provision of rewards, recognition, and motivation. Manage and administer the benefits for employees. Help assist and retain employees. Administer payroll to employees."@en ;
+    rdfs:subClassOf ots:HireToRetire .
+

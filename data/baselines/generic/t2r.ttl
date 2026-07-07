@@ -1,0 +1,143 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:PlanAndManageCustomerServiceWorkforce_6_2_1 a owl:Class ;
+    rdfs:label "Plan and manage customer service workforce"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ManageCustomerServiceProblemsRequestsAndInquiries_6_2_2 ;
+    dcterms:source "APQC PCF v8 6.2.1 (PCF ID 10387)" ;
+    rdfs:comment "Creating and administering the workforce deployed for the customer service process. Forecast the customer workforce needs to correctly schedule the workforce. Track the utility of the workforce deployed. Examine the interactions between the customer and customer service representatives to achieve high quality."@en ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:EvaluateAndManageWarrantyPerformance_6_5_4 a owl:Class ;
+    rdfs:label "Evaluate and manage warranty performance"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:EvaluateRecallPerformance_6_5_5 ;
+    dcterms:source "APQC PCF v8 6.5.4 (PCF ID 12672)" ;
+    rdfs:comment "Assessing the cost and effectiveness of warranties."@en ;
+    rdfs:subClassOf ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 .
+
+ots:EvaluateRecallPerformance_6_5_5 a owl:Class ;
+    rdfs:label "Evaluate recall performance"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC PCF v8 6.5.5 (PCF ID 20121)" ;
+    rdfs:comment "Reviewing customer service feedback to identify areas in which improvements can be made. Engage with management to discuss issues."@en ;
+    rdfs:subClassOf ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 .
+
+ots:ManageCustomerComplaints_6_2_3 a owl:Class ;
+    rdfs:label "Manage customer complaints"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ProcessReturns_6_2_4 ;
+    dcterms:source "APQC PCF v8 6.2.3 (PCF ID 10389)" ;
+    rdfs:comment "Obtaining customer complaints online or by phone. Direct these complaints to higher-level representatives as appropriate. Resolve them. Respond to customers."@en ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:ManageCustomerServiceProblemsRequestsAndInquiries_6_2_2 a owl:Class ;
+    rdfs:label "Manage customer service problems, requests, and inquiries"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ManageCustomerComplaints_6_2_3 ;
+    dcterms:source "APQC PCF v8 6.2.2 (PCF ID 10388)" ;
+    rdfs:comment "Handling the requests and inquiries from customers that seek information regarding the organization's products/services. Obtain the customer requests online and by phone. Direct these requests to higher-level representatives. Approve requests, and respond to customers."@en ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:ManageSupplierRecovery_6_3_3 a owl:Class ;
+    rdfs:label "Manage supplier recovery"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ServiceProducts_6_3_4 ;
+    dcterms:source "APQC PCF v8 6.3.3 (PCF ID 20106)" ;
+    rdfs:comment "Managing the recovery of costs from suppliers for individual claims."@en ;
+    rdfs:subClassOf ots:ServiceProductsAfterSales_6_3 .
+
+ots:MeasureCustomerSatisfactionWithCustomerComplaintHandlingAndResolution_6_5_2 a owl:Class ;
+    rdfs:label "Measure customer satisfaction with customer- complaint handling and resolution"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:MeasureCustomerSatisfactionWithProductsAndServices_6_5_3 ;
+    dcterms:source "APQC PCF v8 6.5.2 (PCF ID 10402)" ;
+    rdfs:comment "Measuring the satisfaction level of customers as pertains to how their complaints are handled and resolved. This process element requires the organization to estimate the customers level of fulfillment with the process reconciling their complaints and towards the objective of ensuring customer retention. The feedback received can be used to develop concepts for new opportunities to boost the level of customer satisfaction."@en ;
+    rdfs:subClassOf ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 .
+
+ots:MeasureCustomerSatisfactionWithCustomerProblemsRequestsAndInquiriesHandling_6_5_1 a owl:Class ;
+    rdfs:label "Measure customer satisfaction with customer problems, requests, and inquiries handling"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:MeasureCustomerSatisfactionWithCustomerComplaintHandlingAndResolution_6_5_2 ;
+    dcterms:source "APQC PCF v8 6.5.1 (PCF ID 10401)" ;
+    rdfs:comment "Calculating satisfaction levels of customers by effectively evaluating the process of handling requests/inquiries of customers. Effectively calculate the performance of customer-requests/inquiries handling and resolution. Obtain information regarding requests/inquiries handling and resolution through customer feedback. Use it to explore new ideas and opportunities for enhanced customer requests/inquiries handling and resolution process."@en ;
+    rdfs:subClassOf ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 .
+
+ots:MeasureCustomerSatisfactionWithProductsAndServices_6_5_3 a owl:Class ;
+    rdfs:label "Measure customer satisfaction with products and services"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:EvaluateAndManageWarrantyPerformance_6_5_4 ;
+    dcterms:source "APQC PCF v8 6.5.3 (PCF ID 10403)" ;
+    rdfs:comment "Calculating satisfaction levels of customers with products/services. Obtain customer feedback on products/services, as well as the effectiveness of the advertising campaigns. Examine this information to reach meaningful conclusions, which could then be used to enhance the customer service operations."@en ;
+    rdfs:subClassOf ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 .
+
+ots:ProcessReturns_6_2_4 a owl:Class ;
+    rdfs:label "Process returns"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ReportIncidentsAndRisksToRegulatoryBodies_6_2_5 ;
+    dcterms:source "APQC PCF v8 6.2.4 (PCF ID 20094)" ;
+    rdfs:comment "Acquiring returns and identify if the returns are scraped or salvaged."@en ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:ProcessWarrantyClaims_6_3_2 a owl:Class ;
+    rdfs:label "Process warranty claims"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ManageSupplierRecovery_6_3_3 ;
+    dcterms:source "APQC PCF v8 6.3.2 (PCF ID 12669)" ;
+    rdfs:comment "Identifying, investigating, and processes warranty claims. This process includes: receipt and validation of a warranty claim; definition and diagnosis /root cause analysis of an issue and recommendation for corrective action; the determination of responsibility for settlement of the claim; the transaction being approved or denied; and the originator being notified and payment authorized. In the case of a recurring event, further investigation (definition and diagnosis or root cause analysis) is performed, and a recommendation for corrective action is made and implemented in production/design. It ends when the claim is closed."@en ;
+    rdfs:subClassOf ots:ServiceProductsAfterSales_6_3 .
+
+ots:RegisterProducts_6_3_1 a owl:Class ;
+    rdfs:label "Register products"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ProcessWarrantyClaims_6_3_2 ;
+    dcterms:source "APQC PCF v8 6.3.1 (PCF ID 20605)" ;
+    rdfs:comment "Filing product registrations."@en ;
+    rdfs:subClassOf ots:ServiceProductsAfterSales_6_3 .
+
+ots:ReportIncidentsAndRisksToRegulatoryBodies_6_2_5 a owl:Class ;
+    rdfs:label "Report incidents and risks to regulatory bodies"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:RegisterProducts_6_3_1 ;
+    dcterms:source "APQC PCF v8 6.2.5 (PCF ID 12840)" ;
+    rdfs:comment "Notifying all stakeholders, legal, and industry regulatory bodies of the incidents and risks related to a return or recall, if needed."@en ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:ServiceProducts_6_3_4 a owl:Class ;
+    rdfs:label "Service products"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:MeasureCustomerSatisfactionWithCustomerProblemsRequestsAndInquiriesHandling_6_5_1 ;
+    dcterms:source "APQC PCF v8 6.3.4 (PCF ID 10218)" ;
+    rdfs:comment "Validating specific service requirements for individual customers. Determine and schedule resource to fulfill these requirements. Provide service to specific individual customers. Ensure the quality of service delivery."@en ;
+    rdfs:subClassOf ots:ServiceProductsAfterSales_6_3 .
+
+ots:TroubleToResolve a owl:Class ;
+    rdfs:label "Trouble to resolve"@en .
+
+ots:ServiceProductsAfterSales_6_3 a owl:Class ;
+    rdfs:label "Service products after sales"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC PCF v8 6.3 (PCF ID 12658)" ;
+    rdfs:comment "Assigning post-sales policies and paying claims on purchased products.  This is a process that is an administrative function focused on creating rules (claim codes). This group ensures that claims are valid and are processed quickly.  As well as to quickly determine responsibility for claim settlement."@en ;
+    rdfs:subClassOf ots:TroubleToResolve .
+
+ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 a owl:Class ;
+    rdfs:label "Evaluate customer service operations and customer satisfaction"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC PCF v8 6.5 (PCF ID 20595)" ;
+    rdfs:comment "Calculating and assessing the operational activities of the customer service function. Evaluation is achieved through the customer requests/inquiries handling process, the customer complaint handling process, and product and services quality. Examine activities to ensure high levels of customer service."@en ;
+    rdfs:subClassOf ots:TroubleToResolve .
+
+ots:PlanAndManageCustomerServiceContacts_6_2 a owl:Class ;
+    rdfs:label "Plan and manage customer service contacts"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC PCF v8 6.2 (PCF ID 10379)" ;
+    rdfs:comment "Planning and administering workforce operations for customer service provision by taking care of customer services requests/inquiries, as well as the complaints."@en ;
+    rdfs:subClassOf ots:TroubleToResolve .
+

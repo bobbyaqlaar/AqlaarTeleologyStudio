@@ -1,0 +1,175 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:ManageLeadsOpportunities_3_5_1 a owl:Class ;
+    rdfs:label "Manage leads/opportunities"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageCustomersAndAccounts_3_5_2 ;
+    dcterms:source "APQC PCF v8 3.5.1 (PCF ID 10182)" ;
+    rdfs:comment "Generating leads of prospective customers to grow the organization's business. Identify viable customers based on customer and market research. Discover leads through IT applications, cold calling, reference/network development, or other sales and business development techniques. Employ a scoring model qualify the prospective customers into leads, and prioritize them."@en ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:DeliverLastMileDeliveryServices_4_4_5 a owl:Class ;
+    rdfs:label "Deliver last mile delivery services"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ProcessCustomerCredit_9_2_1 ;
+    dcterms:source "APQC PCF v8 4.4.5 (PCF ID 21617)" ;
+    rdfs:comment "Validating specific service requirements for individual customers. Determine and schedule resource to fulfill these requirements. Provide service to specific individual customers. Ensure the quality of service delivery."@en ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:DevelopAndManageSalesProposalsBidsAndQuotes_3_5_3 a owl:Class ;
+    rdfs:label "Develop and manage sales proposals, bids, and quotes"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageSalesOrders_3_5_4 ;
+    dcterms:source "APQC PCF v8 3.5.3 (PCF ID 11779)" ;
+    rdfs:comment "Understanding and refining the customer requirements as provided in a RFP (Request for Proposal) or RFI (Request for Information).  When compiling the response, they must take into consideration whether the requirements are a match with the strategic or tactical plans of the organization and whether they are able to submit a bid/proposal that is competitive based on an understanding of the offerings of other competing organizations. The next step will be to define the pricing and scheduling of the proposed solution and determine whether the proposal will be profitable for the company if accepted. The bid is then submitted and a notification of whether or not it was successful is received."@en ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:InvoiceCustomer_9_2_2 a owl:Class ;
+    rdfs:label "Invoice customer"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ProcessAccountsReceivableAr_9_2_3 ;
+    dcterms:source "APQC PCF v8 9.2.2 (PCF ID 10743)" ;
+    rdfs:comment "Preparing detailed reports of customer purchases. Prepare a commercial document between the seller and customer with details about transaction. Detail the quantity purchased, price of products/services, date, parties involved, unique invoice number, and tax information."@en ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ManageAndProcessAdjustmentsDeductions_9_2_5 a owl:Class ;
+    rdfs:label "Manage and process adjustments/deductions"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC PCF v8 9.2.5 (PCF ID 10746)" ;
+    rdfs:comment "Creating and providing funds for necessary adjustments and deductions, including all expenses that were required for the business at certain point in time."@en ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ManageAndProcessCollections_9_2_4 a owl:Class ;
+    rdfs:label "Manage and process collections"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessAdjustmentsDeductions_9_2_5 ;
+    dcterms:source "APQC PCF v8 9.2.4 (PCF ID 10745)" ;
+    rdfs:comment "Posting entries to respective accounts, and preparing accounts for receivables. Manage the cash collected by the business from its debtors. Record it in the books of accounts to provide clear information about the availability of the cash."@en ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ManageCustomersAndAccounts_3_5_2 a owl:Class ;
+    rdfs:label "Manage customers and accounts"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DevelopAndManageSalesProposalsBidsAndQuotes_3_5_3 ;
+    dcterms:source "APQC PCF v8 3.5.2 (PCF ID 10183)" ;
+    rdfs:comment "Managing the customer's expectations, with the intent of responsibly increasing the sale of the organization's products/services. Create a systematic method for governing sales, using sales forecasts and customer management measures. Develop a blueprint to manage relationships with customers and the data it holds on them, as well as the sale of its products/services to these customers. Devise a recipe for handling the organization's key customers in order to manage their expectations with tact and responsibility while maximizing revenue."@en ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:ManageSalesOrders_3_5_4 a owl:Class ;
+    rdfs:label "Manage sales orders"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageSalesPartnersAndAlliances_3_5_5 ;
+    dcterms:source "APQC PCF v8 3.5.4 (PCF ID 10185)" ;
+    rdfs:comment "Taking, receiving, processing, and acknowledging new customer orders or amendments to outstanding customer orders. Monitoring status from order receipt to customer delivery/customer invoicing."@en ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:ManageSalesPartnersAndAlliances_3_5_5 a owl:Class ;
+    rdfs:label "Manage sales partners and alliances"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:PerformSalesAtPhysicalOutlets_3_5_6 ;
+    dcterms:source "APQC PCF v8 3.5.5 (PCF ID 10187)" ;
+    rdfs:comment "Managing the organization's partners and alliances, with the objective of maximizing revenue. Train partners regarding the organization's portfolio of products/services. Craft sales forecasts. Examine their performance. Manage all data held by the organization on these partners."@en ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:OperateOutboundTransportation_4_4_4 a owl:Class ;
+    rdfs:label "Operate outbound transportation"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:DeliverLastMileDeliveryServices_4_4_5 ;
+    dcterms:source "APQC PCF v8 4.4.4 (PCF ID 10341)" ;
+    rdfs:comment "Creating a plan that specifies the schedule and system for transportation and delivery of the outbound products, as well as tracking the performance of the carrier delivery system. Conduct vehicle management and processing of all carrier-related documents."@en ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:OperateWarehousing_4_4_3 a owl:Class ;
+    rdfs:label "Operate warehousing"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:OperateOutboundTransportation_4_4_4 ;
+    dcterms:source "APQC PCF v8 4.4.3 (PCF ID 10340)" ;
+    rdfs:comment "Tracking the inventory deployment. Accept and store products. Ship the products. Measure the accuracy of the inventory. Assess the performance of the outsourced logistics activities."@en ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:PerformDigitalSales_3_5_8 a owl:Class ;
+    rdfs:label "Perform digital sales"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ProvideLogisticsGovernance_4_4_1 ;
+    dcterms:source "APQC PCF v8 3.5.8 (PCF ID 21429)" ;
+    rdfs:comment "Execution of sales in an online environment."@en ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:PerformFieldSales_3_5_7 a owl:Class ;
+    rdfs:label "Perform field sales"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:PerformDigitalSales_3_5_8 ;
+    dcterms:source "APQC PCF v8 3.5.7 (PCF ID 21428)" ;
+    rdfs:comment "Execution of sales within field/remote locations.  This could be any location that is not part of a headquarters location."@en ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:PerformSalesAtPhysicalOutlets_3_5_6 a owl:Class ;
+    rdfs:label "Perform sales at physical outlets"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:PerformFieldSales_3_5_7 ;
+    dcterms:source "APQC PCF v8 3.5.6 (PCF ID 21427)" ;
+    rdfs:comment "Execution of sales at physical / brick and mortar locations."@en ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:PlanAndManageInboundMaterialFlow_4_4_2 a owl:Class ;
+    rdfs:label "Plan and manage inbound material flow"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:OperateWarehousing_4_4_3 ;
+    dcterms:source "APQC PCF v8 4.4.2 (PCF ID 20936)" ;
+    rdfs:comment "Creating and executing a strategy for all the internal activities related to the flow/transfer of inbound materials. This process includes planning inbound material receipts, managing inbound material flow, monitoring inbound delivery performance, managing the flow of returned products, controlling the quality of returned parts, and salvaging or repairing returned products."@en ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:ProcessAccountsReceivableAr_9_2_3 a owl:Class ;
+    rdfs:label "Process accounts receivable (AR)"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessCollections_9_2_4 ;
+    dcterms:source "APQC PCF v8 9.2.3 (PCF ID 10744)" ;
+    rdfs:comment "Processing payments due from customers. This includes all processing of funds received, whether by check or electronically. This does not include the generation of invoices."@en ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ProcessCustomerCredit_9_2_1 a owl:Class ;
+    rdfs:label "Process customer credit"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:InvoiceCustomer_9_2_2 ;
+    dcterms:source "APQC PCF v8 9.2.1 (PCF ID 10742)" ;
+    rdfs:comment "Evaluating and processing requests for advances. Evaluate credit requests by customers requiring loans to buy products/services."@en ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ProvideLogisticsGovernance_4_4_1 a owl:Class ;
+    rdfs:label "Provide logistics governance"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PlanAndManageInboundMaterialFlow_4_4_2 ;
+    dcterms:source "APQC PCF v8 4.4.1 (PCF ID 10338)" ;
+    rdfs:comment "Outlining the strategy for managing logistics. Translate customer requirements logistic requirements. Create an efficient logistic network and outsourcing portions of logistics activities. Design a logistics strategy that optimizes transportation costs and schedule. Define key performance indicators."@en ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:OrderToCash a owl:Class ;
+    rdfs:label "Order to cash"@en .
+
+ots:ManageLogisticsAndWarehousing_4_4 a owl:Class ;
+    rdfs:label "Manage logistics and warehousing"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC PCF v8 4.4 (PCF ID 10219)" ;
+    rdfs:comment "Administering and overseeing all activities related to logistics and warehousing. Outline and establish a strategy for the logistics function. Plan and administer the flow of inbound materials. Administer the operational activities of warehousing and outbound transportation. Manage reverse logistics including returns and exchanges."@en ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:PerformRevenueAccounting_9_2 a owl:Class ;
+    rdfs:label "Perform revenue accounting"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC PCF v8 9.2 (PCF ID 10729)" ;
+    rdfs:comment "Comparing revenue targets to reality. Review all transactions and entries passed in final accounts in a year in order to examine profits."@en ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:DevelopAndManageSalesPlans_3_5 a owl:Class ;
+    rdfs:label "Develop and manage sales plans"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "APQC PCF v8 3.5 (PCF ID 10105)" ;
+    rdfs:comment "Selling products/services. Set appropriate customer expectations. Work with customers using the same schedule that product/service development, production, and customer service functions follow. Manage sales personnel and sales partnerships/alliances."@en ;
+    rdfs:subClassOf ots:OrderToCash .
+

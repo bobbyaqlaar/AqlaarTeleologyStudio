@@ -1,0 +1,88 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:ProvideSourcingGovernance_4_2_1 a owl:Class ;
+    rdfs:label "Provide sourcing governance"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:DevelopCategoryPlan_4_2_2 ;
+    dcterms:source "APQC PCF v8 4.2.1 (PCF ID 10277)" ;
+    rdfs:comment "Creating strategies for procuring materials and services from various sources, and for managing and evaluating categories. Establish a procurement process that describes the approach for obtaining products and purchasing activities. Evaluate the sources. Create sourcing relationships in order to continuously improve. Re-evaluate purchasing activities."@en ;
+    rdfs:subClassOf ots:ProcureMaterialsAndServices_4_2 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:DevelopCategoryPlan_4_2_2 a owl:Class ;
+    rdfs:label "Develop category plan"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:SelectSuppliersAndDevelopMaintainContracts_4_2_3 ;
+    dcterms:source "APQC PCF v8 4.2.2 (PCF ID 16636)" ;
+    rdfs:comment "Defining sourcing strategies and plans for categories of materials or services to optimize cost, supply continuity, value, and alignment with organizational requirements and market conditions."@en ;
+    rdfs:subClassOf ots:ProcureMaterialsAndServices_4_2 .
+
+ots:ManageCorporateCreditCards_9_6_3 a owl:Class ;
+    rdfs:label "Manage corporate credit cards"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC PCF v8 9.6.3 (PCF ID 20929)" ;
+    rdfs:comment "Handling and authoring credit cards to business entities or for corporate purchases."@en ;
+    rdfs:subClassOf ots:ProcessAccountsPayableAndExpenseReimbursements_9_6 .
+
+ots:ManageSuppliers_4_2_5 a owl:Class ;
+    rdfs:label "Manage suppliers"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:ProcessAccountsPayableAp_9_6_1 ;
+    dcterms:source "APQC PCF v8 4.2.5 (PCF ID 10280)" ;
+    rdfs:comment "Collecting and analyzing new information in order to track and rate suppliers and build relationships."@en ;
+    rdfs:subClassOf ots:ProcureMaterialsAndServices_4_2 .
+
+ots:OrderMaterialsAndServices_4_2_4 a owl:Class ;
+    rdfs:label "Order materials and services"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:ManageSuppliers_4_2_5 ;
+    dcterms:source "APQC PCF v8 4.2.4 (PCF ID 10279)" ;
+    rdfs:comment "Creating and approving requisitions and distributing purchase orders accordingly. Hasten the procurement process to satisfy internal needs."@en ;
+    rdfs:subClassOf ots:ProcureMaterialsAndServices_4_2 .
+
+ots:ProcessAccountsPayableAp_9_6_1 a owl:Class ;
+    rdfs:label "Process accounts payable (AP)"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ProcessExpenseReimbursements_9_6_2 ;
+    dcterms:source "APQC PCF v8 9.6.1 (PCF ID 10756)" ;
+    rdfs:comment "Processing payments of operating expenses and other supplier charges. This includes the development of policies and procedures around processing of accounts payable and all operations. This process is often supported by key technology enablers."@en ;
+    rdfs:subClassOf ots:ProcessAccountsPayableAndExpenseReimbursements_9_6 .
+
+ots:ProcessExpenseReimbursements_9_6_2 a owl:Class ;
+    rdfs:label "Process expense reimbursements"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageCorporateCreditCards_9_6_3 ;
+    dcterms:source "APQC PCF v8 9.6.2 (PCF ID 10757)" ;
+    rdfs:comment "Processing reimbursements to employees for the expenses incurred during the course of business. Approve and process advancements and reimbursements for employee expenses on the organization's behalf. Capture and report relevant tax data and manage personal accounts."@en ;
+    rdfs:subClassOf ots:ProcessAccountsPayableAndExpenseReimbursements_9_6 .
+
+ots:SelectSuppliersAndDevelopMaintainContracts_4_2_3 a owl:Class ;
+    rdfs:label "Select suppliers and develop/maintain contracts"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:OrderMaterialsAndServices_4_2_4 ;
+    dcterms:source "APQC PCF v8 4.2.3 (PCF ID 10278)" ;
+    rdfs:comment "Evaluating supplier options to select the most effective and efficient suppliers. Validate selected suppliers. Establish and manage supplier contracts."@en ;
+    rdfs:subClassOf ots:ProcureMaterialsAndServices_4_2 .
+
+ots:ProcureToPay a owl:Class ;
+    rdfs:label "Procure to pay"@en .
+
+ots:ProcessAccountsPayableAndExpenseReimbursements_9_6 a owl:Class ;
+    rdfs:label "Process accounts payable and expense reimbursements"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC PCF v8 9.6 (PCF ID 10733)" ;
+    rdfs:comment "Handling bills and reimbursements to be made. Make payments for goods or services taken or used on behalf of the organization."@en ;
+    rdfs:subClassOf ots:ProcureToPay .
+
+ots:ProcureMaterialsAndServices_4_2 a owl:Class ;
+    rdfs:label "Procure materials and services"@en ;
+    ots:functionUnit "procurement_scm" ;
+    dcterms:source "APQC PCF v8 4.2 (PCF ID 10216)" ;
+    rdfs:comment "Creating a plan for procuring materials and services. Develop strategies for sourcing materials and services. Choose the most appropriate suppliers, and develop contracts with them. Order the materials and services as per the requirements. Manage relationships with suppliers."@en ;
+    rdfs:subClassOf ots:ProcureToPay .
+
