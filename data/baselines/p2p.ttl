@@ -1,0 +1,43 @@
+@prefix ots: <http://ots.local/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+ots:precedes a owl:ObjectProperty ;
+  rdfs:label "precedes"@en .
+
+ots:ProcureToPay a owl:Class ;
+  rdfs:label "Procure to pay"@en .
+
+ots:Requisition a owl:Class ;
+  rdfs:label "Requisition"@en ;
+  rdfs:subClassOf ots:ProcureToPay ;
+  ots:functionUnit "operations" ;
+  ots:linkedBpmnElement "Task_requisition" ;
+  ots:precedes ots:SpendApproval .
+
+ots:SpendApproval a owl:Class ;
+  rdfs:label "Spend approval"@en ;
+  rdfs:subClassOf ots:ProcureToPay ;
+  ots:functionUnit "finance" ;
+  ots:linkedBpmnElement "Task_approve" ;
+  ots:precedes ots:PurchaseOrder .
+
+ots:PurchaseOrder a owl:Class ;
+  rdfs:label "Purchase order"@en ;
+  rdfs:subClassOf ots:ProcureToPay ;
+  ots:functionUnit "procurement_scm" ;
+  ots:linkedBpmnElement "Task_po" ;
+  ots:precedes ots:GoodsReceipt .
+
+ots:GoodsReceipt a owl:Class ;
+  rdfs:label "Goods receipt"@en ;
+  rdfs:subClassOf ots:ProcureToPay ;
+  ots:functionUnit "procurement_scm" ;
+  ots:linkedBpmnElement "Task_receive" ;
+  ots:precedes ots:SupplierPayment .
+
+ots:SupplierPayment a owl:Class ;
+  rdfs:label "Supplier payment"@en ;
+  rdfs:subClassOf ots:ProcureToPay ;
+  ots:functionUnit "finance" ;
+  ots:linkedBpmnElement "Task_pay" .

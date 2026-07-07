@@ -1,0 +1,43 @@
+@prefix ots: <http://ots.local/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+ots:precedes a owl:ObjectProperty ;
+  rdfs:label "precedes"@en .
+
+ots:HireToRetire a owl:Class ;
+  rdfs:label "Hire to retire"@en .
+
+ots:Candidate a owl:Class ;
+  rdfs:label "Candidate"@en ;
+  rdfs:subClassOf ots:HireToRetire ;
+  ots:functionUnit "operations" ;
+  ots:linkedBpmnElement "Task_recruit" ;
+  ots:precedes ots:Interview .
+
+ots:Interview a owl:Class ;
+  rdfs:label "Interview"@en ;
+  rdfs:subClassOf ots:HireToRetire ;
+  ots:functionUnit "operations" ;
+  ots:linkedBpmnElement "Task_interview" ;
+  ots:precedes ots:EmploymentOffer .
+
+ots:EmploymentOffer a owl:Class ;
+  rdfs:label "Employment offer"@en ;
+  rdfs:subClassOf ots:HireToRetire ;
+  ots:functionUnit "operations" ;
+  ots:linkedBpmnElement "Task_offer" ;
+  ots:precedes ots:EmployeeOnboarding .
+
+ots:EmployeeOnboarding a owl:Class ;
+  rdfs:label "Employee onboarding"@en ;
+  rdfs:subClassOf ots:HireToRetire ;
+  ots:functionUnit "it" ;
+  ots:linkedBpmnElement "Task_onboard" ;
+  ots:precedes ots:CareerDevelopment .
+
+ots:CareerDevelopment a owl:Class ;
+  rdfs:label "Career development"@en ;
+  rdfs:subClassOf ots:HireToRetire ;
+  ots:functionUnit "operations" ;
+  ots:linkedBpmnElement "Task_develop" .

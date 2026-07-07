@@ -1,0 +1,43 @@
+@prefix ots: <http://ots.local/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+ots:precedes a owl:ObjectProperty ;
+  rdfs:label "precedes"@en .
+
+ots:OrderToCash a owl:Class ;
+  rdfs:label "Order to cash"@en .
+
+ots:Order a owl:Class ;
+  rdfs:label "Order"@en ;
+  rdfs:subClassOf ots:OrderToCash ;
+  ots:functionUnit "sales" ;
+  ots:linkedBpmnElement "Task_validate" ;
+  ots:precedes ots:CreditAssessment .
+
+ots:CreditAssessment a owl:Class ;
+  rdfs:label "Credit assessment"@en ;
+  rdfs:subClassOf ots:OrderToCash ;
+  ots:functionUnit "finance" ;
+  ots:linkedBpmnElement "Task_credit" ;
+  ots:precedes ots:Fulfillment .
+
+ots:Fulfillment a owl:Class ;
+  rdfs:label "Fulfillment"@en ;
+  rdfs:subClassOf ots:OrderToCash ;
+  ots:functionUnit "operations" ;
+  ots:linkedBpmnElement "Task_fulfil" ;
+  ots:precedes ots:Invoice .
+
+ots:Invoice a owl:Class ;
+  rdfs:label "Invoice"@en ;
+  rdfs:subClassOf ots:OrderToCash ;
+  ots:functionUnit "finance" ;
+  ots:linkedBpmnElement "Task_invoice" ;
+  ots:precedes ots:Payment .
+
+ots:Payment a owl:Class ;
+  rdfs:label "Payment"@en ;
+  rdfs:subClassOf ots:OrderToCash ;
+  ots:functionUnit "finance" ;
+  ots:linkedBpmnElement "Task_collect" .

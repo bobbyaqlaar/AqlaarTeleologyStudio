@@ -1,0 +1,43 @@
+@prefix ots: <http://ots.local/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+ots:precedes a owl:ObjectProperty ;
+  rdfs:label "precedes"@en .
+
+ots:TroubleToResolve a owl:Class ;
+  rdfs:label "Trouble to resolve"@en .
+
+ots:Incident a owl:Class ;
+  rdfs:label "Incident"@en ;
+  rdfs:subClassOf ots:TroubleToResolve ;
+  ots:functionUnit "customer_care" ;
+  ots:linkedBpmnElement "Task_intake" ;
+  ots:precedes ots:IncidentTriage .
+
+ots:IncidentTriage a owl:Class ;
+  rdfs:label "Incident triage"@en ;
+  rdfs:subClassOf ots:TroubleToResolve ;
+  ots:functionUnit "operations" ;
+  ots:linkedBpmnElement "Task_triage" ;
+  ots:precedes ots:RootCause .
+
+ots:RootCause a owl:Class ;
+  rdfs:label "Root cause"@en ;
+  rdfs:subClassOf ots:TroubleToResolve ;
+  ots:functionUnit "it" ;
+  ots:linkedBpmnElement "Task_diagnose" ;
+  ots:precedes ots:IncidentResolution .
+
+ots:IncidentResolution a owl:Class ;
+  rdfs:label "Incident resolution"@en ;
+  rdfs:subClassOf ots:TroubleToResolve ;
+  ots:functionUnit "operations" ;
+  ots:linkedBpmnElement "Task_resolve" ;
+  ots:precedes ots:ClosureSurvey .
+
+ots:ClosureSurvey a owl:Class ;
+  rdfs:label "Closure survey"@en ;
+  rdfs:subClassOf ots:TroubleToResolve ;
+  ots:functionUnit "customer_care" ;
+  ots:linkedBpmnElement "Task_close" .

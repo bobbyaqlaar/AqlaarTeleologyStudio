@@ -1,0 +1,43 @@
+@prefix ots: <http://ots.local/ontology/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+ots:precedes a owl:ObjectProperty ;
+  rdfs:label "precedes"@en .
+
+ots:ConceptToMarket a owl:Class ;
+  rdfs:label "Concept to market"@en .
+
+ots:ProductConcept a owl:Class ;
+  rdfs:label "Product concept"@en ;
+  rdfs:subClassOf ots:ConceptToMarket ;
+  ots:functionUnit "products" ;
+  ots:linkedBpmnElement "Task_ideate" ;
+  ots:precedes ots:SolutionDesign .
+
+ots:SolutionDesign a owl:Class ;
+  rdfs:label "Solution design"@en ;
+  rdfs:subClassOf ots:ConceptToMarket ;
+  ots:functionUnit "products" ;
+  ots:linkedBpmnElement "Task_design" ;
+  ots:precedes ots:ProductBuild .
+
+ots:ProductBuild a owl:Class ;
+  rdfs:label "Product build"@en ;
+  rdfs:subClassOf ots:ConceptToMarket ;
+  ots:functionUnit "production" ;
+  ots:linkedBpmnElement "Task_build" ;
+  ots:precedes ots:MarketLaunch .
+
+ots:MarketLaunch a owl:Class ;
+  rdfs:label "Market launch"@en ;
+  rdfs:subClassOf ots:ConceptToMarket ;
+  ots:functionUnit "marketing" ;
+  ots:linkedBpmnElement "Task_launch" ;
+  ots:precedes ots:CustomerOnboarding .
+
+ots:CustomerOnboarding a owl:Class ;
+  rdfs:label "Customer onboarding"@en ;
+  rdfs:subClassOf ots:ConceptToMarket ;
+  ots:functionUnit "customer_care" ;
+  ots:linkedBpmnElement "Task_support" .
