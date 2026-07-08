@@ -86,13 +86,15 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 - [x] `POST /api/v1/ontology/{eng}/{stream}/concept-mapping` (+ `/remove`) — `ots:mapsToConcept` triples; `mappedConcepts` on OwlClassModel.
 - Note: decided against COPY-from-baseline-graph — direct TTL load per engagement is simpler and tested.
 
-## Phase 3 — Workshop features
+## Phase 3 — Workshop features — DONE 2026-07-08 (E2E-verified in running app)
 
 - [x] `hr` function unit added to enum (types, function-units.ts, globals.css lime token, validate.py, spec §5, README) — Bobby approved 2026-07-08. h2r subtrees now tagged `hr`.
-- [ ] Industry field on engagement (create dialog + type + service); stream picker passes industry to initialize.
-- [ ] System catalog + step→system mapping: types `SystemDef`, `SystemMapping {stepId, systemId}`; seed choices from `ReferenceDocs/DataSources.xlsx`; UI: systems tag panel beside function-tag-panel in process workspace; coverage matrix (steps × systems). Persist as `ots:realizedBy` triples or mock store until Phase 4.
-- [ ] Thesaurus panel in ontology workspace: search concepts, map class→concept, show broader tree.
-- [ ] Serve generated .bpmn baselines from API; replace TS fixtures `apps/web/lib/mock/fixtures/bpmn-baselines.ts`.
+- [x] Industry field: `Industry` type, engagement + create dialog select (constants/industries.ts), ontology initialize?industry= and BPMN load are industry-aware. Globex seed = telecom demo engagement (5 streams unloaded).
+- [x] System mapping: `SystemDef` + `systems[]` on BpmnElementMeta, static catalog constants/systems.ts (DataSources.xlsx was APQC links, not systems), SystemTagPanel beside function panel, processService.setSystems. Coverage matrix view still TODO (nice-to-have). Persisted mock-only until Phase 4.
+- [x] ThesaurusPanel in ontology workspace: framework select (apqc/etom/sid), debounced search, map/unmap class→concept via API (`ots:mapsToConcept`), mapped chips on class. E2E-tested against live Fuseki.
+- [x] Generated .bpmn served from API (`GET /baselines/{industry}/{stream}/bpmn`); process-store loadProcessState fetches it (fixture fallback when API offline); task lists parsed from XML. Verified: telecom o2c renders 20 eTOM tasks in bpmn-js.
+- [x] Fixed: process/ontology pages no longer 404 on client-loaded baselines (server mock store can't see client loads — real fix is Postgres, Phase 4). CORS widened to any localhost port (dev).
+- KNOWN pre-existing bug: Base UI "MenuGroupContext is missing" error from role-switcher dropdown (components/ui/dropdown-menu.tsx:64) — surfaces in dev console, fix separately.
 
 ## Phase 4 — Persistence + production
 
@@ -101,6 +103,8 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 - [ ] OIDC auth, audit events, PDF export, Playwright E2E (spec §15 order).
 
 ## Session log
+
+- 2026-07-08 (late night): Phase 3 complete. Industry picker, thesaurus panel, system tagging, API-served BPMN — all E2E-verified in running app (telecom flow: load O2C → 20 eTOM tasks render → tag Salesforce on step → ontology shows 25 eTOM classes → map class to APQC 9.2.2 concept, chip persists in Fuseki). `npm run build` green. **Next: Phase 4** — Postgres persistence (fixes server/client mock-store split), live LLM gap analysis, coverage matrix, auth/audit/PDF/E2E.
 
 - 2026-07-08: Plan written. Phase 0 done (commit bc74a87). Phase 1 mostly done: ingest package built, pipeline runs end-to-end (`parse-apqc` → `emit` → `validate` all green). O2C baseline now 22 real APQC classes w/ provenance; BPMN 18 tasks/3 lanes, valid XML. **Next up:** (1) re-crawl TM Forum MODA (dump too thin: 27 objects), (2) apqc_pdf parser for industry PCFs, (3) SKOS cross-framework exactMatch alignment, (4) Phase 2 API: baseline graphs by industry + thesaurus endpoints.
 - 2026-07-08 (night): Telecom baselines emitted from eTOM (streams_telecom.yaml + selection.py refactor of emitters) — validated, BPMN parses clean. APQC↔eTOM alignment pass done (21 exact auto-approved, 13 candidates awaiting Bobby's review in mapping/alignments/apqc-etom.yaml) → data/thesaurus/alignments.ttl. Phase 1 COMPLETE except candidate review. **Next: Phase 3 UI** — industry picker on engagement create, system-mapping panel, thesaurus search panel in ontology workspace, serve generated .bpmn from API.

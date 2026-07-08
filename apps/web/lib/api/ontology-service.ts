@@ -1,8 +1,11 @@
 import type {
   FunctionalUnit,
+  Industry,
   InitializeGraphResult,
   OntologyGraph,
   OwlClass,
+  ThesaurusConcept,
+  ThesaurusFramework,
   ValueStreamType,
 } from "@/lib/types";
 
@@ -50,10 +53,44 @@ export const ontologyService = {
   async initialize(
     engagementId: string,
     streamType: ValueStreamType,
+    industry: Industry = "generic",
   ): Promise<InitializeGraphResult> {
     return request(
-      `/api/v1/ontology/${engagementId}/${streamType}/initialize`,
+      `/api/v1/ontology/${engagementId}/${streamType}/initialize?industry=${industry}`,
       { method: "POST" },
+    );
+  },
+
+  async searchThesaurus(
+    framework: ThesaurusFramework,
+    query: string,
+    limit = 25,
+  ): Promise<ThesaurusConcept[]> {
+    const params = new URLSearchParams({ q: query, limit: String(limit) });
+    return request(`/api/v1/ontology/thesaurus/${framework}/search?${params}`);
+  },
+
+  async mapConcept(
+    engagementId: string,
+    streamType: ValueStreamType,
+    classUri: string,
+    conceptUri: string,
+  ): Promise<OwlClass> {
+    return request(
+      `/api/v1/ontology/${engagementId}/${streamType}/concept-mapping`,
+      { method: "POST", body: JSON.stringify({ classUri, conceptUri }) },
+    );
+  },
+
+  async unmapConcept(
+    engagementId: string,
+    streamType: ValueStreamType,
+    classUri: string,
+    conceptUri: string,
+  ): Promise<OwlClass> {
+    return request(
+      `/api/v1/ontology/${engagementId}/${streamType}/concept-mapping/remove`,
+      { method: "POST", body: JSON.stringify({ classUri, conceptUri }) },
     );
   },
 

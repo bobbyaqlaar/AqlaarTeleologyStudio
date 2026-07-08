@@ -12,21 +12,30 @@ import { OwlGraphViewer } from "@/components/ontology/owl-graph-viewer";
 import { OwlClassTree } from "@/components/ontology/owl-class-tree";
 import { OwlClassPanel } from "@/components/ontology/owl-class-panel";
 import { BpmnLinkPanel } from "@/components/ontology/bpmn-link-panel";
+import { ThesaurusPanel } from "@/components/ontology/thesaurus-panel";
 import { FunctionUnitLegend } from "@/components/functions/function-unit-legend";
 import { Button } from "@/components/ui/button";
 import { useRole } from "@/lib/context/role-context";
-import type { FunctionalUnit, OntologyGraph, OwlClass, ValueStreamType } from "@/lib/types";
+import type {
+  FunctionalUnit,
+  Industry,
+  OntologyGraph,
+  OwlClass,
+  ValueStreamType,
+} from "@/lib/types";
 
 interface OntologyWorkspaceProps {
   engagementId: string;
   streamType: ValueStreamType;
   loadedStreams: ValueStreamType[];
+  industry?: Industry;
 }
 
 export function OntologyWorkspace({
   engagementId,
   streamType,
   loadedStreams,
+  industry = "generic",
 }: OntologyWorkspaceProps): React.ReactNode {
   const { canEdit } = useRole();
   const [graph, setGraph] = useState<OntologyGraph | null>(null);
@@ -50,7 +59,7 @@ export function OntologyWorkspace({
       const health = await ontologyService.health();
       setApiOnline(health.fuseki);
 
-      await ontologyService.initialize(engagementId, streamType);
+      await ontologyService.initialize(engagementId, streamType, industry);
       const [graphData, taskData] = await Promise.all([
         ontologyService.getGraph(engagementId, streamType),
         processService.listTasks(engagementId, streamType),
@@ -78,11 +87,71 @@ export function OntologyWorkspace({
     } finally {
       setLoading(false);
     }
-  }, [engagementId, streamType]);
+  }, [engagementId, streamType, industry]);
 
   useEffect(() => {
     void loadData();
   }, [loadData]);
+
+  const applyClassUpdate = (updated: OwlClass): void => {
+    setGraph((current) =>
+      current
+        ? {
+            ...current,
+            classes: current.classes.map((item) =>
+              item.uri === updated.uri ? updated : item,
+            ),
+          }
+        : current,
+    );
+    setSelectedClass(updated);
+  };
+
+  const handleMapConcept = async (conceptUri: string): Promise<void> => {
+    if (!selectedClass || !canEdit) {
+      return;
+    }
+    setLinking(true);
+    try {
+      const updated = await ontologyService.mapConcept(
+        engagementId,
+        streamType,
+        selectedClass.uri,
+        conceptUri,
+      );
+      applyClassUpdate(updated);
+      setStatusMessage(`Mapped ${updated.label} to thesaurus concept.`);
+    } catch (err) {
+      setError(
+        err instanceof OntologyApiError ? err.message : "Concept map failed.",
+      );
+    } finally {
+      setLinking(false);
+    }
+  };
+
+  const handleUnmapConcept = async (conceptUri: string): Promise<void> => {
+    if (!selectedClass || !canEdit) {
+      return;
+    }
+    setLinking(true);
+    try {
+      const updated = await ontologyService.unmapConcept(
+        engagementId,
+        streamType,
+        selectedClass.uri,
+        conceptUri,
+      );
+      applyClassUpdate(updated);
+      setStatusMessage("Concept mapping removed.");
+    } catch (err) {
+      setError(
+        err instanceof OntologyApiError ? err.message : "Unmap failed.",
+      );
+    } finally {
+      setLinking(false);
+    }
+  };
 
   const handleSaveClass = async (updates: {
     label: string;
@@ -279,7 +348,14 @@ export function OntologyWorkspace({
           <FunctionUnitLegend compact />
         </div>
 
-        <div className="min-h-[640px]">
+        <div className="min-h-[640px] space-y-4">
+          <ThesaurusPanel
+            selectedClass={selectedClass}
+            canEdit={canEdit}
+            mapping={linking}
+            onMap={(conceptUri) => void handleMapConcept(conceptUri)}
+            onUnmap={(conceptUri) => void handleUnmapConcept(conceptUri)}
+          />
           <BpmnLinkPanel
             tasks={tasks}
             classes={graph.classes}

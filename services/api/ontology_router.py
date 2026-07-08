@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from fastapi import APIRouter, HTTPException, Query
+from fastapi.responses import Response
 
 from fuseki_client import DEFAULT_INDUSTRY, FusekiClient, FusekiError, VALID_STREAMS
 from models import (
@@ -26,6 +27,16 @@ async def list_baselines() -> BaselineCatalogResponse:
         industries=fuseki.list_baselines(),
         thesauri=fuseki.list_thesauri(),
     )
+
+
+@router.get("/baselines/{industry}/{stream_type}/bpmn")
+async def get_baseline_bpmn(industry: str, stream_type: str) -> Response:
+    """Serve the generated BPMN 2.0 XML for an industry baseline."""
+    _validate_stream(stream_type)
+    bpmn_path = fuseki.baseline_path(stream_type, industry).with_suffix(".bpmn")
+    if not bpmn_path.exists():
+        raise HTTPException(status_code=404, detail=f"Baseline BPMN not found: {bpmn_path.name}")
+    return Response(content=bpmn_path.read_text(encoding="utf-8"), media_type="application/xml")
 
 
 @router.get("/thesaurus/{framework}/search", response_model=list[ThesaurusConceptModel])

@@ -10,6 +10,7 @@ const seedEngagements: Engagement[] = [
     status: "active",
     description:
       "Baseline mapping for five value streams with stakeholder workshops.",
+    industry: "generic",
     participants: [
       {
         userId: "user-consultant-1",
@@ -40,6 +41,7 @@ const seedEngagements: Engagement[] = [
     client: "Globex Industries",
     status: "draft",
     description: "Initial scoping for O2C and P2P customization.",
+    industry: "telecom",
     participants: [
       {
         userId: "user-consultant-1",
@@ -47,7 +49,13 @@ const seedEngagements: Engagement[] = [
         role: "consultant",
       },
     ],
-    valueStreams: [],
+    valueStreams: BASELINE_TEMPLATES.map((baseline) => ({
+      id: `stream-${baseline.streamType}-globex`,
+      type: baseline.streamType,
+      baselineId: baseline.id,
+      baselineLoaded: false,
+      approvalStatus: "draft",
+    })),
     currentStep: "streams",
     createdAt: "2026-06-05T11:00:00.000Z",
     updatedAt: "2026-06-05T11:00:00.000Z",
@@ -76,7 +84,8 @@ export function getEngagementById(id: string): Engagement | undefined {
 }
 
 export function addEngagement(
-  input: Pick<Engagement, "name" | "client" | "description">,
+  input: Pick<Engagement, "name" | "client" | "description"> &
+    Partial<Pick<Engagement, "industry">>,
 ): Engagement {
   const now = new Date().toISOString();
   const engagement: Engagement = {
@@ -84,6 +93,7 @@ export function addEngagement(
     name: input.name,
     client: input.client,
     description: input.description,
+    industry: input.industry ?? "generic",
     status: "draft",
     participants: [
       {

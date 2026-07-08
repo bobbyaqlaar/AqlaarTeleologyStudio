@@ -16,6 +16,34 @@ function stateKey(engagementId: string, streamType: ValueStreamType): string {
   return `${engagementId}:${streamType}`;
 }
 
+const TASK_TAG_RE = /<bpmn:task\s+([^>]*?)\/?>/g;
+
+function attr(attrs: string, name: string): string | undefined {
+  const match = attrs.match(new RegExp(`${name}="([^"]*)"`));
+  return match?.[1];
+}
+
+/** Task id/name pairs straight from the BPMN XML (fixture or generated). */
+export function extractTasksFromXml(
+  xml: string,
+): Array<{ id: string; name: string }> {
+  const tasks: Array<{ id: string; name: string }> = [];
+  for (const match of xml.matchAll(TASK_TAG_RE)) {
+    const id = attr(match[1], "id");
+    if (id) {
+      tasks.push({ id, name: attr(match[1], "name") ?? id });
+    }
+  }
+  return tasks;
+}
+
+function tasksForState(
+  state: ProcessState,
+): Array<{ id: string; name: string }> {
+  const parsed = extractTasksFromXml(state.bpmnXml);
+  return parsed.length > 0 ? parsed : getBaselineTasks(state.streamType);
+}
+
 const processStates = new Map<string, ProcessState>();
 const comments = new Map<string, ProcessComment[]>();
 
@@ -65,6 +93,48 @@ export function ensureProcessState(
   return structuredClone(state);
 }
 
+const API_BASE =
+  process.env.NEXT_PUBLIC_OTS_API_URL ?? "http://localhost:8000";
+
+/**
+ * Load process state, preferring the generated baseline BPMN served by the
+ * API (industry-aware, from the ingestion agent). Falls back to the local
+ * fixture when the API is unreachable. Function-unit tagging starts empty
+ * for generated baselines — consultants tag in the workshop.
+ */
+export async function loadProcessState(
+  engagementId: string,
+  streamType: ValueStreamType,
+  industry: string = "generic",
+): Promise<ProcessState> {
+  const key = stateKey(engagementId, streamType);
+  const existing = processStates.get(key);
+  if (existing) {
+    return structuredClone(existing);
+  }
+
+  try {
+    const response = await fetch(
+      `${API_BASE}/api/v1/ontology/baselines/${industry}/${streamType}/bpmn`,
+    );
+    if (response.ok) {
+      const xml = await response.text();
+      const state: ProcessState = {
+        engagementId,
+        streamType,
+        bpmnXml: xml,
+        elementMeta: {},
+      };
+      processStates.set(key, state);
+      return structuredClone(state);
+    }
+  } catch {
+    // API offline — fall through to fixture
+  }
+
+  return ensureProcessState(engagementId, streamType);
+}
+
 export function getProcessState(
   engagementId: string,
   streamType: ValueStreamType,
@@ -94,7 +164,24 @@ export function setElementFunctionUnit(
   functionUnit: FunctionalUnit | undefined,
 ): ProcessState {
   const state = ensureProcessState(engagementId, streamType);
-  state.elementMeta[elementId] = { functionUnit };
+  state.elementMeta[elementId] = {
+    ...state.elementMeta[elementId],
+    functionUnit,
+  };
+  return saveProcessState(state);
+}
+
+export function setElementSystems(
+  engagementId: string,
+  streamType: ValueStreamType,
+  elementId: string,
+  systems: string[],
+): ProcessState {
+  const state = ensureProcessState(engagementId, streamType);
+  state.elementMeta[elementId] = {
+    ...state.elementMeta[elementId],
+    systems: systems.length > 0 ? systems : undefined,
+  };
   return saveProcessState(state);
 }
 
@@ -179,7 +266,7 @@ export function analyzeProcessGaps(
   streamType: ValueStreamType,
 ): AiGapSuggestion[] {
   const state = ensureProcessState(engagementId, streamType);
-  const tasks = getBaselineTasks(streamType);
+  const tasks = tasksForState(state);
   const suggestions: AiGapSuggestion[] = [];
 
   for (const task of tasks) {
@@ -234,12 +321,14 @@ export function getTaskSummaries(
   id: string;
   name: string;
   functionUnit?: FunctionalUnit;
+  systems?: string[];
 }> {
   const state = ensureProcessState(engagementId, streamType);
 
-  return getBaselineTasks(streamType).map((task) => ({
+  return tasksForState(state).map((task) => ({
     id: task.id,
     name: task.name,
     functionUnit: state.elementMeta[task.id]?.functionUnit,
+    systems: state.elementMeta[task.id]?.systems,
   }));
 }

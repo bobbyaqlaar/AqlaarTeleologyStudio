@@ -14,9 +14,17 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { INDUSTRIES } from "@/lib/constants/industries";
 import { engagementService } from "@/lib/mock/services/engagement-service";
-import type { Engagement } from "@/lib/types";
+import type { Engagement, Industry } from "@/lib/types";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 
@@ -32,6 +40,7 @@ export function CreateEngagementDialog({
   const [name, setName] = useState("");
   const [client, setClient] = useState("");
   const [description, setDescription] = useState("");
+  const [industry, setIndustry] = useState<Industry>("generic");
   const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (): Promise<void> => {
@@ -45,12 +54,14 @@ export function CreateEngagementDialog({
         name: name.trim(),
         client: client.trim(),
         description: description.trim() || undefined,
+        industry,
       });
       onCreated?.(engagement);
       setOpen(false);
       setName("");
       setClient("");
       setDescription("");
+      setIndustry("generic");
       router.push(`/engagements/${engagement.id}/streams`);
     } finally {
       setSubmitting(false);
@@ -89,6 +100,28 @@ export function CreateEngagementDialog({
               onChange={(event) => setClient(event.target.value)}
               placeholder="Acme Corp"
             />
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="engagement-industry">Industry baseline</Label>
+            <Select
+              value={industry}
+              onValueChange={(value) => setIndustry(value as Industry)}
+            >
+              <SelectTrigger id="engagement-industry" className="w-full">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {INDUSTRIES.map((item) => (
+                  <SelectItem key={item.id} value={item.id}>
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <p className="text-xs text-muted-foreground">
+              Determines which process framework seeds the value stream
+              baselines.
+            </p>
           </div>
           <div className="grid gap-2">
             <Label htmlFor="engagement-description">Description</Label>

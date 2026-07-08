@@ -42,12 +42,15 @@ export interface ValueStream {
   approvalStatus: ApprovalStatus;
 }
 
+export type Industry = "generic" | "telecom";
+
 export interface Engagement {
   id: string;
   name: string;
   client: string;
   status: EngagementStatus;
   description?: string;
+  industry: Industry;
   participants: Participant[];
   valueStreams: ValueStream[];
   currentStep: WorkflowStep;
@@ -59,6 +62,7 @@ export interface CreateEngagementInput {
   name: string;
   client: string;
   description?: string;
+  industry?: Industry;
 }
 
 export interface BaselineTemplate {
@@ -72,6 +76,14 @@ export interface BaselineTemplate {
 
 export interface BpmnElementMeta {
   functionUnit?: FunctionalUnit;
+  /** Enterprise systems realizing this step (system catalog ids). */
+  systems?: string[];
+}
+
+export interface SystemDef {
+  id: string;
+  name: string;
+  category: string;
 }
 
 export interface ProcessComment {
@@ -110,6 +122,17 @@ export interface OwlClass {
   label: string;
   functionUnit?: FunctionalUnit;
   linkedBpmnElements: string[];
+  mappedConcepts: string[];
+}
+
+export type ThesaurusFramework = "apqc" | "etom" | "sid";
+
+export interface ThesaurusConcept {
+  uri: string;
+  label: string;
+  notation?: string;
+  definition?: string;
+  broaderUri?: string;
 }
 
 export interface OntologyEdge {

@@ -1,12 +1,13 @@
 import {
   addProcessComment,
   analyzeProcessGaps,
-  ensureProcessState,
   getTaskSummaries,
   listProcessComments,
+  loadProcessState,
   saveBpmnXml,
   saveProcessState,
   setElementFunctionUnit,
+  setElementSystems,
 } from "@/lib/mock/process-store";
 import type {
   AiGapSuggestion,
@@ -20,8 +21,9 @@ export const processService = {
   load(
     engagementId: string,
     streamType: ValueStreamType,
+    industry?: string,
   ): Promise<ProcessState> {
-    return Promise.resolve(ensureProcessState(engagementId, streamType));
+    return loadProcessState(engagementId, streamType, industry);
   },
 
   saveXml(
@@ -45,6 +47,17 @@ export const processService = {
         elementId,
         functionUnit,
       ),
+    );
+  },
+
+  setSystems(
+    engagementId: string,
+    streamType: ValueStreamType,
+    elementId: string,
+    systems: string[],
+  ): Promise<ProcessState> {
+    return Promise.resolve(
+      setElementSystems(engagementId, streamType, elementId, systems),
     );
   },
 

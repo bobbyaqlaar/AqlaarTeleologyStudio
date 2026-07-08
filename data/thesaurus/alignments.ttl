@@ -14,8 +14,12 @@
 <http://ots.local/thesaurus/apqc/12_3_1> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10156>,
         <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10440> .
 
+<http://ots.local/thesaurus/apqc/12_4_8> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10415> .
+
 <http://ots.local/thesaurus/apqc/12_5_1> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10044>,
         <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10572> .
+
+<http://ots.local/thesaurus/apqc/13_2_1_1> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA4_EA8244> .
 
 <http://ots.local/thesaurus/apqc/13_4> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10521> .
 
@@ -23,18 +27,40 @@
 
 <http://ots.local/thesaurus/apqc/13_4_2_3> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10236> .
 
+<http://ots.local/thesaurus/apqc/13_7_3_3> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA4_EA8458> .
+
+<http://ots.local/thesaurus/apqc/1_2_8_2> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA3_EA7982> .
+
 <http://ots.local/thesaurus/apqc/3_1_1_2> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA1_EA7367> .
+
+<http://ots.local/thesaurus/apqc/3_2_6> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA1_EA7372> .
+
+<http://ots.local/thesaurus/apqc/3_2_7_1> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA3_EA8003> .
+
+<http://ots.local/thesaurus/apqc/3_4> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA2_EA7525> .
 
 <http://ots.local/thesaurus/apqc/3_4_4> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA2_EA7524> .
 
+<http://ots.local/thesaurus/apqc/5_2_2_6> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA6_EA9227> .
+
 <http://ots.local/thesaurus/apqc/5_2_3_7> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10724> .
+
+<http://ots.local/thesaurus/apqc/6_1> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA5_EA8946> .
+
+<http://ots.local/thesaurus/apqc/6_3_4_4> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA5_EA8778> .
 
 <http://ots.local/thesaurus/apqc/7_4> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10207> .
 
 <http://ots.local/thesaurus/apqc/7_4_1> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10208> .
 
+<http://ots.local/thesaurus/apqc/7_7_7_4> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10649> .
+
+<http://ots.local/thesaurus/apqc/8_2_4_1> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA5_EA8819> .
+
 <http://ots.local/thesaurus/apqc/9_0> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10122>,
         <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10438> .
 
 <http://ots.local/thesaurus/apqc/9_7_4_3> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10505> .
+
+<http://ots.local/thesaurus/apqc/9_9_1> skos:exactMatch <http://ots.local/thesaurus/etom/etom_EARoot_EA5_EA1_EA8_EA10327> .
 

@@ -30,14 +30,16 @@ export default async function ProcessPage({
 
   const stream = engagement.valueStreams.find((item) => item.type === streamType);
 
-  if (!stream?.baselineLoaded) {
+  if (!stream) {
     notFound();
   }
 
+  // Baseline-loaded state lives in the client-side mock store, so the server
+  // render can't gate on it reliably; the workspace loads the baseline itself.
   ensureProcessState(id, streamType);
 
   const loadedStreams = engagement.valueStreams
-    .filter((item) => item.baselineLoaded)
+    .filter((item) => item.baselineLoaded || item.type === streamType)
     .map((item) => item.type);
 
   const meta = VALUE_STREAM_META[streamType];
@@ -59,6 +61,7 @@ export default async function ProcessPage({
         engagementId={engagement.id}
         streamType={streamType}
         loadedStreams={loadedStreams}
+        industry={engagement.industry}
       />
     </AppShell>
   );

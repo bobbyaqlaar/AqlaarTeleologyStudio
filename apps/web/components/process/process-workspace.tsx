@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import Link from "next/link";
 import type { BpmnEditorHandle } from "@/components/bpmn/bpmn-editor";
 import { FunctionTagPanel } from "@/components/bpmn/function-tag-panel";
+import { SystemTagPanel } from "@/components/bpmn/system-tag-panel";
 import { BpmnTaskList } from "@/components/bpmn/bpmn-task-list";
 import { CommentThread } from "@/components/comments/comment-thread";
 import { GapSuggestionsDrawer } from "@/components/ai/gap-suggestions-drawer";
@@ -53,12 +54,14 @@ interface ProcessWorkspaceProps {
   engagementId: string;
   streamType: ValueStreamType;
   loadedStreams: ValueStreamType[];
+  industry?: string;
 }
 
 export function ProcessWorkspace({
   engagementId,
   streamType,
   loadedStreams,
+  industry = "generic",
 }: ProcessWorkspaceProps): React.ReactNode {
   const { canEdit } = useRole();
   const editorRef = useRef<BpmnEditorHandle>(null);
@@ -96,7 +99,7 @@ export function ProcessWorkspace({
   }, [engagementId, streamType]);
 
   useEffect(() => {
-    void processService.load(engagementId, streamType).then((state) => {
+    void processService.load(engagementId, streamType, industry).then((state) => {
       setProcessState(state);
       setSelectedId(null);
       setSelectedName(null);
@@ -104,11 +107,28 @@ export function ProcessWorkspace({
       void refreshTasks();
       void aiGapService.analyze(engagementId, streamType).then(setSuggestions);
     });
-  }, [engagementId, streamType, refreshTasks]);
+  }, [engagementId, streamType, industry, refreshTasks]);
 
   const selectedFunctionUnit = selectedId
     ? processState?.elementMeta[selectedId]?.functionUnit
     : undefined;
+  const selectedSystems = selectedId
+    ? (processState?.elementMeta[selectedId]?.systems ?? [])
+    : [];
+
+  const handleSetSystems = async (systems: string[]): Promise<void> => {
+    if (!selectedId || !canEdit) {
+      return;
+    }
+
+    const next = await processService.setSystems(
+      engagementId,
+      streamType,
+      selectedId,
+      systems,
+    );
+    setProcessState(next);
+  };
 
   const handleAssignFunction = async (
     functionUnit: FunctionalUnit | undefined,
@@ -254,6 +274,14 @@ export function ProcessWorkspace({
             functionUnit={selectedFunctionUnit}
             canEdit={canEdit}
             onAssign={(unit) => void handleAssignFunction(unit)}
+          />
+
+          <SystemTagPanel
+            elementId={selectedId}
+            elementType={selectedType}
+            systems={selectedSystems}
+            canEdit={canEdit}
+            onChange={(systems) => void handleSetSystems(systems)}
           />
 
           <div className="space-y-2 rounded-lg border border-border bg-card p-4">
