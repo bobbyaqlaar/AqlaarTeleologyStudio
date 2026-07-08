@@ -30,7 +30,7 @@ APQC_XLSX = (
     REPO / "ReferenceDocs" / "General"
     / "K016808_APQC Process Classification Framework (PCF) - Cross-Industry - Excel Version 8.0.xlsx"
 )
-MODA_DUMP = REPO / "ReferenceDocs" / "moda_dump.jsonl"
+MODA_DUMP = REPO / "services" / "ingest" / "cache" / "moda_full.jsonl"
 STREAMS_YAML = REPO / "services" / "ingest" / "mapping" / "streams.yaml"
 BASELINES = REPO / "data" / "baselines"
 THESAURUS = REPO / "data" / "thesaurus"
@@ -91,13 +91,6 @@ def parse_moda() -> None:
     (CACHE / "etom.jsonl").write_text("\n".join(p.model_dump_json() for p in processes))
     (CACHE / "sid.jsonl").write_text("\n".join(e.model_dump_json() for e in entities))
     typer.echo(json.dumps(stats, indent=2))
-    if stats["stub_pages"] > stats["pages"] * 0.5:
-        typer.echo(
-            "WARNING: dump is mostly navigation stubs — re-run "
-            "ReferenceDocs/moda_spider.py with deeper crawling before "
-            "trusting telecom output.",
-            err=True,
-        )
 
 
 @app.command()
@@ -121,6 +114,29 @@ def emit(
     skos_path = THESAURUS / "apqc.ttl"
     skos_emitter.emit("apqc", elements, skos_path)
     typer.echo(f"thesaurus: {skos_path}")
+
+    # TM Forum thesauri when the MODA caches exist
+    from services.ingest.models import DataEntity
+
+    etom_cache = CACHE / "etom.jsonl"
+    if etom_cache.exists():
+        etom = [
+            ProcessElement.model_validate_json(line)
+            for line in etom_cache.read_text().splitlines()
+        ]
+        path = THESAURUS / "etom.ttl"
+        skos_emitter.emit("etom", etom, path)
+        typer.echo(f"thesaurus: {path}")
+
+    sid_cache = CACHE / "sid.jsonl"
+    if sid_cache.exists():
+        sid = [
+            DataEntity.model_validate_json(line)
+            for line in sid_cache.read_text().splitlines()
+        ]
+        path = THESAURUS / "sid.ttl"
+        skos_emitter.emit("sid", sid, path)
+        typer.echo(f"thesaurus: {path}")
 
 
 @app.command()

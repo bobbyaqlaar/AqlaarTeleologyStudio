@@ -48,7 +48,11 @@ Root `pyproject.toml`: add deps `openpyxl, pdfplumber, beautifulsoup4, lxml, rdf
 ### 1.2 Canonical model — [x] DONE (`services/ingest/models.py`)
 `ProcessElement {id, frameworkId(PCF hierarchy id e.g. "3.2.1" / eTOM id), framework, level(1-5), name, description?, parentId?, order, functionUnit?}`. `DataEntity {id, name, domain, framework(sid), description?, parentId?}`. `StreamMapping` from streams.yaml.
 
-### 1.3 Parsers — [x] apqc_xlsx (2017 elements) · [~] moda (re-crawl DONE via services/ingest/crawl_moda.py → cache/moda_full.jsonl ~18k pages from guid_look map in index.htm; parser rewrite against full dump still TODO) · [x] apqc_pdf (two-column industry PDFs; telecom 1649 / retail 1708 / utilities 2069 elements, 0 orphans; `ots-ingest parse-industry <pdf> --industry <slug>`)
+### 1.3 Parsers — ALL DONE 2026-07-08
+- [x] apqc_xlsx (2017 elements)
+- [x] apqc_pdf (two-column industry PDFs; telecom 1649 / retail 1708 / utilities 2069 elements, 0 orphans; `ots-ingest parse-industry <pdf> --industry <slug>`)
+- [x] moda: full re-crawl (crawl_moda.py, 18,257/18,261 pages → cache/moda_full.jsonl, 293MB gitignored — RE-RUN CRAWL in new clone before re-parsing). Breadcrumb-based parser: eTOM 3198 elements (8 domains, levels 1–7, 0 orphans) + SID 5124 entities (1000 ABEs). Noise filtered (deleted/zTemplate/$diagram/unused).
+- NOTE: minor dup concepts (element page + diagram page share name) in etom/sid thesauri — dedup pass optional.
 - xlsx: PCF Excel has rows w/ hierarchy number + name + optional metrics. Parse hierarchy number to build tree. Verify sheet layout first (openpyxl, print head).
 - moda: each jsonl line `{url, title, html}`. Extract EA-exported tables: process element names, ids, descriptions, parent links; SID domains/ABEs from "SID Domains.html" style pages. Coverage check: 83 pages likely partial → re-run `ReferenceDocs/moda_spider.py` (needs scrapy) if key eTOM L2s missing.
 - pdf: extract per-category definitions text; LLM cleanup pass optional/deferred; cache to `cache/apqc_pdf/*.jsonl`.
@@ -62,7 +66,7 @@ Root `pyproject.toml`: add deps `openpyxl, pdfplumber, beautifulsoup4, lxml, rdf
 - t2r: apqc [6.0 customer service], etom [Operations-Assurance]
 (Exact PCF ids TBD from parsed xlsx — verify then pin.)
 
-### 1.5 Emitters — [x] ttl · [x] skos (apqc.ttl, 2017 concepts; exactMatch alignment still TODO) · [x] bpmn (straight-line + lanes + DI; gateways = consultant work). Emitted to `data/baselines/generic/*.{ttl,bpmn}` + `data/thesaurus/apqc.ttl`. Old flat `data/baselines/*.ttl` kept until Phase 2 API migration.
+### 1.5 Emitters — [x] ttl · [x] skos (apqc.ttl 2017 + etom.ttl 3198 + sid.ttl 5124 concepts; cross-framework exactMatch alignment still TODO) · [x] bpmn (straight-line + lanes + DI; gateways = consultant work). Emitted to `data/baselines/generic/*.{ttl,bpmn}` + `data/thesaurus/apqc.ttl`. Old flat `data/baselines/*.ttl` kept until Phase 2 API migration.
 - ttl → `data/baselines/generic/{stream}.ttl` + `data/baselines/telecom/{stream}.ttl`. Keep existing flat files until API migrated (Phase 2), then delete old.
 - skos → `data/thesaurus/apqc.ttl`, `data/thesaurus/etom.ttl`, `data/thesaurus/sid.ttl`; cross-links `skos:exactMatch` via LLM-assisted alignment, human-review YAML in `mapping/alignments/`.
 - bpmn → `data/baselines/{industry}/{stream}.bpmn`: process w/ laneSet per functionUnit, tasks from leaf ProcessElements, sequenceFlows from order/precedes. Must open in apps/web bpmn-js editor.
@@ -98,4 +102,5 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 ## Session log
 
 - 2026-07-08: Plan written. Phase 0 done (commit bc74a87). Phase 1 mostly done: ingest package built, pipeline runs end-to-end (`parse-apqc` → `emit` → `validate` all green). O2C baseline now 22 real APQC classes w/ provenance; BPMN 18 tasks/3 lanes, valid XML. **Next up:** (1) re-crawl TM Forum MODA (dump too thin: 27 objects), (2) apqc_pdf parser for industry PCFs, (3) SKOS cross-framework exactMatch alignment, (4) Phase 2 API: baseline graphs by industry + thesaurus endpoints.
+- 2026-07-08 (evening): MODA fully crawled (18,257 pages) + breadcrumb parser → eTOM 3198 / SID 5124; thesauri emitted (apqc/etom/sid TTL, live-search-tested via API: multi-word regex works). Phase 2 API done + integration-tested (baselines catalog, initialize?industry=, thesaurus search, concept-mapping w/ mappedConcepts on classes). apqc_pdf parser done (3 industries tested). **Next:** telecom baseline emit from eTOM subtrees (needs etom entries in streams.yaml + emitter support for etom cache), SKOS exactMatch alignment, Phase 3 UI (industry picker, system mapping, thesaurus panel), Phase 4 persistence.
 - 2026-07-08 (later): Bobby approved `hr` function unit → added across web enum/colors, ingest validator, streams.yaml (h2r 7.x → hr), spec, README. Re-emitted baselines, validation green. Verified all 5 generated .bpmn parse clean via bpmn-moddle (0 warnings; h2r lanes hr+finance). `npx tsc --noEmit` clean.
