@@ -14,6 +14,7 @@ from pathlib import Path
 from xml.etree import ElementTree as ET
 
 from services.ingest.models import ProcessElement, StreamMapping
+from services.ingest.selection import leaf_level_elements, select
 
 BPMN_NS = "http://www.omg.org/spec/BPMN/20100524/MODEL"
 BPMNDI_NS = "http://www.omg.org/spec/BPMN/20100524/DI"
@@ -25,10 +26,6 @@ TASK_W, TASK_H, GAP_X, LANE_H, START_X = 140, 70, 60, 130, 180
 
 def _task_id(element: ProcessElement) -> str:
     return "Task_" + re.sub(r"[^A-Za-z0-9]", "_", element.id)
-
-
-def _in_subtree(element: ProcessElement, prefix: str) -> bool:
-    return element.id == prefix or element.id.startswith(prefix + ".")
 
 
 def emit(
@@ -44,10 +41,7 @@ def emit(
     # Ordered process-level tasks with their default function unit.
     tasks: list[tuple[ProcessElement, str]] = []
     for subtree in stream.subtrees:
-        selected = sorted(
-            (e for e in elements if _in_subtree(e, subtree.prefix) and e.level == subtree.max_level),
-            key=lambda e: [int(p) for p in e.id.split(".")],
-        )
+        selected = leaf_level_elements(subtree, select(subtree, elements))
         tasks.extend((element, subtree.function_unit) for element in selected)
 
     lanes = list(dict.fromkeys(unit for _, unit in tasks))

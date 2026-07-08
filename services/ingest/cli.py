@@ -38,8 +38,10 @@ THESAURUS = REPO / "data" / "thesaurus"
 ALL_STREAMS = ["o2c", "p2p", "c2m", "h2r", "t2r"]
 
 
-def _load_stream_mappings() -> dict[str, StreamMapping]:
-    raw = yaml.safe_load(STREAMS_YAML.read_text())
+def _load_stream_mappings(industry: str = "generic") -> dict[str, StreamMapping]:
+    per_industry = STREAMS_YAML.with_name(f"streams_{industry}.yaml")
+    path = per_industry if per_industry.exists() else STREAMS_YAML
+    raw = yaml.safe_load(path.read_text())
     return {
         key: StreamMapping(stream=key, label=value["label"], subtrees=value["subtrees"])
         for key, value in raw.items()
@@ -98,9 +100,15 @@ def emit(
     stream: str = typer.Option("all", help="o2c|p2p|c2m|h2r|t2r|all"),
     industry: str = typer.Option("generic", help="baseline industry folder"),
 ) -> None:
-    """Emit TTL + BPMN baselines per stream, and the APQC SKOS thesaurus."""
+    """Emit TTL + BPMN baselines per stream, and the SKOS thesauri."""
     elements = _load_apqc_cache()
-    mappings = _load_stream_mappings()
+    etom_cache = CACHE / "etom.jsonl"
+    if etom_cache.exists():
+        elements = elements + [
+            ProcessElement.model_validate_json(line)
+            for line in etom_cache.read_text().splitlines()
+        ]
+    mappings = _load_stream_mappings(industry)
     targets = ALL_STREAMS if stream == "all" else [stream]
 
     for key in targets:
@@ -137,6 +145,34 @@ def emit(
         path = THESAURUS / "sid.ttl"
         skos_emitter.emit("sid", sid, path)
         typer.echo(f"thesaurus: {path}")
+
+    alignment_yaml = REPO / "services" / "ingest" / "mapping" / "alignments" / "apqc-etom.yaml"
+    if alignment_yaml.exists():
+        from services.ingest.align import emit_alignment_ttl
+
+        path = THESAURUS / "alignments.ttl"
+        count = emit_alignment_ttl(alignment_yaml, path)
+        typer.echo(f"alignments: {count} exactMatch → {path}")
+
+
+@app.command()
+def align() -> None:
+    """Build APQC↔eTOM alignment candidates (mapping/alignments/apqc-etom.yaml)."""
+    from services.ingest.align import build_alignments
+
+    apqc = _load_apqc_cache()
+    etom_cache = CACHE / "etom.jsonl"
+    if not etom_cache.exists():
+        typer.echo("No etom cache — run `ots-ingest parse-moda` first.", err=True)
+        raise typer.Exit(1)
+    etom = [
+        ProcessElement.model_validate_json(line)
+        for line in etom_cache.read_text().splitlines()
+    ]
+    out = REPO / "services" / "ingest" / "mapping" / "alignments" / "apqc-etom.yaml"
+    stats = build_alignments(apqc, etom, out)
+    typer.echo(f"{stats['exact']} exact + {stats['candidate']} candidates → {out}")
+    typer.echo("Review candidates (set status: approved/rejected), then `ots-ingest emit`.")
 
 
 @app.command()

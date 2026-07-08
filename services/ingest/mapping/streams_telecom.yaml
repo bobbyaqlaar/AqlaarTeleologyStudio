@@ -1,0 +1,44 @@
+# Telecom value stream mapping — TM Forum eTOM (MODA crawl) subtrees selected
+# by root_name; h2r falls back to APQC (eTOM has no HR processes).
+# eTOM levels here: domain=1, L2 process=2, L3=3. max_level 3 → L3 tasks.
+
+o2c:
+  label: Order to Cash
+  subtrees:
+    - { framework: etom, root_name: "Selling", function_unit: sales, max_level: 3 }
+    - { framework: etom, root_name: "Customer Order Processing Management", function_unit: operations, max_level: 3 }
+    - { framework: etom, root_name: "Customer Bill Invoice Management", function_unit: finance, max_level: 3 }
+    - { framework: etom, root_name: "Customer Receivables Management", function_unit: finance, max_level: 3 }
+
+p2p:
+  label: Procure to Pay
+  subtrees:
+    - { framework: etom, root_name: "Business Partner Tender Management", function_unit: procurement_scm, max_level: 3 }
+    - { framework: etom, root_name: "Business Partner Order Management", function_unit: procurement_scm, max_level: 3 }
+    - { framework: etom, root_name: "BP Bill/Invoice Management", function_unit: finance, max_level: 3 }
+    - { framework: etom, root_name: "BP Bill Payments & Receivables Management", function_unit: finance, max_level: 3 }
+
+c2m:
+  label: Concept to Market
+  subtrees:
+    - { framework: etom, root_name: "Product Portfolio Strategy Management", function_unit: products, max_level: 3 }
+    - { framework: etom, root_name: "Product Specification & Offering Development & Retirement", function_unit: products, max_level: 3 }
+    - { framework: etom, root_name: "Product Development", function_unit: products, max_level: 3 }
+    - { framework: etom, root_name: "Marketing Campaign Management", function_unit: marketing, max_level: 3 }
+
+h2r:
+  label: Hire to Retire
+  subtrees:
+    - { framework: apqc, prefix: "7.2", function_unit: hr, max_level: 3 }
+    - { framework: apqc, prefix: "7.3", function_unit: hr, max_level: 3 }
+    - { framework: apqc, prefix: "7.5", function_unit: hr, max_level: 3 }
+    - { framework: apqc, prefix: "7.6", function_unit: hr, max_level: 3 }
+    - { framework: apqc, prefix: "9.5", function_unit: finance, max_level: 3 }
+
+t2r:
+  label: Trouble to Resolve
+  subtrees:
+    - { framework: etom, root_name: "Customer Problem Management", function_unit: customer_care, max_level: 3 }
+    - { framework: etom, root_name: "Service Problem Management", function_unit: operations, max_level: 3 }
+    - { framework: etom, root_name: "Resource Trouble Management", function_unit: networks, max_level: 3 }
+    - { framework: etom, root_name: "Customer QoS/SLA Management", function_unit: customer_care, max_level: 3 }

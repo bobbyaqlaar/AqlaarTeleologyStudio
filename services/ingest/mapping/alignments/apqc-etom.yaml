@@ -1,0 +1,170 @@
+- apqc_id: '10.3'
+  apqc_name: Maintain assets
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10406
+  etom_name: Maintain Assets
+  status: exact
+- apqc_id: '11.1'
+  apqc_name: Manage enterprise risk
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10170
+  etom_name: Enterprise Risk Management
+  status: exact
+- apqc_id: '11.1'
+  apqc_name: Manage enterprise risk
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10080
+  etom_name: Enterprise Risk Management
+  status: exact
+- apqc_id: 11.1.3.1
+  apqc_name: Identify risks
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10588
+  etom_name: Identify Risks
+  status: exact
+- apqc_id: 11.1.3.5
+  apqc_name: Monitor risks
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10593
+  etom_name: Monitor Risks
+  status: exact
+- apqc_id: '11.2'
+  apqc_name: Manage compliance
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10520
+  etom_name: Manage Compliance
+  status: exact
+- apqc_id: 12.3.1
+  apqc_name: Report financial results
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10440
+  etom_name: Report Financial Results
+  status: exact
+- apqc_id: 12.3.1
+  apqc_name: Report financial results
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10156
+  etom_name: Report Financial Results
+  status: exact
+- apqc_id: 12.5.1
+  apqc_name: Manage community relations
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10572
+  etom_name: Community Relations Management
+  status: exact
+- apqc_id: 12.5.1
+  apqc_name: Manage community relations
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10044
+  etom_name: Community Relations Management
+  status: exact
+- apqc_id: '13.4'
+  apqc_name: Manage change
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10521
+  etom_name: Manage Change
+  status: exact
+- apqc_id: 13.4.1
+  apqc_name: Plan for change
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10444
+  etom_name: Plan Change
+  status: exact
+- apqc_id: 13.4.2.3
+  apqc_name: Develop training plan
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10236
+  etom_name: Develop Training Plan
+  status: exact
+- apqc_id: 3.1.1.2
+  apqc_name: Identify market segments
+  etom_id: etom:EARoot_EA5_EA1_EA1_EA7367
+  etom_name: Identify Market Segments
+  status: exact
+- apqc_id: 3.4.4
+  apqc_name: Establish sales goals and measures
+  etom_id: etom:EARoot_EA5_EA1_EA2_EA7524
+  etom_name: Establish Sales Goals and Measures
+  status: exact
+- apqc_id: 5.2.3.7
+  apqc_name: Evaluate training effectiveness
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10724
+  etom_name: Evaluate Training Effectiveness
+  status: exact
+- apqc_id: '7.4'
+  apqc_name: Manage employee relations
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10207
+  etom_name: Manage Employee Relations
+  status: exact
+- apqc_id: 7.4.1
+  apqc_name: Manage labor relations
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10208
+  etom_name: Manage Labor Relations
+  status: exact
+- apqc_id: '9.0'
+  apqc_name: Manage Financial Resources
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10438
+  etom_name: Manage Financial Resources
+  status: exact
+- apqc_id: '9.0'
+  apqc_name: Manage Financial Resources
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10122
+  etom_name: Manage Financial Resources
+  status: exact
+- apqc_id: 9.7.4.3
+  apqc_name: Manage liquidity
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10505
+  etom_name: Manage Liquidity
+  status: exact
+- apqc_id: 1.2.8.2
+  apqc_name: Design customer experience
+  etom_id: etom:EARoot_EA5_EA1_EA3_EA7982
+  etom_name: Design Customer Experience Journey
+  status: candidate
+- apqc_id: 12.4.8
+  apqc_name: Provide legal advice/counseling
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10415
+  etom_name: Provide Legal Advice
+  status: candidate
+- apqc_id: 13.2.1.1
+  apqc_name: Establish portfolio strategy
+  etom_id: etom:EARoot_EA5_EA1_EA4_EA8244
+  etom_name: Establish Product Portfolio Strategy
+  status: candidate
+- apqc_id: 13.7.3.3
+  apqc_name: Collect performance data
+  etom_id: etom:EARoot_EA5_EA1_EA4_EA8458
+  etom_name: Collect Product Performance Data
+  status: candidate
+- apqc_id: 3.2.6
+  apqc_name: Develop marketing communication strategy
+  etom_id: etom:EARoot_EA5_EA1_EA1_EA7372
+  etom_name: Develop Marketing Communication
+  status: candidate
+- apqc_id: 3.2.7.1
+  apqc_name: Define customer loyalty program
+  etom_id: etom:EARoot_EA5_EA1_EA3_EA8003
+  etom_name: Define Loyalty Program
+  status: candidate
+- apqc_id: '3.4'
+  apqc_name: Develop sales strategy
+  etom_id: etom:EARoot_EA5_EA1_EA2_EA7525
+  etom_name: Develop Sales Channel Strategy
+  status: candidate
+- apqc_id: 5.2.2.6
+  apqc_name: Monitor and manage resource capacity and availability
+  etom_id: etom:EARoot_EA5_EA1_EA6_EA9227
+  etom_name: Monitor Resource Capacity
+  status: candidate
+- apqc_id: '6.1'
+  apqc_name: Develop customer service strategy
+  etom_id: etom:EARoot_EA5_EA1_EA5_EA8946
+  etom_name: Develop Service Strategy
+  status: candidate
+- apqc_id: 6.3.4.4
+  apqc_name: Ensure quality of service
+  etom_id: etom:EARoot_EA5_EA1_EA5_EA8778
+  etom_name: Ensure Service Capability Quality
+  status: candidate
+- apqc_id: 7.7.7.4
+  apqc_name: Identify workforce data sources
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10649
+  etom_name: Identify Data Sources
+  status: candidate
+- apqc_id: 8.2.4.1
+  apqc_name: Establish IT service management strategy and goals
+  etom_id: etom:EARoot_EA5_EA1_EA5_EA8819
+  etom_name: Establish Service Strategy & Goals
+  status: candidate
+- apqc_id: 9.9.1
+  apqc_name: Develop tax strategy and plan
+  etom_id: etom:EARoot_EA5_EA1_EA8_EA10327
+  etom_name: Plan Tax Strategy
+  status: candidate

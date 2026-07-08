@@ -1,0 +1,198 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:DevelopSalesProposal_EA7571 a owl:Class ;
+    rdfs:label "Develop Sales Proposal"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:NegotiateSalesContract_EA7574 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA2_EA7571" ;
+    rdfs:comment "The purpose of this process is to develop a sales proposal to respond to the customer’s requirements. This process commences following approval by the Qualify Customer process. The development of a sales proposal may require the selection of a standard product offering, may require the development of a non-standard offering, or may require the creation of a project team to construct an offering in response to a customer’s Request For Proposal. In all cases, the processes are responsible for ascertaining the customer’s requirements, determining the ability of the enterprise to support the customer requirements, and developing a proposal (or proposals) for the customer which meets the stated requirements. These processes assess the extent of enterprise support required to develop the sales proposal, marshal the necessary support across the enterprise and administer the sales proposal development activity to ensure that any timing constraints associated with the customer requirements are achieved.<br/>Note that development of a non-standard sales proposal or the response to a customer’s RFP may require the development of unique solution designs. The development of unique solutions, within the context of current deployed capabilities, uses the Design Solutions process within Service Management & Operations to undertake the necessary feasibility studies. Where current capabilities are not able to support customer’s requirements, the Product & Offer Capability Delivery processes are invoked to undertake any necessary assessment and business case development.<br/>Develop Sales Proposal develops a sales proposal to respond to a sales prospect's requirements. It commences following approval by the Qualify Opportunity process if this process is applicable. The development of a sales proposal may require the selection of a standard product offering, may require the development of a non-standard offering, or may require the creation of a project team to construct an offering in response to a sales prospect's Request For Proposal. In all cases, the processes are responsible for ascertaining a prospect's requirements, determining the ability of the enterprise to support the requirements, and developing a proposal (or proposals) which meets the stated requirements.<br/><br/>This process assesses the extent of enterprise support required to develop the sales proposal, marshal the necessary support across the enterprise and administer the sales proposal development activity to ensure that any timing constraints associated with the customer requirements are achieved.<br/><br/>Note that development of a non-standard sales proposal or the response to a customer’s RFP may require the development of unique solution designs. The development of unique solutions, within the context of current deployed capabilities, uses the Design Solutions process within Service Management & Operations to undertake the necessary feasibility studies. Where current capabilities are not able to support customer’s requirements, the Product & Offer Capability Delivery processes are invoked to undertake any necessary assessment and business case development.<br/>"@en ;
+    rdfs:subClassOf ots:Selling_EA7505 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:AcquireSalesProspectData_EA7572 a owl:Class ;
+    rdfs:label "Acquire Sales Prospect Data"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:CrossUpSell_EA7573 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA2_EA7572" ;
+    rdfs:comment "Acquire Sales Prospect Data captures and records all pertinent sales prospect data required for qualifying an opportunity and for the initiation, realization and deployment of the agreed sales proposal. In most standard offerings the necessary sales prospect data is often captured by Contact/Lead/Prospect Management. For non-standard and/or complex sales agreements associated, for instance, with a customer RFP, extensive customer information may be required to plan and roll-out the agreed solution. For example, a smart city may require extensive capture of details surrounding deployment of IoT devices and applications to manage them.<br/><br/>In some cases the necessary level of precise detail may be available from Develop Sales Proposal. Where this is not the case, this process is responsible for determining the precise sales prospect information required to support the agreed sales proposal, capturing through forms, or sales prospect interviews, and so forth, the required sales prospect information, and storing the details in a form required by other processes.<br/>"@en ;
+    rdfs:subClassOf ots:Selling_EA7505 .
+
+ots:CreateCustomerBillInvoice_EA7850 a owl:Class ;
+    rdfs:label "Create Customer Bill Invoice"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:PricingDiscountingAdjustmentsRebatesApplication_EA7852 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7850" ;
+    rdfs:comment "The primary purpose of the Create Customer Bill Invoice process is the production of a timely and accurate invoice in accordance with the specific billing cycles and reflective of the final charges for services, together with any adjustments, delivered to the customer by the Service Provider and respective other parties.<br/>This process contains the invoicing components of the Service Provider’s business. This includes the rendering/formatting of an invoice, the delivery of an electronic copy of an invoice to customers and the processes that verify invoice quality prior to distribution to the customer in electronic form, or to the process responsible for physical invoice production and distribution. The flow of this process can be viewed as an extension of the company’s e-business strategy. In this case, the Service Provider would render an invoice electronically, via the Internet for example.<br/>Furthermore, this process provides specifications for the formatting of invoices in different ways and to achieve different publishing possibilities, and supports the creation of different invoice formats for different publication media. The process is further responsible for splitting and re-arranging invoices for customers (particularly customers with complex account structures) according to agreements made with these customers.<br/>Additionally these processes store the customer invoice for a period of time to address regulation and/or internal requirements, during which they can be accessed to support any customer or regulator agency inquiries on bill invoices.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerBillInvoiceManagement_EA7714 .
+
+ots:CrossUpSell_EA7573 a owl:Class ;
+    rdfs:label "Cross/Up Sell"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageCustomerOrderPolicy_EA8058 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA2_EA7573" ;
+    rdfs:comment "Cross/Up Sell ensures that the value of the relationship between the customer or other party and an enterprise is maximized by selling additional, or more of the existing, product offerings. The ongoing analysis of customer or other party trends, such as usage, problems, complaints, is used to identify when the current offerings may no longer be appropriate or when the opportunity for a larger sale arises. Based on the data collected, more appropriate or other offering(s) may be recommended to the customer or other party.<br/>"@en ;
+    rdfs:subClassOf ots:Selling_EA7505 .
+
+ots:ManageCustomerBillInquiry_EA7797 a owl:Class ;
+    rdfs:label "Manage Customer Bill Inquiry"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7797" ;
+    rdfs:comment "The purpose of Manage Customer Bill Inquiry process is to ensure the timely and effective fulfillment of all customer bill inquiries and complaints. This process is responsible for managing customer interaction as it relates to a customer’s billing relationship to a Service Provider. This includes the creation of inquiries against the customer’s billing account(s), and management of changes to customer billing account structure and details, the managing of all customer bill inquiry lifecycle, reporting changes and updates and closing of customer bill inquiry when all activities were accomplished. This process can be viewed via traditional means, with a service representative managing the customer or via e-business means. In the latter case, inquiries, complaints and changes to details would be handled via electronic media without the intervention of a representative.<br/>This was an L2 process in 24.0 it was renamed old name was Customer Bill Inquiry Handling<br/>"@en ;
+    rdfs:subClassOf ots:CustomerReceivablesManagement_EA7715 .
+
+ots:ManageCustomerBillingAccount_EA7794 a owl:Class ;
+    rdfs:label "Manage Customer Billing Account"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageCustomerBillInquiry_EA7797 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7794" ;
+    rdfs:comment "Manage Customer Billing Account's purpose pertains to effective management of the customer’s billing account as it relates to the products purchased and consumed throughout the appropriate billing cycle. This process focuses on managing changes to the customer’s billing account (for example, customer billing address, etc.) as it relates to the customer’s service portfolio, such as ensuring that the correct purchased products are assigned to the customer’s billing account for accurate billing.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerReceivablesManagement_EA7715 .
+
+ots:ManageCustomerDebtCollection_EA7796 a owl:Class ;
+    rdfs:label "Manage Customer Debt Collection"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageCustomerBillingAccount_EA7794 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7796" ;
+    rdfs:comment "The purpose of the Manage Customer Debt Collection process is to collect past due payments from the customer. This process monitors the amount due from the customer, i.e. check whether the payments are made on time, and implements necessary activities and policies to recover amounts overdue. <br/><br/>The responsibilities of this process include, but are not limited to:<br/>• Identifying invoices which are overdue for payment;<br/>• Initiating and managing follow-up with customers having overdue amounts;<br/>• Arranging and monitoring payment plans to allow customers to pay overdue amounts in installments;<br/>• Initiating debt recovery activities in accordance with appropriate commercial practice and policies;<br/>• Managing the aged customer debt portfolio;<br/>• Establishing and managing customer debt profiles to assist in managing debt recovery and debt risk on a customer, product or customer group basis;<br/>• Establishing and managing commercial arrangements with third parties for the recover of aged debt, and/or for the write-off and selling of parts of the debt portfolio to third parties.<br/><br/>Note that these processes may initiate a direct enquiry to the customer and attempt to manage the initial recovery through the Bill Inquiry Handling processes. These processes use policies established by the Support Bill Payments & Receivable Management process to direct any escalation of the recovery processes being employed. <br/><br/>Note that where third party arrangements need to be put in place, these processes are responsible for establishing the requirements for, and managing any commercial arrangements agreed with, third party suppliers. The Party Tender Management and Party Agreement Management processes are used deliver the commercial agreements.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerReceivablesManagement_EA7715 .
+
+ots:ManageCustomerOrderCancellation_EA8054 a owl:Class ;
+    rdfs:label "Manage Customer Order Cancellation"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageCustomerOrderPayment_EA8052 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA8054" ;
+    rdfs:comment "Manage Customer Order Cancellation business activity directs and controls the review, acceptance and processing of order cancellation requests in accordance to the order management policies and procedures. <br/><br/>Manage Customer Order Cancellation includes activities that enable review cancellation requests, approve or reject cancellation requests, and overseas any returns applicable to the review outcome of cancellation requests.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerOrderProcessingManagement_EA7708 .
+
+ots:ManageCustomerOrderClosure_EA8057 a owl:Class ;
+    rdfs:label "Manage Customer Order Closure"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageCustomerOrderCompletion_EA8055 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA8057" ;
+    rdfs:comment "Manage Customer Order Closure business activity ensures that customer has confirmed the delivery of a completed customer order. <br/><br/>Manage Customer Order Closure business activity closes-the-loop of between the Customer Order Completion process and the confirmation by the Customer. This business activity includes tasks to communicate and confirm delivery to customer; cancellation of any open line items in the customer order; and reports the customer order completion to related stakeholders.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerOrderProcessingManagement_EA7708 .
+
+ots:ManageCustomerOrderCompletion_EA8055 a owl:Class ;
+    rdfs:label "Manage Customer Order Completion"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageCustomerOrderCancellation_EA8054 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA8055" ;
+    rdfs:comment "Manage Customer Order Completion business activity controls activities to confirm that an order has been successfully delivered/shipped to the customer. <br/><br/>Manage Customer Order Completion includes activities that assure delivery/shipment is successfully processed by the business, and there is a confirmation that the customer order is in effectively in a delivery/shipping state.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerOrderProcessingManagement_EA7708 .
+
+ots:ManageCustomerOrderFulfillment_EA8053 a owl:Class ;
+    rdfs:label "Manage Customer Order Fulfillment"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ProduceDistributeCustomerBill_EA7851 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA8053" ;
+    rdfs:comment "Manage Customer Order Fulfillment business activity directs and controls all activities that provision and activate orders marked for fulfillment. <br/><br/>Manage Customer Order Fulfillment ensure customer orders are organized and arranged (orchestrated), and tracked to meet committed ordering terms.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerOrderProcessingManagement_EA7708 .
+
+ots:ManageCustomerOrderManagementReport_EA8056 a owl:Class ;
+    rdfs:label "Manage Customer Order Management Report"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageCustomerOrderClosure_EA8057 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA8056" ;
+    rdfs:comment "Manage Customer Order Management Report business activity provides detailed account of Customer Order Management activities, representing state and status of customer orders across the customer order lifecycle. <br/><br/>Manage Customer Order Management Report provides monitoring, tracking and customer order status updates/notification as needed to all stakeholders linked to the customer ordering and fulfillment activities.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerOrderProcessingManagement_EA7708 .
+
+ots:ManageCustomerOrderPayment_EA8052 a owl:Class ;
+    rdfs:label "Manage Customer Order Payment"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageCustomerOrderPlacement_EA8051 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA8052" ;
+    rdfs:comment "Manage Customer Order Payment business activity directs and controls customer payments for orders received. It is responsible for ensuring that customer payments for orders are processed, and accounted for correctly. <br/><br/>This business activity ensures that payments are received, validated, correctly applied to the customers accounts, tracked for compliance, and where applicable the corresponding portion of the payment sent to upstream business partners.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerOrderProcessingManagement_EA7708 .
+
+ots:ManageCustomerOrderPlacement_EA8051 a owl:Class ;
+    rdfs:label "Manage Customer Order Placement"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageCustomerOrderFulfillment_EA8053 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA8051" ;
+    rdfs:comment "Manage Customer Order Placement business activity directs and controls the capture of information to enable create customer order, change customer order and validate customer order based on ordering information from customer.<br/><br/>Manage Customer Order Placement ensures that the organization can identify customers, facilitate product selection, capture requirements and confirm payments associated to orders.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerOrderProcessingManagement_EA7708 .
+
+ots:ManageCustomerOrderPolicy_EA8058 a owl:Class ;
+    rdfs:label "Manage Customer Order Policy"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageCustomerOrderManagementReport_EA8056 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA8058" ;
+    rdfs:comment "Manage Customer Order Policy business process controls all business and technical procedures that support customer order scenarios and activities.<br/><br/>Manage Customer Order Policy ensures customer order will be processed in a manner that is efficient and accurate based on implied levels of business agreement with customers.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerOrderProcessingManagement_EA7708 .
+
+ots:ManageCustomerPayments_EA7795 a owl:Class ;
+    rdfs:label "Manage Customer Payments"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageCustomerDebtCollection_EA7796 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7795" ;
+    rdfs:comment "The purpose of the Manage Customer Payments process is to collect payments made by the customer and reconcile the payments to the invoices. This process is meant to match these payments with the services/invoices delivered to this customer. These processes can include credit/debit/EFT payments using various channels, either directly or through third parties, and cash or check payments, either directly or through third parties.<br/><br/>In all the above cases these processes are responsible for the processes interacting with the customers and/or the third parties. The processes are also responsible for establishing managing back-end bank accounts for receipt of the customer payments and for the transfer of funds collected by third parties. These processes are responsible for reconciling the money received into the bank accounts against the payments expected in the invoices. Additionally these processes inform the Financial Management on all those payments for updating the ledger.<br/><br/>These processes are responsible for establishing the requirements for, and managing any commercial arrangements agreed with, other parties. Note that the other Party Capability Delivery process is used to deliver the commercial agreements.<br/><br/>To the extent that processing of any payments is undertaken internally, i.e. check processing, these processes are responsible for managing the operation and quality of the internal processing.<br/><br/>Where payments do not match invoices, this process is responsible for informing the Manage Customer Debt Collection Manage Debt Management processes of any underpayments, and the Bill Inquiry Handling processes for any over-payments. Underpayments and overpayments are handled appropriately by these separate processes.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerReceivablesManagement_EA7715 .
+
+ots:NegotiateSalesContract_EA7574 a owl:Class ;
+    rdfs:label "Negotiate Sales/Contract"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:QualifySellingOpportunity_EA7570 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA2_EA7574" ;
+    rdfs:comment "The purpose of this process is to close the sale with terms that are understood by the customer, and are mutually agreeable to both the customer and the service provider. This process may involve obtaining customer agreement to standard terms and conditions. The agreement process may require interaction with the customer to ensure that the standard terms and conditions are understood by, and are acceptable to, the customer.<br/>In some cases this process may involve the development of, and negotiation with the customer of, non-standard terms and conditions associated with sales proposals specifically developed to meet specific customer requirements. For complex sales proposals associated with customer RFPs this process may extend over long time periods and require extensive interaction with customers to achieve agreement. Aspects of contract price determination may include issues of CPE prices from third party vendors, allowances based on customer location, etc. For RFPs, many of the commercial terms being sought may be developed or originated by the customer, and the negotiating team may need to develop strategies to achieve acceptable commercial outcomes. The sale is concluded through negotiations and joint agreement on features, service levels, pricing and discounts, resulting in a sign-off formal agreement/contract between the customer and service provider. Depending upon specific circumstances, final agreement from the Service Provider’s perspective may require escalation to, and agreement from, an appropriately delegated manager. The formal agreement could include zero or more confirmed orders from the customer. These orders are then passed on as requests to allow formal Customer Orders to be generated and processed.<br/>Negotiate Sales/Contract closes the sale with terms that are understood by the sales prospect, which now becomes a customer or a some other party that make an enterprise's offerings to the market, such as a partner, and are mutually agreeable to both the customer or other party and an enterprise. This process may involve obtaining an agreement which contains standard terms and conditions. The agreement process may require interaction with the party to ensure that the standard terms and conditions are understood by, and are acceptable to, them.<br/><br/>In some cases this process may involve the development of, and negotiation with a party of, non-standard terms and conditions associated with sales proposals specifically developed to meet specific party requirements.<br/><br/>For complex sales proposals associated with customer RFPs this process may extend over long time periods and require extensive interaction with a customer to achieve agreement. Aspects of contract price determination may include issues of CPE prices from third party vendors, allowances based on customer location, and so forth.<br/><br/>For RFPs, many of the commercial terms being sought may be developed or originated by a customer, and the negotiating team may need to develop strategies to achieve acceptable commercial outcomes. The sale is concluded through negotiations and joint agreement on features, service levels, pricing and discounts, resulting in a sign-off formal agreement/contract between a party and an enterprise. Depending upon specific circumstances, final agreement from an enterprise's perspective may require escalation to, and agreement from, an appropriately delegated manager.<br/><br/>The formal agreement could include zero or more confirmed order requests from a party. These requests are then passed to other processes to allow formal party or customer orders to be generated and processed.<br/><br/>Note that the Party Agreement Management process manages the lifecycle of the agreement, such as negotiating and approving it.<br/>"@en ;
+    rdfs:subClassOf ots:Selling_EA7505 .
+
+ots:PricingDiscountingAdjustmentsRebatesApplication_EA7852 a owl:Class ;
+    rdfs:label "Pricing, Discounting, Adjustments & Rebates Application"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageCustomerPayments_EA7795 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7852" ;
+    rdfs:comment "The purpose of the Pricing, Discounting, Adjustments & Rebates Application process is to ensure that the bill invoice is reflective of all the commercially agreed billable events and any bill invoice adjustments agreed between a Service Provider and the customer. In addition, it ensures that the appropriate taxes, rebates (i.e. missed customer commitments) and credits are applied to the customer’s bill invoice(s). This process contains the account and customer specific pricing, charges, discounting, credits and taxation for services delivered to the customer by the Service Provider. It accepts events that have been collected, translated, correlated, assembled, guided and service rated. It takes these events and determines the account or customer specific pricing, charges, discounts, and taxation that should be delivered to the invoice(s) for the customer. It reviews any agreed adjustments agreed in the previous billing period and includes these to the bill invoice. This process can occur in real-time as events are service rated, or can be on a scheduled on a periodic basis at the Service Provider’s discretion.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerBillInvoiceManagement_EA7714 .
+
+ots:ProduceDistributeCustomerBill_EA7851 a owl:Class ;
+    rdfs:label "Produce & Distribute Customer Bill"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:CreateCustomerBillInvoice_EA7850 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7851" ;
+    rdfs:comment "The purpose of the Produce & Distribute Customer Bill Invoice process is the physical production and distribution of bills to customers in accordance with the specified billing cycle. This process is responsible for all activities associated with ensuring a physical bill is delivered to customers.<br/>The responsibilities of the process include, but are not limited to:<br/>• Establishing and managing the physical bill production cycle;<br/>• Establishing the requirements for, and managing the agreed commercial arrangements with, appropriate outsourced suppliers of the production and distribution capabilities;<br/>• Delivery of invoice information to the physical production processes;<br/>• Coordinating with promotional processes for any billing insertions to be included with the bill;<br/>• If internal processes are used, managing availability of paper and envelope volumes to meet the needs of the physical production process;<br/>• If internal production facilities are used, managing the production runs to create the bills<br/>• Quality management of the physical production and distribution processes.<br/>Note that in the above processes for establishing arrangements with outsourced other parties that the other party Capability Delivery processes are used as the vehicle for creating the commercial agreements.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerBillInvoiceManagement_EA7714 .
+
+ots:QualifySellingOpportunity_EA7570 a owl:Class ;
+    rdfs:label "Qualify Selling Opportunity"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:AcquireSalesProspectData_EA7572 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA2_EA7570" ;
+    rdfs:comment "Qualify Selling Opportunity process ensures that a sales prospect is qualified in terms of any associated risk, and the amount of effort required, such as to prepare a response to a Request for Proposal [RFP]) to achieve a sale. The opportunity is explored with a sales prospect to ensure the offer meets a prospect’s expectations, and to ensure that the breadth of a prospect's requirements is understood. <br/><br/>Extended interactions with a prospect may be required to achieve mutual understanding and agreement. The opportunity may require the development of alternative solutions or customization to the specific prospect’s requirements. The Qualify Opportunity process is responsible for assessing the size of the potential development and its risk. The resources, financing and potential on-going prospect commitment to the developed solution are all factors that must be assessed.<br/><br/>This process also assesses the strategic importance of the opportunity, the potential for wider application, and the importance of the specific prospect to the enterprise. The solution alternatives must be available, such as capacity, or scheduled on a product offering roadmap.<br/>"@en ;
+    rdfs:subClassOf ots:Selling_EA7505 .
+
+ots:CustomerBillInvoiceManagement_EA7714 a owl:Class ;
+    rdfs:label "Customer Bill Invoice Management"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7714" ;
+    rdfs:comment "Customer Bill Invoice Management processes ensure the bill invoice is created, physically and/or electronically produced and distributed to customers, and that the appropriate taxes, discounts, adjustments, rebates and credits for the products and services delivered to customers have been applied. These processes are accountable for assuring that enterprise revenue is billed and invoices delivered appropriately to customers.<br/>These processes are responsible for, but not limited to:<br/>• Establishment and application of taxes and charges to the services delivered to customers;<br/>• Application of the adjustment (adjustment decision done in Customer Bill Inquiry Handling);<br/>• Creation of accurate Customer bill invoices including all adjustments, rebates, discounts, credits, etc.<br/>• Production & distribution of Customer bill in physical and/or electronic form to customers in accordance with the billing cycle;<br/>• Forecasting of physical resources associated with Customer bill production, such as paper and envelope quantities;<br/>• Alignment and management of promotional material insertion into distributed Customer bills<br/>• Establishment and management of third party arrangements to support Customer bill invoice generation, production and distribution.<br/>"@en ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:CustomerReceivablesManagement_EA7715 a owl:Class ;
+    rdfs:label "Customer Receivables Management"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7715" ;
+    rdfs:comment "The purpose of the Customer Receivables Management processes is to ensure that enterprise revenue is collected through pre-established collection channels and put in place procedures to recover past due payments. These processes are responsible for managing customer’s billing account, processing their payments, performing payment collections and monitoring the status of the account balance.<br/><br/>These processes are responsible for, but not limited to:<br/>• Establishment and management of customer payment processes and channels;<br/>• Establishment and management of debt collection processes<br/>• Establishment and management of third party arrangements to support collection and recovery of past due payments.<br/><br/>This process was renamed in 23.5. old name was Customer Bill Payments & Receivables Management<br/>"@en ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:OrderToCash a owl:Class ;
+    rdfs:label "Order to cash"@en .
+
+ots:Selling_EA7505 a owl:Class ;
+    rdfs:label "Selling"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA2_EA7505" ;
+    rdfs:comment "Selling processes are responsible for managing prospective customers, for the qualification and education of the customer and for matching customer expectations to the enterprise’s products and services and ability to deliver. These processes also manage the response to customer RFPs.<br/>Selling is responsible managing prospective parties with whom an enterprise may do business, such as potential existing or new customers and partners. Existing customers and partners may represent new selling opportunities to them as identified by the Contact/Lead/Prospect Management.<br/><br/>Selling is responsible for qualifying and educating them, and ensuring their expectations are met. This process confirms matches of party expectations to an enterprise’s product offerings that have been made by Contact/Lead/Prospect Management are correct. The ability to deliver them is confirmed. <br/><br/>This process also manages a response to customer requests for proposal (RFP). Any eventual agreement with the sales prospect is the responsibility of Party Agreement Management.<br/>"@en ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:CustomerOrderProcessingManagement_EA7708 a owl:Class ;
+    rdfs:label "Customer Order Processing Management"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7708" ;
+    rdfs:comment "Customer Order Processing Management business process directs and controls all activities that operationally realize orders for customer. <br/><br/>Customer Order Processing Management assures the capture, processing, fulfillment, \"shipping\", delivery and reporting of customer orders from feasibility assessment, purchasing, payment, fulfillment and follow up with the customer for closure.<br/>"@en ;
+    rdfs:subClassOf ots:OrderToCash .
+

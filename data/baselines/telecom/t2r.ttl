@@ -1,0 +1,246 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:CreateCustomerProblemReport_EA7932 a owl:Class ;
+    rdfs:label "Create Customer Problem Report"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ManageCustomerProblemCoordination_EA7930 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7932" ;
+    rdfs:comment "Create Problem Report will document the issue for tracking and future reference. It includes tasks to collect the problem information, create the problem report, and assign the problem ID.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerProblemManagement_EA7712 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:AssessCustomerQosSlaPerformance_EA7880 a owl:Class ;
+    rdfs:label "Assess Customer QoS/SLA Performance"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ManageQosSlaViolation_EA7881 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7880" ;
+    rdfs:comment "The purpose of the Assess Customer QoS/SLA Performance processes is to manage the overall assessment of the customer QoS/SLA performance. <br/>These processes are responsible for ensuring that the QoS received by the customer meets the contractual obligations agreed with the customer. They check that the QoS data that they receive from other processes and entities meets the required QoS thresholds and they alert other processes and entities if this is not the case. <br/>These processes are responsible for collecting service and resource performance information analyzed and reported by the Report Service Quality Performance and Report Resource Performance processes, and converting it into a form suitable for determining whether the contractual obligations with the customer are being met. The actual reporting of the results of the assessments is managed in the Report Customer QoS Performance processes.<br/>They are responsible for maintaining an overview of the quality of the customer's purchased product offering, and for carrying out QoS performance reviews with the customer, as well as for undertaking any preparatory and/or follow-up steps with other processes/entities in conjunction with such reviews.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerQosSlaManagement_EA7713 .
+
+ots:CloseCustomerProblemReport_EA7931 a owl:Class ;
+    rdfs:label "Close Customer Problem Report"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:IsolateCustomerProblem_EA7928 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7931" ;
+    rdfs:comment "Close Report will keep the customer problem management up to date and includes tasks to monitor the status of all open customer problem reports, verify the customer problem resolution, update the customer problem status, and close the problem report according to outcome of processes.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerProblemManagement_EA7712 .
+
+ots:CloseCustomerQosPerformanceDegradationReport_EA7885 a owl:Class ;
+    rdfs:label "Close Customer QoS Performance Degradation Report"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:CreateCustomerQosPerformanceDegradationReport_EA7883 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7885" ;
+    rdfs:comment "The objective of the Close Customer QoS Performance Degradation Report processes is to close a customer QoS performance degradation report when the performance of the customer purchased product offerings has been resolved.<br/>These processes monitor the status of all open customer QoS performance degradation reports, and recognize that a customer QoS performance degradation report is ready to be closed when the status is changed to cleared.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerQosSlaManagement_EA7713 .
+
+ots:CloseResourceTroubleReport_EA9287 a owl:Class ;
+    rdfs:label "Close Resource Trouble Report"@en ;
+    ots:functionUnit "networks" ;
+    ots:precedes ots:LocalizeResourceTrouble_EA9283 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA6_EA9287" ;
+    rdfs:comment "The objective of the Close Service Trouble Report processes is to close a service trouble report when the service problem has been resolved. <br/>These processes monitor the status of all open service trouble reports, and recognize that a service trouble report is ready to be closed when the status is changed to cleared.<br/>"@en ;
+    rdfs:subClassOf ots:ResourceTroubleManagement_EA9082 .
+
+ots:CloseServiceTroubleReport_EA8699 a owl:Class ;
+    rdfs:label "Close Service Trouble Report"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ReportServiceProblem_EA8698 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA5_EA8699" ;
+    rdfs:comment "The objective of the Close Service Trouble Report processes is to close a service trouble report when the service problem has been resolved. <br/>These processes monitor the status of all open service trouble reports, and recognize that a service trouble report is ready to be closed when the status is changed to cleared.<br/>"@en ;
+    rdfs:subClassOf ots:ServiceProblemManagement_EA8683 .
+
+ots:CorrectCustomerProblem_EA7933 a owl:Class ;
+    rdfs:label "Correct Customer Problem"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:CloseCustomerProblemReport_EA7931 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7933" ;
+    rdfs:comment "Correct Customer Problem will restore normal service for the customer. It includes tasks to apply the resolution steps, test the resolution effectiveness, and confirm the problem resolution.<br/>This process was renamed in 23.5. it was called Correct & Recover Customer Problem<br/>"@en ;
+    rdfs:subClassOf ots:CustomerProblemManagement_EA7712 .
+
+ots:CorrectResolveResourceTrouble_EA9284 a owl:Class ;
+    rdfs:label "Correct & Resolve Resource Trouble"@en ;
+    ots:functionUnit "networks" ;
+    ots:precedes ots:CloseCustomerQosPerformanceDegradationReport_EA7885 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA6_EA9284" ;
+    rdfs:comment "The objective of the Correct & Resolve Resource Trouble processes is to restore or replace resources that have failed as efficiently as possible.<br/>Based on the nature of the resource failure leading to the associated resource alarm event notification, automatic restoration procedures might be triggered. Manual restoration activity is assigned to the Correct & Resolve Resource Trouble processes from the Track & Manage Resource Trouble processes.<br/>Depending on the nature of the specific resource failure, these processes may possibly repair or replace the failed unit or specific resource. These processes are also responsible for<br/> - to isolate a unit with a fault<br/> - to manage the redundant resource units (e.g. hot standby)<br/> - to (auto) heal a resource <br/> - to identify the root cause of failure<br/> - to repair failed specific resource (including hardware failure and software failure)<br/>For large resource failures requiring extensive repair and/or replacement activity to restore normal operation, these processes will attempt to implement work-arounds to recover the specific resource operation. In these circumstances, recover of normal operation may require invocation of the Support Resource Trouble Management processes.<br/>They will also report successful restoration of normal operation, restoration through temporary work-arounds or an unsuccessful attempt at restoration to Track & Manage Resource Trouble through updates to the associated resource trouble report.<br/>"@en ;
+    rdfs:subClassOf ots:ResourceTroubleManagement_EA9082 .
+
+ots:CorrectResolveServiceProblem_EA8696 a owl:Class ;
+    rdfs:label "Correct & Resolve Service Problem"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:DiagnoseServiceProblem_EA8695 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA5_EA8696" ;
+    rdfs:comment "The objective of the Correct & Resolve Service Problem processes is to restore the service to a normal operational state as efficiently as possible.<br/>Based on the nature of the service failure leading to the associated service alarm event notification, automatic restoration procedures might be triggered. Manual restoration activity is assigned to the Correct & Resolve Service Problem processes from the Track & Manage Service Problem processes.<br/>Depending on the nature of the specific service failure, these processes may possibly re-assign services or re-configure service parameters.<br/>For large service failures requiring extensive re-assignment and/or re-configuration activity to restore normal operation, these processes will attempt to implement work-arounds to recover the specific service operation. In these circumstances, recovery of normal operation may require invocation of the Support Service Problem Management processes.<br/>They will also report successful restoration of normal service operation, restoration through temporary work-arounds or an unsuccessful attempt at service restoration to Track & Manage Service Problem through updates to the associated service trouble report.<br/>"@en ;
+    rdfs:subClassOf ots:ServiceProblemManagement_EA8683 .
+
+ots:CreateCustomerQosPerformanceDegradationReport_EA7883 a owl:Class ;
+    rdfs:label "Create Customer QoS Performance Degradation Report"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ReportCustomerQosPerformance_EA7882 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7883" ;
+    rdfs:comment "Not used for this process element<br/>"@en ;
+    rdfs:subClassOf ots:CustomerQosSlaManagement_EA7713 .
+
+ots:CreateResourceTroubleReport_EA9288 a owl:Class ;
+    rdfs:label "Create Resource Trouble Report"@en ;
+    ots:functionUnit "networks" ;
+    ots:precedes ots:ReportResourceTrouble_EA9286 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA6_EA9288" ;
+    rdfs:comment "The objective of the Create Resource Trouble Report process is to create a new resource trouble report. <br/>A new resource trouble report may be created as a result of resource alarm event notification analysis, and subsequent creation of new resource alarm event records, undertaken by the Survey & Analyze Resource Trouble processes, or at the request of analysis undertaken by other processes in the Service-Ops or Resource-Ops (in particular a Service Trouble Report can generate one or more Resource Trouble Reports) or Engaged Party-Ops and Resource-Ops layers which detect that some form of failure has occurred for which resource restoration activity is required to restore normal operation.<br/>If the resource trouble report is created as a result of a notification or request from processes other than the Survey & Analyze Resource Trouble processes, the Create Resource Trouble Report processes are responsible for converting the received information into a form suitable for the Resource Trouble Management processes, and for requesting additional information if required.<br/>These processes will make estimates of the time to restore resource which will be included in the new resource trouble report so that other processes can gain access to this information.<br/>"@en ;
+    rdfs:subClassOf ots:ResourceTroubleManagement_EA9082 .
+
+ots:CreateServiceTroubleReport_EA8694 a owl:Class ;
+    rdfs:label "Create Service Trouble Report"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:CreateResourceTroubleReport_EA9288 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA5_EA8694" ;
+    rdfs:comment "The objective of the Create Service Trouble Report process is to create a new service trouble report. <br/>A new service trouble report may be created as a result of service alarm event notification analysis, and subsequent creation of new service alarm event records, undertaken by the Survey & Analyze Service Problem processes, or at the request of analysis undertaken by other processes in the Customer ( in particular a Customer Problem Report can generate one or more Service Trouble Reports), Service or Resource Domains which detect that some form of failure has occurred for which service restoration activity is required to restore normal operation.<br/>If the service trouble report is created as a result of a notification or request from processes other than the Survey & Analyze Service Problem processes, the Create Service Trouble Report processes are responsible for converting the received information into a form suitable for the Service Problem Management processes, and for requested additional information if required.<br/>These processes will make estimates of the time to restore service which will be included in the new service trouble report so that other processes can gain access to this information.<br/>"@en ;
+    rdfs:subClassOf ots:ServiceProblemManagement_EA8683 .
+
+ots:DiagnoseServiceProblem_EA8695 a owl:Class ;
+    rdfs:label "Diagnose Service Problem"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:CreateServiceTroubleReport_EA8694 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA5_EA8695" ;
+    rdfs:comment "The objective of the Diagnose Service Problem processes is to identify the root cause of the specific service problem. These processes are invoked by the Track & Manage Service Problem processes.<br/>The responsibilities of these processes include, but are not limited to:<br/>• Verifying whether the service configuration matches the appropriate product features;<br/>• Performing diagnostics against the specific services;<br/>• Running tests against the specific services;<br/>• Starting and stopping audits against specific services<br/>• Scheduling routine testing of the specific services.<br/>The Diagnose Service Problem processes will make the results of the root cause analysis available to other processes. The Diagnose Service Problem processes will update the open service trouble report, as required during the assessment, and when the root cause has been identified.<br/>When the process is complete the Diagnose Service Problem processes will notify the Track & Manage Service Problem processes.<br/>"@en ;
+    rdfs:subClassOf ots:ServiceProblemManagement_EA8683 .
+
+ots:IsolateCustomerProblem_EA7928 a owl:Class ;
+    rdfs:label "Isolate Customer Problem"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:SurveyAnalyzeServiceProblem_EA8700 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7928" ;
+    rdfs:comment "Isolate Customer Problem business activity will verify the use of the product, perform diagnostics while liaising with the customer, and identify the root cause of the problem. This is to enable the enterprise to understand the problem in detail so that it can be effectively addressed.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerProblemManagement_EA7712 .
+
+ots:LocalizeResourceTrouble_EA9283 a owl:Class ;
+    rdfs:label "Localize Resource Trouble"@en ;
+    ots:functionUnit "networks" ;
+    ots:precedes ots:SurveyAnalyzeResourceTrouble_EA9282 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA6_EA9283" ;
+    rdfs:comment "The objective of the Localize Resource Trouble processes is to identify the root cause of the specific resource trouble. These processes are invoked by the Track & Manage Resource Trouble processes.<br/><br/>The responsibilities of these processes include, but are not limited to:<br/>•Verifying whether the resource configuration matches the appropriate service features;<br/>•Performing diagnostics against the specific resources;•<br/>•Running tests against the specific resources;<br/>•Starting and stopping audits against specific resources<br/>•Scheduling routine testing of the specific resources.<br/><br/>The Localize Resource Trouble processes will make the results of the root cause analysis available to other processes. The Localize Resource Trouble processes will update the open resource trouble report, as required during the assessment, and when the root cause has been identified.<br/>When the process is complete the Localize Resource Trouble processes will notify the Track & Manage Resource Trouble processes.<br/>"@en ;
+    rdfs:subClassOf ots:ResourceTroubleManagement_EA9082 .
+
+ots:ManageCustomerProblemCoordination_EA7930 a owl:Class ;
+    rdfs:label "Manage Customer Problem Coordination"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ReportCustomerProblem_EA7929 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7930" ;
+    rdfs:comment "Manage Customer Problem Coordination will ensure the problem is being addressed in a timely manner. It includes tasks to schedule, assign and coordinate customer problem recovery activities, generating respective trouble repots, managing update to information systems, cancelling customer problem report and monitoring the jeopardy status/problem status, progress, and resolution.<br/>This process was renamed in 23.5. old process name was Track & Manage Customer Problem<br/>"@en ;
+    rdfs:subClassOf ots:CustomerProblemManagement_EA7712 .
+
+ots:ManageQosSlaViolation_EA7881 a owl:Class ;
+    rdfs:label "Manage QoS/SLA Violation"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:TrackManageCustomerQosPerformanceResolution_EA7884 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7881" ;
+    rdfs:comment "The purpose of the Manage QoS/SLA Violation processes is to ensure that the customer and the relevant internal processes are informed of service quality degradations and violations and that action is undertaken to resolve the degradation or violation. They analyze all the information related to a QoS/SLA degradation or violation and take the appropriate actions when a soft threshold is crossed or the agreed QoS is violated. They follow up the actions to ensure that the customer is satisfied with the resolution of the problem. They ensure that the customer is informed of any planned maintenance or other scheduled events likely to impact delivery of the customer's service.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerQosSlaManagement_EA7713 .
+
+ots:ReportCustomerProblem_EA7929 a owl:Class ;
+    rdfs:label "Report Customer Problem"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:CorrectCustomerProblem_EA7933 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7929" ;
+    rdfs:comment "Report Customer Problem will keep everyone informed about the issue and its status. It includes tasks to create and send a problem report that contains the problem details, impact, and resolution.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerProblemManagement_EA7712 .
+
+ots:ReportCustomerQosPerformance_EA7882 a owl:Class ;
+    rdfs:label "Report Customer QoS Performance"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:AssessCustomerQosSlaPerformance_EA7880 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7882" ;
+    rdfs:comment "The objective of the Report Customer QoS Performance processes is to monitor the status of customer QoS performance degradation reports, provide notifications of any changes and provide management reports.<br/>These processes are responsible for continuously monitoring the status of customer QoS performance degradation reports and managing notifications to other processes and to other parties, including customers, registered to receive notifications of any status changes. Notification lists are managed and maintained by the Support Customer QoS/SLA Management processes.<br/>These processes record, analyze and assess the customer QoS performance degradation report status changes to provide management reports and any specialized summaries of the efficiency and effectiveness of the overall Customer QoS/SLA Management process. These specialized summaries could be specific reports required by specific audiences and/or customers.<br/>These processes also report any identified constraints that can affect customer related quality standards to other processes. These constraints may include specific resource failures, capacity shortages due to unexpected demand peaks, etc.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerQosSlaManagement_EA7713 .
+
+ots:ReportResourceTrouble_EA9286 a owl:Class ;
+    rdfs:label "Report Resource Trouble"@en ;
+    ots:functionUnit "networks" ;
+    ots:precedes ots:CloseResourceTroubleReport_EA9287 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA6_EA9286" ;
+    rdfs:comment "The objective of the Report Resource Trouble processes is to monitor the status of resource trouble reports, provide notifications of any changes and provide management reports.<br/>These processes are responsible for continuously monitoring the status of resource trouble reports and managing notifications to processes and other parties registered to receive notifications of any status changes, for example, Resource Performance Management and Service Quality Management. Notification lists are managed and maintained by the Support Resource Trouble Management processes.<br/>These processes record, analyze and assess the resource trouble report status changes to provide management reports and any specialized summaries of the efficiency and effectiveness of the overall Resource Trouble Management process. These specialized summaries could be specific reports required by specific audiences.<br/>These processes will make the necessary reports about the resource trouble that occurred, the root cause and the activities carried out for restoration.<br/>"@en ;
+    rdfs:subClassOf ots:ResourceTroubleManagement_EA9082 .
+
+ots:ReportServiceProblem_EA8698 a owl:Class ;
+    rdfs:label "Report Service Problem"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:TrackManageServiceProblem_EA8697 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA5_EA8698" ;
+    rdfs:comment "The objective of the Report Service Problem processes is to monitor the status of service trouble reports, provide notifications of any changes and provide management reports.<br/>These processes are responsible for continuously monitoring the status of service trouble reports and managing notifications to processes and other parties registered to receive notifications of any status changes, for example, Service Quality Management and Customer QoS/SLA Management processes. Notification lists are managed and maintained by the Support Service Problem Management processes.<br/>These processes record, analyze and assess the service trouble report status changes to provide management reports and any specialized summaries of the efficiency and effectiveness of the overall Service Problem Management process. These specialized summaries could be specific reports required by specific audiences.<br/>These processes will make the necessary reports about the problem that occurred, the root cause and the activities carried out for restoration.<br/>"@en ;
+    rdfs:subClassOf ots:ServiceProblemManagement_EA8683 .
+
+ots:SurveyAnalyzeResourceTrouble_EA9282 a owl:Class ;
+    rdfs:label "Survey & Analyze Resource Trouble"@en ;
+    ots:functionUnit "networks" ;
+    ots:precedes ots:TrackManageResourceTrouble_EA9285 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA6_EA9282" ;
+    rdfs:comment "The objective of the Survey & Analyze Resource Trouble processes is to monitor resource alarm event notifications and manage resource alarm event records in real-time.<br/><br/>Responsibilities of the Survey & Analyze Resource Trouble processes include, but are not limited to:<br/>• Detecting and collecting resource alarm event notifications; <br/>• Initiating and managing resource alarm event records;<br/>• Performing resource alarm event notification localization analysis; <br/>• Correlating and filtering resource alarm event records;<br/>• Reporting resource alarm event record status changes to other processes<br/>• Managing resource alarm event record jeopardy conditions.<br/><br/>Resource alarm event notification analysis encompasses the identification of the resource alarm event in terms of reporting entity and nature of the resource alarm event. It will then analyze the resource alarm events based on a number of criteria and then suppress redundant, transient or implied resource alarm events by means of filtering and correlation. It includes the notification of new resource alarm event records, or status changes of previously reported resource alarm event records, as well as abatement messages when resource alarm event records have been cleared.<br/><br/>The analysis will correlate resource alarm event notifications to planned outage notifications to remove false resource alarm event notifications arising as a result of the planned outage activity.<br/><br/>These processes may determine that a resource alarm event notification may represent a service impacting condition. In these circumstances this process is responsible for indicating a potential service problem to the Service Problem Management processes. As a part of this indication this process is responsible for identifying the impacted service instances associated with the resource instances presenting alarm event notifications and passing this information to the Service Problem Management processes.<br/><br/>Resource alarm event record correlation and filtering encompasses the correlation of redundant, transient or implied resource alarm event notifications with a specific “root cause” resource alarm event notification and associated resource alarm event record.<br/><br/>The Survey & Analyze Resource Trouble processes might trigger a well-defined action based on specific resource alarm event notification information as well as the non-arrival of resource alarm event notification information after a specific time interval has elapsed.<br/><br/>These processes are also responsible for monitoring and triggering the appropriate action when a resource alarm event record is not cleared within a pre-defined period of time.<br/>"@en ;
+    rdfs:subClassOf ots:ResourceTroubleManagement_EA9082 .
+
+ots:SurveyAnalyzeServiceProblem_EA8700 a owl:Class ;
+    rdfs:label "Survey & Analyze Service Problem"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:CloseServiceTroubleReport_EA8699 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA5_EA8700" ;
+    rdfs:comment "The objective of the Survey & Analyze Service Problem processes is to monitor service alarm event notifications and manage service alarm event records in real-time.<br/><br/>Responsibilities of the Survey & Analyze Service Problem processes include, but are not limited to:<br/><br/>• Detecting and collecting service alarm event notifications; <br/>• Initiating and managing service alarm event records;<br/>• Performing service alarm event notification localization analysis; <br/>• Correlating and filtering service alarm event records;<br/>• Reporting service alarm event record status changes to other processes;<br/>• Managing service alarm event record jeopardy conditions.<br/><br/>Service alarm event notification analysis encompasses the identification of the service alarm event in terms of reporting entity and nature of the service alarm event. It will then analyze the service alarm events based on a number of criteria and then suppress redundant, transient or implied service alarm events by means of filtering and correlation. It includes the notification of new service alarm event records, or status changes of previously reported service alarm event records, as well as abatement messages when service alarm event records have been cleared.<br/><br/>The analysis will correlate service alarm event notifications to planned outage notifications to remove false service alarm event notifications arising as a result of the planned outage activity.<br/><br/>These processes may determine that a service alarm event notification may represent a customer impacting condition. In these circumstances this process is responsible for indicating a potential customer problem to the Problem Handling processes. As a part of this indication this process is responsible for identifying the impacted deployed product instances associated with the service instances presenting alarm event notifications and passing this information to the Problem Handling processes.<br/><br/>Service alarm event record correlation and filtering encompasses the correlation of redundant, transient or implied service alarm event notifications with a specific “root cause” service alarm event notification and associated service alarm event record.<br/><br/>The Survey & Analyze Service Problem processes might trigger a well-defined action based on specific service alarm event notification information as well as the non-arrival of service alarm event notification information after a specific time interval has elapsed.<br/><br/>These processes are also responsible for monitoring and triggering the appropriate action when a service alarm event record is not cleared within a pre-defined period of time.<br/>"@en ;
+    rdfs:subClassOf ots:ServiceProblemManagement_EA8683 .
+
+ots:TrackManageCustomerQosPerformanceResolution_EA7884 a owl:Class ;
+    rdfs:label "Track & Manage Customer QoS Performance Resolution"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7884" ;
+    rdfs:comment "The objective of the Track & Manage Customer QoS Performance Resolution processes is to efficiently assign, coordinate and track specific customer purchased product offering related performance analysis, restoration and improvement activities, and escalate any open customer QoS performance degradation reports in jeopardy. Responsibilities of these processes include, but are not limited to:<br/>• Adding additional information to an open customer QoS performance degradation report based on the first-in and on-going analysis;<br/>• Scheduling, assigning and coordinating analysis and specific customer QoS performance restoration activities and/or repair activities delegated to other processes;<br/>• Generating the respective service trouble report creation request(s) to Create Service Trouble Report based on specific customer QoS performance degradation reports where analysis the root cause is related to services;<br/>• Modifying information in an existing customer QoS performance degradation report based on assignments;<br/>• Modifying the customer QoS performance degradation report status;<br/>• Canceling a customer QoS performance degradation report when the specific request was related to a false performance event<br/>• Monitoring the jeopardy status of open customer QoS performance degradation reports, and escalating customer QoS performance degradation reports as necessary.<br/>Note that some specific product and/or service components may be owned and managed by other parties. In these cases the Track & Manage Customer QoS Performance Resolution process is responsible for initiating requests, through other parties Performance Management for resolution by the other parties of the specific service components. <br/>These processes will co-ordinate all the actions necessary in order to guarantee that all tasks are finished at the appropriate time and in the appropriate sequence.<br/>The Track & Manage Customer QoS Performance Resolution processes will also inform the Close Customer QoS Performance Degradation Report processes by modifying the customer QoS performance degradation report status to cleared when the specific customer purchased product offering performance quality issues have been resolved.<br/>"@en ;
+    rdfs:subClassOf ots:CustomerQosSlaManagement_EA7713 .
+
+ots:TrackManageResourceTrouble_EA9285 a owl:Class ;
+    rdfs:label "Track & Manage Resource Trouble"@en ;
+    ots:functionUnit "networks" ;
+    ots:precedes ots:CorrectResolveResourceTrouble_EA9284 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA6_EA9285" ;
+    rdfs:comment "The objective of the Track & Manage Resource Trouble is to ensure testing, repair and restoration activities are assigned, coordinated and tracked efficiently, and that escalation is invoked as required for any open resource trouble reports in jeopardy. Responsibilities of these processes include, but are not limited to:<br/>•Initiating first-in testing using automated remote testing capabilities;<br/>•Adding additional information to an open resource trouble report based on the first-in testing;<br/>•Scheduling, assigning and coordinating repair and restoration activities;<br/>•Initiate any final testing to confirm clearance of the service problem;<br/>•Undertake necessary tracking of the execution progress;<br/>•Modifying information in an existing resource trouble report based on assignments;<br/>•Modifying the resource trouble report status;<br/>•Canceling a resource trouble report when the specific trouble was related to a false alarm event<br/>•Monitoring the jeopardy status of open resource trouble reports, and escalating resource trouble reports as necessary.<br/>These processes will co-ordinate all the actions necessary in order to guarantee that all tasks are finished at the appropriate time and in the appropriate sequence.<br/>The Track & Manage Resource Trouble processes are responsible for engaging external suppliers in correction and recovery activities when higher level expertise and/or higher level support is required to resolve the resource trouble. This engagement can be linked to the priority of the resource trouble report, and could occur automatically for highest priority resource trouble reports.<br/>The Track & Manage Resource Trouble processes will also inform the Close Resource Trouble processes by modifying the resource trouble report status to cleared when the resource trouble has been resolved.<br/>"@en ;
+    rdfs:subClassOf ots:ResourceTroubleManagement_EA9082 .
+
+ots:TrackManageServiceProblem_EA8697 a owl:Class ;
+    rdfs:label "Track & Manage Service Problem"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:CorrectResolveServiceProblem_EA8696 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA5_EA8697" ;
+    rdfs:comment "The purpose of the Track & Manage Service Problem processes is to ensure that testing, repair and restoration activities are assigned, coordinated and tracked efficiently, and that escalation is invoked as required for any open service trouble reports in jeopardy.<br/>Responsibilities of these processes include, but are not limited to:<br/><br/>• Initiating first-in testing using automated remote testing capabilities;<br/>• Adding additional information to an open service trouble report based on the first-in testing;<br/>• Scheduling, assigning and coordinating repair and restoration activities;<br/>• Generating the respective resource trouble report creation request(s) to Create Resource Trouble Report based on specific service trouble reports;<br/>• Initiate any final testing to confirm clearance of the service problem;<br/>• Undertake necessary tracking of the execution progress;<br/>• Modifying information in an existing service trouble report based on assignments;<br/>• Modifying the service trouble report status;<br/>• Canceling a service trouble report when the specific problem was related to a false service alarm event<br/>• Monitoring the jeopardy status of open service trouble reports, and escalating service trouble reports as necessary.<br/><br/>Note that some specific resource components may be owned and managed by other parties. In these cases the Track & Manage Service Problem process is responsible for initiating requests, through Party Problem Handling processes for restoration and recovery by the party related to the specific resource components.<br/>These processes will co-ordinate all the actions necessary in order to guarantee that all tasks are finished at the appropriate time and in the appropriate sequence.<br/><br/>The Track & Manage Service Problem processes are responsible for engaging external parties in correction and recovery activities when:<br/>• higher level expertise and/or higher level support is required to resolve the service problem, (which may be automatic in the case of highest priority service problems);<br/>• the specific service has been purchased from an external party (as in an interconnect service).<br/>• the specific service is delivered by an external party.<br/><br/>Where the engagement with an external party is for purchased or delivered services, as the case may be, the tracking and management of the party problem resolution activity is actually performed by the Party Problem Handling processes, with the Track & Manage Service Problem processes relegated to an overall coordination role. The Track & Manage Service Problem processes will also inform the Close Service Problem processes by modifying the service trouble report status to cleared when the service problem has been resolved.<br/>"@en ;
+    rdfs:subClassOf ots:ServiceProblemManagement_EA8683 .
+
+ots:TroubleToResolve a owl:Class ;
+    rdfs:label "Trouble to resolve"@en .
+
+ots:CustomerProblemManagement_EA7712 a owl:Class ;
+    rdfs:label "Customer Problem Management"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7712" ;
+    rdfs:comment "Customer problem management involves managing the capture and analysis of customer problems, identifying the root cause of the problem, correcting or providing solutions or compensation to customers, reporting and tracking customer problems, and ensuring that problems are resolved to customer satisfaction. The process supports the enterprise to maintain a positive relationship with the customers and improve loyalty and retention.<br/>"@en ;
+    rdfs:subClassOf ots:TroubleToResolve .
+
+ots:CustomerQosSlaManagement_EA7713 a owl:Class ;
+    rdfs:label "Customer QoS/SLA Management"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA3_EA7713" ;
+    rdfs:comment "Customer QoS/SLA Management processes encompass monitoring, managing and reporting of delivered vs. contractual Quality of Service (QoS), as defined in the enterprise's Service Descriptions, customer contracts or the catalogue of product offerings. They are also concerned with the performance of the enterprise and its products in relation to its Service Level Agreements (SLA) for specific product instances, and other service-related documents. They include operational parameters such as resource performance and availability, but also encompass performance across all of a product's contractual or regulatory parameters, e.g., % Completion on Time for Order Requests, time to repair commitments, customer contact performance. Failure to meet a contracted SLA may lead to billing adjustments, which are handled by Billing and Collections Management.<br/>"@en ;
+    rdfs:subClassOf ots:TroubleToResolve .
+
+ots:ResourceTroubleManagement_EA9082 a owl:Class ;
+    rdfs:label "Resource Trouble Management"@en ;
+    ots:functionUnit "networks" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA6_EA9082" ;
+    rdfs:comment "Resource Trouble Management processes are responsible for the management of troubles, including security events, associated with specific resources. The objectives of these processes are to efficiently and effectively manage reported resource trouble, isolate the root cause and act to resolve the resource trouble. <br/><br/>Responsibilities of the Resource Trouble Management processes include, but are not limited to:<br/><br/>• Detecting, analyzing, managing and reporting on resource alarm event notifications; <br/>• Initiating and managing resource trouble reports;<br/>• Performing resource trouble localization analysis; <br/>• Correcting and resolving resource trouble;<br/>• Reporting progress on resource trouble reports to other processes;<br/>• Assigning & tracking resource trouble testing and repair activities <br/>• Managing resource trouble jeopardy conditions.<br/><br/>On one hand, resource troubles may relate to Problems in the Service domain and therefore also potentially in the customer domain. On the other hand, they may relate to specific resource failures or performance degradations, which are caused by resource faults.<br/>As such, the Resource Trouble Management processes work with specific resource alarm event notifications received from Resource Data Collection & Distribution, specific resource performance notifications from Resource Performance Management, and potential specific resource trouble notifications from Service Problem Management processes.<br/><br/>Resource Trouble Management processes perform analysis, decide on the appropriate actions/responses and carry them out with the intent of restoring normal operation on specific resources. <br/>However these activities need to interact with the Service Problem Management processes, as the latter have a view on service impact. Resource Trouble Management processes are responsible for informing Service Problem Management of any potential service problems. Where the original report arose as a result of service problems, the Resource Trouble Management processes may be coordinated by Service Problem Management processes.<br/>"@en ;
+    rdfs:subClassOf ots:TroubleToResolve .
+
+ots:ServiceProblemManagement_EA8683 a owl:Class ;
+    rdfs:label "Service Problem Management"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA5_EA8683" ;
+    rdfs:comment "Service Problem Management processes are responsible for the management of problems associated with specific services. The objective of these processes is to respond immediately to reported service problems or failures in order to minimize their effects on customers, and to invoke the restoration of the service, or provide an alternate service as soon as possible.<br/>Responsibilities of the Service Problem Management processes include, but are not limited to:<br/>• Detecting, analyzing, managing and reporting on service alarm event notifications; <br/>• Initiating and managing service trouble reports;<br/>• Performing service problem localization analysis; <br/>• Correcting and resolving service problems;<br/>• Reporting progress on service trouble reports to other processes;<br/>• Assigning & tracking service problem testing and recovery activities <br/>• Managing service problem jeopardy conditions<br/>Service Problem Management processes perform analysis, decide on the appropriate actions/responses and carry them out with the intent of restoring normal operation on specific services. <br/>However these activities need to interact with the Problem Handling processes, as the latter have a view on customer impact. Service Problem Management processes are responsible for informing Problem Handling processes of any potential customer problems. Where the original report arose as a result of customer problems, the Service Problem Management processes may be coordinated by Problem Handling processes.<br/>"@en ;
+    rdfs:subClassOf ots:TroubleToResolve .
+

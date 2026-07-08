@@ -1,0 +1,174 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:ManageTheTenderProcess_EA9838 a owl:Class ;
+    rdfs:label "Manage the Tender Process"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:GainTenderDecisionApproval_EA9839 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9838" ;
+    rdfs:comment "The Manage the Tender Process processes manage and administer the mechanics of the tender process. The processes determine the engagement interactions with potential parties, the timing of the process, bring together the commercial and functional requirements into the tender documentation, the analysis and scoring mechanisms for tender analysis based on the functional, technical, operational and commercial requirements, and manage the tender analysis team engagement approach. <br/>These processes are invoked by the Party Order Handling processes in the event that the order process requires a tender to select between previously contracted parties.<br/>These processes also manage the analysis of the strategic sourcing factors used at the commencement of the process including the industry and competitive analysis, and a determination of the minimum acceptable outcomes from the sourcing process.<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerTenderManagement_EA9612 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:BpBillInvoiceControl_EA9705 a owl:Class ;
+    rdfs:label "BP Bill/Invoice Control"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:BpBillInvoiceLifecycleManagement_EA9706 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9705" ;
+    rdfs:comment "BP Bill/Invoice Control establishes and maintains BP bill invoice formats, and any interaction with specific parties to modify the format. It maintains lists of parties who are eligible for receiving bills/invoices. It also defines the billing cycles and respective dates according to cash flow needs as established by financial management processes.<br/>"@en ;
+    rdfs:subClassOf ots:BpBillInvoiceManagement_EA9622 .
+
+ots:BpBillInvoiceLifecycleManagement_EA9706 a owl:Class ;
+    rdfs:label "BP Bill/Invoice Lifecycle Management"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:BpBillInvoiceProcessManagement_EA9704 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9706" ;
+    rdfs:comment "BP Bill/Invoice Lifecycle Management ensures BP bills/invoices are created, physically and/or electronically produced and distributed to parties, and that the appropriate taxes, discounts, adjustments, rebates and credits for the products delivered to parties have been applied. These processes are accountable for assuring that enterprise revenue is billed and bills/invoices delivered appropriately to parties.<br/><br/>These processes are responsible for, but not limited to:<br/>• Establishment and application of taxes and charges to the products delivered to parties<br/>• Application of adjustments (adjustment decision done in BP Bill Inquiry Handling and other applicable processes)<br/>• Creation of accurate bills/invoices including all adjustments, rebates, discounts, credits, and so forth<br/>• Production & distribution of bills/invoices in physical and/or electronic form to parties in accordance with a billing cycle or as needed<br/>• Forecasting of physical resources associated with bill/invoice production, such as paper and envelope quantities<br/>• Alignment and management of promotional material insertion into distributed bills/invoices<br/>• Interaction with BP Tender Management and BP Agreement Management to establish and manage of third BP arrangements to support bill/invoice generation, production and distribution.<br/>"@en ;
+    rdfs:subClassOf ots:BpBillInvoiceManagement_EA9622 .
+
+ots:BpBillInvoiceProcessManagement_EA9704 a owl:Class ;
+    rdfs:label "BP Bill/Invoice Process Management"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:SpecificBpRevenueHandling_EA9707 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9704" ;
+    rdfs:comment "BP Bill/Invoice Process Management makes certain that there is capability so that the BP Bill Invoice Management processes can operate effectively.<br/>"@en ;
+    rdfs:subClassOf ots:BpBillInvoiceManagement_EA9622 .
+
+ots:BusinessPartnerAccountBalanceManagement_EA9894 a owl:Class ;
+    rdfs:label "Business Partner Account Balance Management"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:BusinessPartnerPaymentManagement_EA9893 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9894" ;
+    rdfs:comment "Business Partner Account Balance Management manages, calculates, applies policies to manage, and manages functionality/interfaces for Business Partner account balances. The values resulting from rating and the application of discounts are applied to parties' account balance. This process also authorizes product requests, such as usage events, based on available balance as needed. <br/><br/>A Business Partner account balance includes monetary and non-monetary balances (or shared) and are used as prepaid balances (enabling real-time product authorization), postpaid balances (in conjunction with an Account Receivables [AR] processes). Examples of non-monetary balances and allowances are free minutes, gigabytes allowance, and number of downloads.<br/>"@en ;
+    rdfs:subClassOf ots:BpBillPaymentsReceivablesManagement_EA9623 .
+
+ots:BusinessPartnerPaymentManagement_EA9893 a owl:Class ;
+    rdfs:label "Business Partner Payment Management"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9893" ;
+    rdfs:comment "Party Payment Management manages methods used by parties to make payments, administers payment plans, handles payments, and collects debt.<br/><br/>Party Payment Method Management defines and manages the various types of payment methods and the methods by which an individual party may make an inbound and/or outbound payment. Party Payment Plan Administration develops and manages payment plans that specify how a party will pay over a specified period of time for a product that has been acquired. <br/><br/>Party Payment Handling receives payments from parties, remits payments to parties, and applies payments to any form of request for payment, such as bills, settlements or other forms of revenue sharing, purchases, charges, or payment plans as needed. Party Debt Collection collects past due payments from parties with whom an enterprise does business. It monitors the amount due from parties, for example check whether the payments are made on time, and implements necessary activities and policies to recover amounts overdue.<br/>"@en ;
+    rdfs:subClassOf ots:BpBillPaymentsReceivablesManagement_EA9623 .
+
+ots:CloseBusinessPartnerOrder_EA9996 a owl:Class ;
+    rdfs:label "Close Business Partner Order"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:IssueBusinessPartnerOrder_EA9994 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9996" ;
+    rdfs:comment "The objective of the Close Business Partner Order processes is to close a Business Partner order when it has been successfully completed.<br/>These processes monitor the status of all open Business Partner orders, and recognize that a Business Partner order is ready to be closed when the status is changed to completed. .<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerOrderManagement_EA9617 .
+
+ots:DetermineBusinessPartnerPreOrderFeasibility_EA9991 a owl:Class ;
+    rdfs:label "Determine Business Partner Pre-Order Feasibility"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:ReportBusinessPartnerOrders_EA9995 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9991" ;
+    rdfs:comment "The Determine Business Partner Pre-Order Feasibility processes are responsible for determining the ability of parties to deliver the specific resources, services or products, within the specified requirements.<br/><br/>These processes query a set of candidate parties to check for Business Partner specific resource, service or product availability and ability to meet delivery volumes, delivery time-scales and schedules, locations, specific technical and other requirements (including relevant standards), etc. The candidate parties will have been defined during the Select Order Business Partner processes.<br/>Once a supplier/partner is chosen, it must be established that the specific resource, service or product is available (in stock / or that sufficient capacity is available), and that the delivery volumes and conditions can be met. There may be some negotiation with the supplier regarding delivery scheduling and Business Partner specific resource, service or product availability.<br/>There may be a number of suppliers who in principle can meet the business need, and so, within the confines of existing commercial agreements, there may be a process of evaluating each Business Partner's specific resource, service or product offering (and options) against the business need.<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerOrderManagement_EA9617 .
+
+ots:DeterminePotentialParties_EA9837 a owl:Class ;
+    rdfs:label "Determine Potential Parties"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:DetermineTheSourcingRequirements_EA9836 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9837" ;
+    rdfs:comment "The Determine Potential Parties processes determine the appropriate short list of parties to meet the specific enterprise requirements (for example, expected technical capability, anticipated delivery timeframes, anticipated costs, etc..). The processes provide detailed analysis of potential parties, leveraging information available from the Gather & Analyze Value Fabric Information <br/>The processes include any interaction with cross-enterprise coordination and management functions to ensure that the selected short list meets the needs of all stakeholders<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerTenderManagement_EA9612 .
+
+ots:DetermineTheSourcingRequirements_EA9836 a owl:Class ;
+    rdfs:label "Determine the Sourcing Requirements"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:CloseBusinessPartnerOrder_EA9996 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9836" ;
+    rdfs:comment "The Determine the Sourcing Requirements processes manage the collection and finalization of the specific requirements to be achieved from the sourcing process including a chronological timetable for anticipated sourcing activities. These requirements take into account the required functional, technical and/or operational specifications produced by the area seeking the sourcing activity and assuring that appropriately aligned commercial aspects (such as special commercial terms, tender timing, cost parameters, etc.) are catered for. The requirements will be determined from the requirements specified in the various business or investment proposals, and any subsequent detailed specifications developed as a part of the architecture design activity, within the product, market, service or resource capability delivery processes. The actual range of requirements are dependent on the needs of the sourcing initiator, but are likely to include, at a minimum, technical, operational, training and specific supplier support requirements.<br/>The Party Strategy and Planning processes will also provide a set of enterprise level requirements that the sourcing process will need to satisfy.<br/>The processes include any interaction with cross-enterprise coordination and management functions to ensure that the requirements meets the needs of all stakeholders<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerTenderManagement_EA9612 .
+
+ots:GainTenderDecisionApproval_EA9839 a owl:Class ;
+    rdfs:label "Gain Tender Decision Approval"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:DeterminePotentialParties_EA9837 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9839" ;
+    rdfs:comment "The Gain Tender Decision Approval processes capture all activities required to provide management oversight on the tender process and gain approval for the sourcing decision and party selection. These processes cover the establishment of any tender selection boards, the reporting processes and timetables, and the final approval of the tender decisions.<br/>The processes include any interaction with cross-enterprise coordination and management functions to ensure that the tender decisions are supported by all stakeholders<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerTenderManagement_EA9612 .
+
+ots:IssueBusinessPartnerOrder_EA9994 a owl:Class ;
+    rdfs:label "Issue Business Partner Order"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:TrackManageBusinessPartnerOrders_EA9992 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9994" ;
+    rdfs:comment "Initiate Business Partner Order processes is responsible for generating a correctly formatted and specified Business Partner order and issuing this to the selected Business Partner. A request for an order is passed to the from the Track & Manage processes in the Customer, Service, and Resource domains. The Initiate Business Partner Order contains the originating request identifier to allow for appropriate linking to the processes which originally caused the Business Partner order to be initiated.<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerOrderManagement_EA9617 .
+
+ots:ReceiveAcceptBusinessPartnerOrder_EA9993 a owl:Class ;
+    rdfs:label "Receive & Accept Business Partner Order"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:SelectExternalBusinessPartnerForBusinessPartnerOrder_EA9990 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9993" ;
+    rdfs:comment "Receive & Accept Business Partner Order records delivery of a Business Partner order and arranges for any acceptance testing or commissioning required.<br/>These processes facilitate and support coordination of internal activities with activities performed by the Business Partner, that are required to:<br/>• Configure a bought-in Business Partner product;<br/>• Bring a bought-in Business Partner product into service; or<br/>• Restore a bought-in Business Partner product to service.<br/><br/>The actual performance of any acceptance testing and/or commissioning activities by the enterprise is managed within the appropriate process(es) as required.<br/>These processes also manage negotiations with a Business Partner where there have been problems with a Business Partner product's supply, and determine through dialogue with the Business Partner, how best to resolve such issues. <br/>The Business Partner delivery acceptance may involve co-ordination with internal processes, where the supplied specific resource, service or product forms part of a composite, or is to be onward shipped.<br/>These processes report and document on acceptance, and record final acceptance of Business Partner deliveries.<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerOrderManagement_EA9617 .
+
+ots:ReportBusinessPartnerOrders_EA9995 a owl:Class ;
+    rdfs:label "Report Business Partner Orders"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:BpBillInvoiceControl_EA9705 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9995" ;
+    rdfs:comment "The objective of the Report Business Partner processes is to monitor the status of Business Partner orders, provide notifications of any changes and provide management reports.<br/>These processes are responsible for continuously monitoring the status of Business Partner orders and managing notifications to processes and other parties registered to receive notifications of any status changes. Notification lists are managed and maintained by the Support Business Partner Order processes.<br/>These processes record, analyze and assess the Business Partner order status changes to provide management reports and any specialized summaries of the efficiency and effectiveness of the overall Business Partner Order process. These specialized summaries could be specific reports required by specific audiences.<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerOrderManagement_EA9617 .
+
+ots:SelectExternalBusinessPartnerForBusinessPartnerOrder_EA9990 a owl:Class ;
+    rdfs:label "Select External Business Partner for Business Partner Order"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:DetermineBusinessPartnerPreOrderFeasibility_EA9991 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9990" ;
+    rdfs:comment "The responsibility of the Select External Business Partner processes is to identify the most appropriate external Business Partner or parties amongst those with whom an appropriate agreement exists.<br/>Based on the particular product, service and/or resource requirements, select the most appropriate Business Partner from the range of parties with whom a agreement exists.<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerOrderManagement_EA9617 .
+
+ots:SpecificBpRevenueHandling_EA9707 a owl:Class ;
+    rdfs:label "Specific BP Revenue Handling"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:BusinessPartnerAccountBalanceManagement_EA9894 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9707" ;
+    rdfs:comment "Specific Parties Revenue Handling process performs specific revenue model actions that do not follow the generic Billing Invoice procedure. Different revenue management methods are applied towards different parties due to different billing and settlement. Include: Perform Roaming BP Billing Handle Interconnect BP Billing Handle MVNO&MVNE Billing Calculate Sales BP Commissions Handle Content BP Billing Execute BP Billing on Behalf Perform 3rd BP Billing Handle Clearing House Billing Perform Supplier Billing.<br/>"@en ;
+    rdfs:subClassOf ots:BpBillInvoiceManagement_EA9622 .
+
+ots:TrackManageBusinessPartnerOrders_EA9992 a owl:Class ;
+    rdfs:label "Track & Manage Business Partner Orders"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:ReceiveAcceptBusinessPartnerOrder_EA9993 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9992" ;
+    rdfs:comment "The objective of the Track & Manage Business Partner Orders processes is to ensure a Business Partner's orders are being processed and delivered efficiently and effectively, and that escalation is being invoked as required for any open Business Partner orders in jeopardy.<br/><br/>Responsibilities of these processes include, but are not limited to:<br/>• Managing regular interaction with the Business Partner to establish progress of Business Partner orders;<br/>• Modifying information in an existing Business Partner order based on feedback of progress from the Business Partner<br/>• Modifying the Business Partner order status;<br/>• Cancelling a Business Partner order when the specific order requirements are no longer required as notified by the other processes<br/>• Monitoring the jeopardy status of open Business Partner orders, and initiating escalation of Business Partner orders as necessary.<br/><br/>These processes track progress with the Business Partner, either periodically, or at defined points according to a project or program plan. This tracking may be driven from the enterprise, or triggered by reports from the Business Partner (e.g. periodically or at key events). These processes also initiate jeopardy and risk management in relation to the supplied specific resources, services and products, their availability and delivery schedule. <br/><br/>These processes also manage notifications or requests from parties regarding forced or requested changes to the Business Partner order or delivery schedule. These change requests may be caused by the Business Partner or may be outside its control. Change requests are sent to the originating processes where a resolution is agreed.<br/><br/>The Track & Manage Business Partner Order processes will also inform the Close Business Partner Order process by modifying the Business Partner order status to completed when the Business Partner order has been successfully delivered.<br/>"@en ;
+    rdfs:subClassOf ots:BusinessPartnerOrderManagement_EA9617 .
+
+ots:BpBillPaymentsReceivablesManagement_EA9623 a owl:Class ;
+    rdfs:label "BP Bill Payments & Receivables Management"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9623" ;
+    rdfs:comment "Party Bill Payments & Receivables Management is responsible for management of methods used by parties to make payments, administers payment plans, handles payments, and collects debt.<br/>It also concerns management, calculations, application of policies of functionality/interfaces for party account balances. The values resulting from rating and the application of discounts are applied to parties' account balance. This process also authorizes product requests, such as usage events, based on available balance as needed.<br/>"@en ;
+    rdfs:subClassOf ots:ProcureToPay .
+
+ots:BpBillInvoiceManagement_EA9622 a owl:Class ;
+    rdfs:label "BP Bill/Invoice Management"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9622" ;
+    rdfs:comment "Business Partner Bill/Invoice Management manages the Business Partner bill/invoice process, controls bills/invoices, manages the lifecycle of bills/invoices.<br/><br/>A bill is a notice for payment which is supposed to be preceded by an invoice in most cases. An invoice typically does not summarize to total outstanding payment or payments due. A bill typically contains the payment due date and outstanding payment or advanced payment.<br/><br/>Party Bill/Invoice Process Management makes certain that there is capability so that the Bill Invoice Management processes can operate effectively. It also designs and develops an enterprises invoicing process. <br/><br/>Party Bill/Invoice Control establishes and maintains party bill invoice formats, and any interaction with specific parties to modify the format. It maintains lists of parties who are eligible for receiving bills/invoices.<br/><br/>Party Bill/Invoice Lifecycle Management generates bills/invoices for products that were provided by an enterprise on behalf of another party. It also receives bills/invoices for products that were provided by another party on an enterprise's behalf. <br/><br/>Major Differentiation Factors for a separate Invoice Generation: <br/>• Invoice Timeliness - Generation happen monthly but often also biweekly. In contrast to Retail where it is critical customer's invoice is being generating on time, (Cost of Infrastructure, ability to re-invoice, apply adjustments) and dependency on reconciliation (often manually externally driven), requires<br/>• Invoice Accuracy – The tolerance for accepting differences between the balance of two invoices is much higher than for retail. By implication checks and balances<br/><br/>The Invoice document does not summarize to total outstanding payment or payments due. The Bill contains the payment due date and Balance. <br/>Interconnect charges may be incurred for all call attempts rather than just those that succeed and are charged to the retail customer.<br/><br/>Further Sub processes impacted <br/>Tax Jurisdiction Applied -The process of applying Taxes according to applicable Jurisdictions for National and Multinational Customers applicable for various services. In certain countries it is standard practice to outsource sub functions of Tax Determinations to specialized external entities. <br/>Interconnect charges may be incurred for all call attempts rather than just those that succeed and are charged to the retail customer.<br/>Reflect the whole route of the call, not just the origination and termination points.<br/>As a consequence, for example the Interconnect Invoice will be generated from <br/>• Data & Voice CDRs that is only billable for Interconnect providers. E.g.: Outgoing calls (revenue shared), Outgoing Transit calls, Incoming calls, etc. The model simplifies it in terms of a balance in MOU (minutes of use). The Outgoing calls are the expense and Incoming calls are the revenue for the Telecom Provider.<br/>"@en ;
+    rdfs:subClassOf ots:ProcureToPay .
+
+ots:BusinessPartnerTenderManagement_EA9612 a owl:Class ;
+    rdfs:label "Business Partner Tender Management"@en ;
+    ots:functionUnit "procurement_scm" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9612" ;
+    rdfs:comment "Business Partner Tender Management processes manage the activities associated with developing tender documents, running tender processes, gaining enterprise agreement to tender decisions.<br/>The tender process for the sourcing activity can be used not only for managing the sourcing of infrastructure of various types, but is also applicable for use in outsourcing tender processes, and for the sourcing of commodity items used within a business. The actual depth to which the sourcing process is used is dependent on such factors as the value of the sourced items. Note that these processes can also be used for the negotiated agreements between the enterprise and its competitors as a part of regulated inter-carrier agreements. While tender processes are not used in such a case, the processes for determining appropriate commercial arrangements and for gaining enterprise agreement are used for these regulated and competitive activities.<br/>They also manage the evaluation of agreements with parties, to determine those with the products and services that best meet the enterprise’s needs.<br/>"@en ;
+    rdfs:subClassOf ots:ProcureToPay .
+
+ots:ProcureToPay a owl:Class ;
+    rdfs:label "Procure to pay"@en .
+
+ots:BusinessPartnerOrderManagement_EA9617 a owl:Class ;
+    rdfs:label "Business Partner Order Management"@en ;
+    ots:functionUnit "procurement_scm" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA7_EA9617" ;
+    rdfs:comment "The Business Partner Order Management processes track, monitor and report on an order to another Business Partner to ensure that the interactions are in accordance with the agreed commercial agreements with the other Business Partner.<br/>External parties are engaged when:<br/>• specific resources need to be purchased and delivered to satisfy resource orders;<br/>• the enterprise has outsourced specific activities to another Business Partner that are required to be utilized as part of an activity (i.e. outsourced installation activities);<br/>• the specific service is purchased from another Business Partner (as in an interconnect service);<br/>• the specific product and/or service, or specific product and/or service component, is owned and delivered by an another Business Partner, or<br/>• previously issued orders for specific resources or services need to be modified or cancelled.<br/>Business Partner Order Handling<br/>"@en ;
+    rdfs:subClassOf ots:ProcureToPay .
+

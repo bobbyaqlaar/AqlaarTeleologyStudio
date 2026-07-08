@@ -45,10 +45,15 @@ class DataEntity(BaseModel):
 
 
 class SubtreeMapping(BaseModel):
-    """One framework subtree contributing to a value stream baseline."""
+    """One framework subtree contributing to a value stream baseline.
+
+    Identified by `prefix` (dotted hierarchy id, APQC) or `root_name`
+    (element name, eTOM — duplicates resolved to the richest subtree).
+    """
 
     framework: Framework
-    prefix: str  # hierarchy-id prefix, e.g. "4.2"
+    prefix: str | None = None  # hierarchy-id prefix, e.g. "4.2"
+    root_name: str | None = None  # e.g. "Customer Order Processing Management"
     function_unit: str  # default; consultant retags in workshops
     max_level: int = 3  # deepest level emitted into the baseline
 

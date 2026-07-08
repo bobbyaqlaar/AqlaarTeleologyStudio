@@ -1,0 +1,222 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:AnalyzeProductTestQuality_EA8248 a owl:Class ;
+    rdfs:label "Analyze Product Test Quality"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:GainCommitmentToProductBusinessPlans_EA8246 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8248" ;
+    rdfs:comment "Analyze Product Test Quality process performs quality analysis of testing processes, in order to continuously fine-tune and improve them.<br/>Product Test Quality Analysis processes provide analysis of the performance of product testing processes to ensure their continuous fitness for purpose, and eventually propose modifications or enhancements to the current product test specifications (including: product testing methods, quota, authorized users, recommendations and course of action if needed).<br/>The analysis is done using statistical product test usage data to evaluate product tests performance and required improvements if needed.<br/>Following the analysis, typical course of action can be:<br/> - No changes needed currently,<br/> - Creation of additional product tests,<br/> - Improving existing product tests,<br/> - Removing product tests that are no longer relevant.<br/>"@en ;
+    rdfs:subClassOf ots:ProductPortfolioStrategyManagement_EA8188 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:ApproveProductBusinessCase_EA8425 a owl:Class ;
+    rdfs:label "Approve Product Business Case"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:UndertakeMarketingCampaignsTrendAnalysis_EA7354 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8425" ;
+    rdfs:comment "The Approve Product Business Case processes capture all activities required to develop and gain the necessary level of approval for a business case to develop and deliver the required capabilities, including identification of potential business partners. The business case should identify any required product infrastructure components, development costs and anticipated benefits, including revenue gains, productivity gains, performance improvements and/or operational cost improvements. The business case should also include a general view of the types of product offers which could be developed and deployed using the product infrastructure, but would not necessarily include a specific proposal to launch a specific product. This later activity is managed by the PLM processes. The processes include any interaction with cross-enterprise co-ordination and management functions to ensure that the business case is supported by all stakeholders.<br/>"@en ;
+    rdfs:subClassOf ots:ProductDevelopment_EA8189 .
+
+ots:CaptureProductCapabilityShortfalls_EA8424 a owl:Class ;
+    rdfs:label "Capture Product Capability Shortfalls"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:DefineProductCapabilityRequirements_EA8423 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8424" ;
+    rdfs:comment "The Capture Product Capability Shortfalls processes identify specific or imminent product capacity, product performance and/or product operational support shortfalls. These processes take information available from the Customer Relationship Management processes to establish detailed views of anticipated product capacity and performance shortfalls and support process issues.<br/>"@en ;
+    rdfs:subClassOf ots:ProductDevelopment_EA8189 .
+
+ots:DefineProductCapabilityRequirements_EA8423 a owl:Class ;
+    rdfs:label "Define Product Capability Requirements"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ManageHandoverToProductOperations_EA8427 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8423" ;
+    rdfs:comment "The Define Product Capability Requirements processes define and obtain agreement to the detailed infrastructure requirements to support the product portfolio and individual product plans. Product infrastructure requirements to support new product initiatives for the product lifecycle management are captured in this process, as well as any product infrastructure requirements needed to support the specific offers being made to customers through the sales channels. These processes also identify the service infrastructure capabilities required to deliver the product infrastructure. The processes include any interaction with cross-enterprise co-ordination and management functions to ensure that the requirements capture the needs of all stakeholders.<br/>These processes provide input into the requirements capture processes in the Service and Party Offering Development & Retirement processes, and potentially the Resource, horizontal process groupings.<br/>"@en ;
+    rdfs:subClassOf ots:ProductDevelopment_EA8189 .
+
+ots:DeliverProductCapability_EA8426 a owl:Class ;
+    rdfs:label "Deliver Product Capability"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:CaptureProductCapabilityShortfalls_EA8424 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8426" ;
+    rdfs:comment "The Deliver Product Capability processes ensure the co-coordinated delivery in line with the approved business case of all required product infrastructure capabilities for that business case across the enterprise. It is predominantly a program/project management function, with the detailed management of individual infrastructure component delivery managed through separate processes. The processes track and ensure that the business case cost parameters are met, and anticipated benefits and ongoing operational costs are likely to be achieved.<br/>"@en ;
+    rdfs:subClassOf ots:ProductDevelopment_EA8189 .
+
+ots:DevelopMarketingCampaign_EA7349 a owl:Class ;
+    rdfs:label "Develop Marketing Campaign"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:EnsureMarketingCampaignCapability_EA7348 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA1_EA7349" ;
+    rdfs:comment "Develop Marketing Campaign manages all activities and stakeholder engagement to develop and agree on a marketing campaign. It also interacts with Marketing Communications to develop campaign messages and Product Offering Promotion Development to create product offering promotions associated with the campaign.<br/><br/>The criteria used to identify the customer and other parties targeted by the marketing campaign are defined. Develop a target list of customers and other parties that will be contacted as part of the campaign. <br/><br/>Describe the marketing campaign proposition which that will be addressed to each market sub-segment in terms of discounts for associated product promotions, requested effort, and validity period.<br/><br/>Design the marketing campaign workflow which includes establishing and scheduling waves, or periodical steps in the campaign. Each wave is designed to take into account responses from those targeted by the campaign.<br/>"@en ;
+    rdfs:subClassOf ots:MarketingCampaignManagement_EA7321 .
+
+ots:EndMarketingCampaign_EA7353 a owl:Class ;
+    rdfs:label "End Marketing Campaign"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:ModifyMarketingCampaign_EA7352 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA1_EA7353" ;
+    rdfs:comment "Not used for this process element<br/>"@en ;
+    rdfs:subClassOf ots:MarketingCampaignManagement_EA7321 .
+
+ots:EnsureMarketingCampaignCapability_EA7348 a owl:Class ;
+    rdfs:label "Ensure Marketing Campaign Capability"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:PlanMarketingCampaign_EA7347 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA1_EA7348" ;
+    rdfs:comment "Ensure that there is capability (for example, information, materials, systems and resources) so that the marketing campaign can be launched and managed. Monitor planned campaigns and redistribute existing capability or enable new capability (people, facilities, infrastructure).<br/>"@en ;
+    rdfs:subClassOf ots:MarketingCampaignManagement_EA7321 .
+
+ots:EstablishProductPortfolioStrategy_EA8244 a owl:Class ;
+    rdfs:label "Establish Product Portfolio Strategy"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:GatherAnalyzeProductInformation_EA8243 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8244" ;
+    rdfs:comment "The Establish Product Portfolio Strategy processes define the overall structure of the product portfolios to be used across the enterprise, or between or within business units. These products and product portfolios form the basis of offers made to customers. It includes the agreement on and implementation of cross-portfolio and cross-product co-ordination and management functions.<br/>"@en ;
+    rdfs:subClassOf ots:ProductPortfolioStrategyManagement_EA8188 .
+
+ots:GainCommitmentToProductBusinessPlans_EA8246 a owl:Class ;
+    rdfs:label "Gain Commitment to Product Business Plans"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ProductTestStrategy_EA8247 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8246" ;
+    rdfs:comment "The Gain Commitment to Product Business Plans processes gain enterprise commitment to the product portfolio strategy and individual product plans. These processes include all aspects of identification of stakeholders and negotiation to gain stakeholder approval.<br/>"@en ;
+    rdfs:subClassOf ots:ProductPortfolioStrategyManagement_EA8188 .
+
+ots:GatherAnalyzeProductInformation_EA8243 a owl:Class ;
+    rdfs:label "Gather & Analyze Product Information"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ProductSpecificationTestDevelopmentRetirement_EA8349 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8243" ;
+    rdfs:comment "Gather & Analyze Product Information processes research information relating to product ideas and opportunities and identify product opportunities based on the analysis of external and internal information sources. These processes encompass analysis to identify new products as well as reviewing existing products. They also include the establishment and management of relationships with external providers of product information, and the management of internal resources used for providing product information.<br/>"@en ;
+    rdfs:subClassOf ots:ProductPortfolioStrategyManagement_EA8188 .
+
+ots:LaunchMarketingCampaign_EA7350 a owl:Class ;
+    rdfs:label "Launch Marketing Campaign"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:DevelopMarketingCampaign_EA7349 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA1_EA7350" ;
+    rdfs:comment "Launch Marketing Campaign executes the marketing campaign by managing and coordinating the delivery of the marketing campaign to the selected channel(s). It ensures that the channel(s) (owned and/or contracted) are adequately trained and/or informed to manage the campaign launch, and that sufficient resources are available in the selected channel(s) to support the launch.<br/><br/>An initial launch of the marketing campaign may be made to limited audiences in order to validate the campaign before it is formally launched. In this case the Monitor Marketing Campaign Effectiveness process may also be executed during the initial launch.<br/>"@en ;
+    rdfs:subClassOf ots:MarketingCampaignManagement_EA7321 .
+
+ots:ManageHandoverToProductOperations_EA8427 a owl:Class ;
+    rdfs:label "Manage Handover to Product Operations"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ManageProductCapabilityDeliveryMethodology_EA8428 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8427" ;
+    rdfs:comment "The Manage Handover to Product Operations processes manage the processes involved in handover of deployed product infrastructure to operational control. These processes ensure that all performance and operational design requirements have been met by the installed product infrastructure, and that all tools, test equipment, operational procedures, support groups, and training is in place to allow for successful operation. These processes include the management and coordination of all stakeholders required to gain approval and acceptance of the handover to operational control.<br/>"@en ;
+    rdfs:subClassOf ots:ProductDevelopment_EA8189 .
+
+ots:ManageProductCapabilityDeliveryMethodology_EA8428 a owl:Class ;
+    rdfs:label "Manage Product Capability Delivery Methodology"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ApproveProductBusinessCase_EA8425 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8428" ;
+    rdfs:comment "The Manage Product Capability Delivery Methodology processes define and manage the methodology to be adopted for product capability delivery across the enterprise. The processes define the procedures and steps to follow to ensure that all project activities across the enterprise to develop infrastructure capability are co-coordinated, visible and controlled. These processes define the steps in the methodology, and approval process or gates to be passed by individual product capability delivery projects, and may maintain a repository of all activities as a part of the coordination aspects.<br/>"@en ;
+    rdfs:subClassOf ots:ProductDevelopment_EA8189 .
+
+ots:ModifyMarketingCampaign_EA7352 a owl:Class ;
+    rdfs:label "Modify Marketing Campaign"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:LaunchMarketingCampaign_EA7350 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA1_EA7352" ;
+    rdfs:comment "Modify Marketing Campaign updates a marketing campaign to improve its effectiveness based on metric analysis or based on feedback from recipients or stakeholders.<br/><br/>It may also extend the end date of a marketing campaign if warranted and modify the campaign message based on feedback from the market and external stakeholders.<br/>"@en ;
+    rdfs:subClassOf ots:MarketingCampaignManagement_EA7321 .
+
+ots:MonitorMarketingCampaignEffectiveness_EA7351 a owl:Class ;
+    rdfs:label "Monitor Marketing Campaign Effectiveness"@en ;
+    ots:functionUnit "marketing" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA1_EA7351" ;
+    rdfs:comment "Monitor Marketing Campaign Effectiveness establishes, monitors, and analyzes metrics to gauge the effectiveness of a marketing campaign or campaigns. Based on analysis these processes feedback suggested changes to adapt the campaign or campaigns to become more effective now or in the future.<br/><br/>Note that this process' sub-processes reuse a generalized set of metric processes to develop, gather, and analyze (to some degree) marketing campaign metrics.<br/>"@en ;
+    rdfs:subClassOf ots:MarketingCampaignManagement_EA7321 .
+
+ots:PlanMarketingCampaign_EA7347 a owl:Class ;
+    rdfs:label "Plan Marketing Campaign"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:MonitorMarketingCampaignEffectiveness_EA7351 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA1_EA7347" ;
+    rdfs:comment "Plan Marketing Campaign defines the specific strategy, objectives, start/end date, and messages to be used for positioning the enterprise in the marketplace, including its relationship to competitors. Establish Market Strategy defines the overall umbrella, and this process operates within that umbrella to target the marketing campaigns for the enterprise in general, specific products, market segments, customers and prospects, and so forth. <br/><br/>It selects the appropriate channel or channels to support delivery of the campaign and defines contact rules in order to ensure that commercial pressure on customers is managed.<br/><br/>A budget and return on investment (ROI) are also prepared and the budget is approved by the appropriate stakeholders.<br/><br/>It ensures that the campaign adheres to the campaign plan defined by Market Strategy & Policy specifically to fall in sequence with other campaigns in the plan to reach the expected business objectives for a specific market segment.<br/>"@en ;
+    rdfs:subClassOf ots:MarketingCampaignManagement_EA7321 .
+
+ots:ProduceProductPortfolioBusinessPlans_EA8245 a owl:Class ;
+    rdfs:label "Produce Product Portfolio Business Plans"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:EstablishProductPortfolioStrategy_EA8244 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8245" ;
+    rdfs:comment "The Produce Product Portfolio Business Plans processes develop product and product portfolio business plans to guide new product development and enhancements for existing products within the enterprise. These plans include portfolio forecasts, negotiation for required level of resources, outlines of the strategy for offering of the products into the market, anticipated pricing strategies, projected revenues and costs, product performance requirements, operational requirements, gaining interdepartmental, process, infrastructure and supply chain commitment and executive approval, as well as communicating the plans.<br/><br/>The portfolio plans can be developed top-down from the overall enterprise business strategy, or can be developed as a bottom-up amalgamation and summary of individual product plans contained within the portfolio, or some combination of the two approaches.<br/>"@en ;
+    rdfs:subClassOf ots:ProductPortfolioStrategyManagement_EA8188 .
+
+ots:ProductOfferingDevelopmentRetirement_EA8348 a owl:Class ;
+    rdfs:label "Product Offering Development & Retirement"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ProductSpecificationDevelopmentRetirement_EA8347 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8348" ;
+    rdfs:comment "Product Offering Development & Retirement develops new product offerings and their associated features. Pricing for the offerings is also developed, such as standard pricing and feature-based pricing. The offerings and selected processes are included in product catalogs which are also developed by these processes.<br/><br/>Note that this process is reused to support the development of product offerings on-boarded from other parties with whom an enterprises collaborates to deliver value to customers. This is done to remove the redundancy between this process and the Party Offering Development & Retirement process. The focus of the Party Offering Development & Retirement core process is the relationships that product offerings have with other parties.<br/>"@en ;
+    rdfs:subClassOf ots:ProductSpecificationOfferingDevelopmentRetirement_EA8193 .
+
+ots:ProductSpecificationDevelopmentRetirement_EA8347 a owl:Class ;
+    rdfs:label "Product Specification Development & Retirement"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:DeliverProductCapability_EA8426 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8347" ;
+    rdfs:comment "Product Specification Development & Retirement processes develop and deliver new product specifications as well as enhancements and new features, ready for use by other processes. Additionally they handle the removal of specifications no longer offered. Also, dynamic allocation of resources and services to deliver products to the market. They are responsible <br/><br/>Product specifications represent the types of services and resources made available as product offerings to the market by an enterprise.<br/><br/>The key measures of this process are how effectively the enterprise’s offerings are broadened by these specifications or new specification features. These processes also manage updates and enhancements to product specifications. Business case development tracking and commitment are key elements of this process.<br/><br/>Note that this process is reused to support the development of product specifications on-boarded from other parties with whom an enterprises collaborates to deliver value to customers. This is done to remove the redundancy between this process and the Party Offering Development & Retirement process. The focus of the Party Offering Development & Retirement core process is the relationships that product specifications have with other parties.<br/><br/>Also note that some of these processes, such as Gather & Analyze New Product Specification Ideas and Develop New Product Specification Business Proposal, may be performed in conjunction with the equivalent process in Product Offering Development & Retirement. For example, if ideas for a new specification or feature are being developed, ideas on how to offer it to the market may also be gathered; or if a new offering is being considered it may require new features defined for the specification or one or more new specifications to be developed for it.<br/>"@en ;
+    rdfs:subClassOf ots:ProductSpecificationOfferingDevelopmentRetirement_EA8193 .
+
+ots:ProductSpecificationTestDevelopmentRetirement_EA8349 a owl:Class ;
+    rdfs:label "Product Specification Test Development & Retirement"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ProductOfferingDevelopmentRetirement_EA8348 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8349" ;
+    rdfs:comment "Product Test Development & Retirement is in charge of the Product Test catalog.<br/>A type of Product Test aims at measuring proper functioning and capacities of a Product whatever the context is (Product Specification Development & Retirement, Order Handling, Customer Order Orchestration, Product Performance Management, Customer Problem Handling, Product Test Management).<br/>Product Test Development & Retirement includes:<br/>- Specifying in detail each Product Test according to the different context. It includes specifying:<br/><ul><li>the roles authorized to use the Test and quotas for each type of role</li><li>the method to conduct the Test</li><li>the rules that define the strategies for conducting the test (including the test plan)</li><li>the thresholds and related actions</li><li>the relationships with lower level tests (Service Test or Resource Test)</li><li>the report of test results with rules for enrichment of Service & Resource Tests results according to role asking for it</li></ul>- Specifying test scenarios defining sequence of Tests with rules about context and planning to trigger it. It includes roles allowed for asking test scenario and corresponding quotas.<br/>"@en ;
+    rdfs:subClassOf ots:ProductSpecificationOfferingDevelopmentRetirement_EA8193 .
+
+ots:ProductTestStrategy_EA8247 a owl:Class ;
+    rdfs:label "Product Test Strategy"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ProduceProductPortfolioBusinessPlans_EA8245 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8247" ;
+    rdfs:comment "Product Test Strategy develops the strategies of the enterprise for Product Test.<br/>This process is in charge of identifying types of Product Test to be conducted according to different context (i.e. business activities) for types of products.<br/>The different context for Product Test are:<br/><ul><li>Product Specification Development & Retirement to qualify the capacity to deliver Products before validating a new ProductSpecification,</li><li>Order Handling (Customer Order Orchestration) to test the Product before closing the CustomerOrderItem,</li><li>Product Performance Management to test Product performance,</li><li>Customer Problem Handling to test Product functioning,</li><li>Product Test Management to conduct tests not specific to a customer’s product.</li></ul><p/>"@en ;
+    rdfs:subClassOf ots:ProductPortfolioStrategyManagement_EA8188 .
+
+ots:UndertakeMarketingCampaignsTrendAnalysis_EA7354 a owl:Class ;
+    rdfs:label "Undertake Marketing Campaigns Trend Analysis"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:EndMarketingCampaign_EA7353 ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA1_EA7354" ;
+    rdfs:comment "Not used for this process element<br/>"@en ;
+    rdfs:subClassOf ots:MarketingCampaignManagement_EA7321 .
+
+ots:ProductSpecificationOfferingDevelopmentRetirement_EA8193 a owl:Class ;
+    rdfs:label "Product Specification & Offering Development & Retirement"@en ;
+    ots:functionUnit "products" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8193" ;
+    rdfs:comment "Product Specification & Offering Development & Retirement processes develop and deliver new product specifications as well as enhancements and new features, ready for use by other processes. Additionally they handle the removal of specifications no longer offered.<br/><br/>Product specifications represent the types of services and resources made available as product offerings to the market by an enterprise.<br/><br/>The key measures of this process are how effectively the enterprise’s offerings are broadened by these specifications or new specification features. These processes also manage updates and enhancements to product specifications. Business case development tracking and commitment are key elements of this process.<br/><br/>They also develop new product offerings and their associated features. Pricing for the offerings is also developed, such as standard pricing and feature-based pricing. The offerings and selected processes are included in product catalogs which are also developed by these processes.<br/>"@en ;
+    rdfs:subClassOf ots:ConceptToMarket .
+
+ots:ConceptToMarket a owl:Class ;
+    rdfs:label "Concept to market"@en .
+
+ots:ProductDevelopment_EA8189 a owl:Class ;
+    rdfs:label "Product Development"@en ;
+    ots:functionUnit "products" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8189" ;
+    rdfs:comment "Product Development business process grouping supports the business in creating new products or enhancing existing ones, including conceptualization to market launch. It handles the requisite infrastructure (when the technologies, scope, or type/depth of infrastructure is significantly different from that currently employed in the enterprise e.g., the introduction of Third-generation Mobile Telephony networks) and begins with identifying a market need, where a problem that requires solving or an opportunity is pinpointed, and the potential for a product-based solution is assessed.<br/>This process was renamed in 24.0 Old name was Product & Offer Capability Delivery<br/>"@en ;
+    rdfs:subClassOf ots:ConceptToMarket .
+
+ots:ProductPortfolioStrategyManagement_EA8188 a owl:Class ;
+    rdfs:label "Product Portfolio Strategy Management"@en ;
+    ots:functionUnit "products" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA4_EA8188" ;
+    rdfs:comment "Product Portfolio Strategy Management includes activities to make decisions about products to develop, maintain, or phase out. It also has oversight on Product Allocation to maximize growth and profitability across the entire product portfolio, and individual Product Strategy to outline how a product will operate and support the business strategy and goals. Product Portfolio Strategy Management plans, supports development, and overseeing a product from concept to market release.<br/>This process name was changed in 24.0. Old name was Product & Offer Portfolio Planning<br/>"@en ;
+    rdfs:subClassOf ots:ConceptToMarket .
+
+ots:MarketingCampaignManagement_EA7321 a owl:Class ;
+    rdfs:label "Marketing Campaign Management"@en ;
+    ots:functionUnit "marketing" ;
+    dcterms:source "TM Forum eTOM (MODA) etom:EARoot_EA5_EA1_EA1_EA7321" ;
+    rdfs:comment "Marketing Campaign Management develops a marketing campaign through a coordinated series of steps that can include promotion of one or more product offerings through different mediums (television, radio, print, online) using a variety of different types of advertisements to reach the market, customers and channels. <br/><br/>Marketing campaigns can be designed with different ends in mind, including building a brand image, introducing a new product, retaining customers, bringing in new customers, increasing sales of a product already on the market, or even reducing the impact of negative news.<br/><br/>Marketing Campaign Management works with other processes, such as Brand Management, Market Research, Marketing Communications, Product Offering Promotion Development, and Advertising Management to design marketing promotions and advertising, to determine trade show participation and presence, to support product introductions, and so forth. One of the key roles of all these processes is to position the product in the market, especially versus competitive products.<br/>"@en ;
+    rdfs:subClassOf ots:ConceptToMarket .
+

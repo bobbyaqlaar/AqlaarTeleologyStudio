@@ -15,7 +15,15 @@ from pathlib import Path
 
 from rdflib import DCTERMS, OWL, RDF, RDFS, Graph, Literal, Namespace, URIRef
 
-from services.ingest.models import ProcessElement, StreamMapping
+from services.ingest.models import Framework, ProcessElement, StreamMapping
+from services.ingest.selection import leaf_level_elements, select
+
+SOURCE_LABELS = {
+    Framework.APQC: "APQC PCF v8",
+    Framework.APQC_INDUSTRY: "APQC industry PCF",
+    Framework.ETOM: "TM Forum eTOM (MODA)",
+    Framework.SID: "TM Forum SID (MODA)",
+}
 
 OTS = Namespace("http://ots.local/ontology/")
 
@@ -30,11 +38,9 @@ STREAM_ROOTS = {
 
 def _class_uri(element: ProcessElement) -> URIRef:
     slug = re.sub(r"[^A-Za-z0-9]+", " ", element.name).title().replace(" ", "")
-    return OTS[f"{slug}_{element.id.replace('.', '_')}"]
-
-
-def _in_subtree(element: ProcessElement, prefix: str) -> bool:
-    return element.id == prefix or element.id.startswith(prefix + ".")
+    # APQC ids are dotted ("9.2.2"); eTOM slugs end in an EA page number
+    suffix = element.id.replace(".", "_").rsplit("_", 1)[-1] if ":" in element.id else element.id.replace(".", "_")
+    return OTS[f"{slug}_{suffix}"]
 
 
 def emit(
@@ -59,10 +65,8 @@ def emit(
     chain: list[URIRef] = []  # process-level classes in stream order
 
     for subtree in stream.subtrees:
-        selected = sorted(
-            (e for e in elements if _in_subtree(e, subtree.prefix) and e.level <= subtree.max_level),
-            key=lambda e: [int(p) for p in e.id.split(".")],
-        )
+        selected = select(subtree, elements)
+        leaves = {e.id for e in leaf_level_elements(subtree, selected)}
         for element in selected:
             uri = _class_uri(element)
             uri_by_id[element.id] = uri
@@ -71,11 +75,13 @@ def emit(
             parent_uri = uri_by_id.get(element.parent_id or "")
             graph.add((uri, RDFS.subClassOf, parent_uri if parent_uri else root))
             graph.add((uri, OTS.functionUnit, Literal(subtree.function_unit)))
-            source = f"APQC PCF v8 {element.id}" + (f" (PCF ID {element.pcf_id})" if element.pcf_id else "")
+            source = f"{SOURCE_LABELS[element.framework]} {element.id}" + (
+                f" (PCF ID {element.pcf_id})" if element.pcf_id else ""
+            )
             graph.add((uri, DCTERMS.source, Literal(source)))
             if element.description:
                 graph.add((uri, RDFS.comment, Literal(element.description, lang="en")))
-            if element.level == subtree.max_level:
+            if element.id in leaves:
                 chain.append(uri)
 
     for current, following in zip(chain, chain[1:]):
