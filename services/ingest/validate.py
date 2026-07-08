@@ -15,7 +15,7 @@ OTS = Namespace("http://ots.local/ontology/")
 
 FUNCTION_UNITS = {
     "sales", "marketing", "customer_care", "finance", "procurement_scm",
-    "production", "operations", "products", "it", "networks",
+    "production", "operations", "hr", "products", "it", "networks",
 }
 
 

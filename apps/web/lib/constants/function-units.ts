@@ -59,6 +59,13 @@ export const FUNCTION_UNITS: FunctionUnitMeta[] = [
     dotClass: "bg-fn-operations",
   },
   {
+    id: "hr",
+    label: "Human Resources",
+    token: "fn-hr",
+    colorClass: "text-fn-hr",
+    dotClass: "bg-fn-hr",
+  },
+  {
     id: "products",
     label: "Products",
     token: "fn-products",

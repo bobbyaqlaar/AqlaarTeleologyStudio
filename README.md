@@ -62,7 +62,7 @@ Dev role switcher in the header toggles consultant vs stakeholder (with function
 
 Every BPMN step is tagged with one function:
 
-Sales · Marketing · Customer care/experience · Finance · Procurement/SCM · Production · Operations · Products · IT · Networks
+Sales · Marketing · Customer care/experience · Finance · Procurement/SCM · Production · Operations · Human Resources · Products · IT · Networks
 
 ### Value streams (generic baseline)
 
@@ -102,7 +102,7 @@ Data-dense professional SaaS (Datadog/Palantir-inspired):
 - **Geist Sans + Geist Mono**; balanced density; soft 8px radius cards
 - Collapsible sidebar; icon + **Ontology-Teleology Studio** wordmark in header
 - Horizontal **numbered stepper** (1–5); breadcrumbs; one primary CTA per screen
-- **10 function-unit colors** with fixed legend on BPMN views
+- **11 function-unit colors** with fixed legend on BPMN views
 - Role-aware views; status badges (`Draft` · `In review` · `Approved` · `Rejected`)
 
 Full spec: [`docs/superpowers/specs/2026-06-11-ots-phase1-design.md`](docs/superpowers/specs/2026-06-11-ots-phase1-design.md)

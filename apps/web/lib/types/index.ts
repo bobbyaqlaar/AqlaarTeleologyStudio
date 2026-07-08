@@ -6,6 +6,7 @@ export type FunctionalUnit =
   | "procurement_scm"
   | "production"
   | "operations"
+  | "hr"
   | "products"
   | "it"
   | "networks";

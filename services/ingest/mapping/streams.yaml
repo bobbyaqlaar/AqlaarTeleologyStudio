@@ -4,8 +4,7 @@
 #  operations products it networks) — consultants retag in workshops.
 # max_level = deepest PCF level emitted into the baseline (3 = Process level).
 #
-# NOTE: the OTS function-unit enum has no HR unit; H2R subtrees default to
-# `operations` until the enum grows (docs/TODO-implementation-plan.md Phase 3).
+# `hr` unit added to the enum 2026-07-08 (Bobby approved).
 
 o2c:
   label: Order to Cash
@@ -30,10 +29,10 @@ c2m:
 h2r:
   label: Hire to Retire
   subtrees:
-    - { framework: apqc, prefix: "7.2", function_unit: operations, max_level: 3 }   # Recruit, source, and select employees
-    - { framework: apqc, prefix: "7.3", function_unit: operations, max_level: 3 }   # Onboarding, training, development
-    - { framework: apqc, prefix: "7.5", function_unit: operations, max_level: 3 }   # Reward and retain employees
-    - { framework: apqc, prefix: "7.6", function_unit: operations, max_level: 3 }   # Redeploy and retire employees
+    - { framework: apqc, prefix: "7.2", function_unit: hr, max_level: 3 }   # Recruit, source, and select employees
+    - { framework: apqc, prefix: "7.3", function_unit: hr, max_level: 3 }   # Onboarding, training, development
+    - { framework: apqc, prefix: "7.5", function_unit: hr, max_level: 3 }   # Reward and retain employees
+    - { framework: apqc, prefix: "7.6", function_unit: hr, max_level: 3 }   # Redeploy and retire employees
     - { framework: apqc, prefix: "9.5", function_unit: finance, max_level: 3 }      # Process payroll
 
 t2r:

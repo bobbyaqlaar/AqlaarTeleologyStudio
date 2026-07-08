@@ -83,6 +83,7 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 
 ## Phase 3 — Workshop features
 
+- [x] `hr` function unit added to enum (types, function-units.ts, globals.css lime token, validate.py, spec §5, README) — Bobby approved 2026-07-08. h2r subtrees now tagged `hr`.
 - [ ] Industry field on engagement (create dialog + type + service); stream picker passes industry to initialize.
 - [ ] System catalog + step→system mapping: types `SystemDef`, `SystemMapping {stepId, systemId}`; seed choices from `ReferenceDocs/DataSources.xlsx`; UI: systems tag panel beside function-tag-panel in process workspace; coverage matrix (steps × systems). Persist as `ots:realizedBy` triples or mock store until Phase 4.
 - [ ] Thesaurus panel in ontology workspace: search concepts, map class→concept, show broader tree.
@@ -96,4 +97,5 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 
 ## Session log
 
-- 2026-07-08: Plan written. Phase 0 done (commit bc74a87). Phase 1 mostly done: ingest package built, pipeline runs end-to-end (`parse-apqc` → `emit` → `validate` all green). O2C baseline now 22 real APQC classes w/ provenance; BPMN 18 tasks/3 lanes, valid XML. **Next up:** (1) re-crawl TM Forum MODA (dump too thin: 27 objects), (2) apqc_pdf parser for industry PCFs, (3) SKOS cross-framework exactMatch alignment, (4) verify generated .bpmn opens in bpmn-js editor, (5) Phase 2 API: baseline graphs by industry + thesaurus endpoints.
+- 2026-07-08: Plan written. Phase 0 done (commit bc74a87). Phase 1 mostly done: ingest package built, pipeline runs end-to-end (`parse-apqc` → `emit` → `validate` all green). O2C baseline now 22 real APQC classes w/ provenance; BPMN 18 tasks/3 lanes, valid XML. **Next up:** (1) re-crawl TM Forum MODA (dump too thin: 27 objects), (2) apqc_pdf parser for industry PCFs, (3) SKOS cross-framework exactMatch alignment, (4) Phase 2 API: baseline graphs by industry + thesaurus endpoints.
+- 2026-07-08 (later): Bobby approved `hr` function unit → added across web enum/colors, ingest validator, streams.yaml (h2r 7.x → hr), spec, README. Re-emitted baselines, validation green. Verified all 5 generated .bpmn parse clean via bpmn-moddle (0 warnings; h2r lanes hr+finance). `npx tsc --noEmit` clean.

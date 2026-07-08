@@ -145,7 +145,7 @@ Consultant still validates everything in Process and Ontology steps. **UI shippe
 | Roles | **Consultant** edits artefacts; **Stakeholder** comments and approves only |
 | Value streams | O2C, P2P, C2M, H2R, T2R (generic cross-industry baselines) |
 | Artefacts | Linked **BPMN** process maps + **OWL** ontology (RDF/Turtle) |
-| Function units | Every BPMN step tagged with one of 10 enterprise functions |
+| Function units | Every BPMN step tagged with one of 11 enterprise functions |
 | Teleology | Matrix table, row editor, org themes, function drill-down, submit/approve |
 | Connectors (UI) | Salesforce + Jira cards, field map, import preview/apply (**mock** — UI complete) |
 | Review (UI) | Approval queue: streams, teleology, BPMN feedback resolution |
@@ -181,6 +181,7 @@ Every step in any business process maps to exactly one function unit.
 | `procurement_scm` | Procurement / SCM |
 | `production` | Production |
 | `operations` | Operations |
+| `hr` | Human Resources |
 | `products` | Products |
 | `it` | IT |
 | `networks` | Networks |
@@ -481,6 +482,7 @@ Fixed legend on every BPMN canvas and filter bar:
 | Procurement / SCM | `fn-procurement` | Amber |
 | Production | `fn-production` | Orange |
 | Operations | `fn-operations` | Rose |
+| Human Resources | `fn-hr` | Lime |
 | Products | `fn-products` | Pink |
 | IT | `fn-it` | Indigo |
 | Networks | `fn-networks` | Teal |

@@ -46,6 +46,7 @@
   --color-fn-procurement: var(--fn-procurement);
   --color-fn-production: var(--fn-production);
   --color-fn-operations: var(--fn-operations);
+  --color-fn-hr: var(--fn-hr);
   --color-fn-products: var(--fn-products);
   --color-fn-it: var(--fn-it);
   --color-fn-networks: var(--fn-networks);
@@ -98,6 +99,7 @@
   --fn-procurement: oklch(0.769 0.164 80.5);
   --fn-production: oklch(0.705 0.187 47.5);
   --fn-operations: oklch(0.645 0.215 16.5);
+  --fn-hr: oklch(0.768 0.196 130.5);
   --fn-products: oklch(0.656 0.212 354.5);
   --fn-it: oklch(0.585 0.204 277.5);
   --fn-networks: oklch(0.695 0.127 185.5);
@@ -142,6 +144,7 @@
   --fn-procurement: oklch(0.769 0.164 80.5);
   --fn-production: oklch(0.705 0.187 47.5);
   --fn-operations: oklch(0.645 0.215 16.5);
+  --fn-hr: oklch(0.768 0.196 130.5);
   --fn-products: oklch(0.656 0.212 354.5);
   --fn-it: oklch(0.585 0.204 277.5);
   --fn-networks: oklch(0.695 0.127 185.5);
@@ -154,6 +157,7 @@
 .bg-fn-procurement { background-color: var(--fn-procurement); }
 .bg-fn-production { background-color: var(--fn-production); }
 .bg-fn-operations { background-color: var(--fn-operations); }
+.bg-fn-hr { background-color: var(--fn-hr); }
 .bg-fn-products { background-color: var(--fn-products); }
 .bg-fn-it { background-color: var(--fn-it); }
 .bg-fn-networks { background-color: var(--fn-networks); }
