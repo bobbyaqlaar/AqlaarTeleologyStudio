@@ -32,12 +32,12 @@ export function RoleSwitcher(): React.ReactNode {
         <ChevronDown className="size-3 opacity-60" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52">
-        <DropdownMenuLabel>Dev role switcher</DropdownMenuLabel>
-        <DropdownMenuSeparator />
         <DropdownMenuRadioGroup
           value={role}
           onValueChange={(value) => setRole(value as UserRole)}
         >
+          <DropdownMenuLabel>Dev role switcher</DropdownMenuLabel>
+          <DropdownMenuSeparator />
           <DropdownMenuRadioItem value="consultant">
             Consultant
           </DropdownMenuRadioItem>
