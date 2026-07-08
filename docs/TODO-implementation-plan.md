@@ -48,7 +48,7 @@ Root `pyproject.toml`: add deps `openpyxl, pdfplumber, beautifulsoup4, lxml, rdf
 ### 1.2 Canonical model — [x] DONE (`services/ingest/models.py`)
 `ProcessElement {id, frameworkId(PCF hierarchy id e.g. "3.2.1" / eTOM id), framework, level(1-5), name, description?, parentId?, order, functionUnit?}`. `DataEntity {id, name, domain, framework(sid), description?, parentId?}`. `StreamMapping` from streams.yaml.
 
-### 1.3 Parsers — [x] apqc_xlsx (2017 elements) · [~] moda (works, but dump only 27 real objects/83 pages — RE-CRAWL NEEDED via moda_spider.py) · [ ] apqc_pdf (stub raises NotImplementedError)
+### 1.3 Parsers — [x] apqc_xlsx (2017 elements) · [~] moda (re-crawl DONE via services/ingest/crawl_moda.py → cache/moda_full.jsonl ~18k pages from guid_look map in index.htm; parser rewrite against full dump still TODO) · [x] apqc_pdf (two-column industry PDFs; telecom 1649 / retail 1708 / utilities 2069 elements, 0 orphans; `ots-ingest parse-industry <pdf> --industry <slug>`)
 - xlsx: PCF Excel has rows w/ hierarchy number + name + optional metrics. Parse hierarchy number to build tree. Verify sheet layout first (openpyxl, print head).
 - moda: each jsonl line `{url, title, html}`. Extract EA-exported tables: process element names, ids, descriptions, parent links; SID domains/ABEs from "SID Domains.html" style pages. Coverage check: 83 pages likely partial → re-run `ReferenceDocs/moda_spider.py` (needs scrapy) if key eTOM L2s missing.
 - pdf: extract per-category definitions text; LLM cleanup pass optional/deferred; cache to `cache/apqc_pdf/*.jsonl`.
@@ -73,13 +73,13 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 ### 1.7 CLI — [x] DONE: `uv run ots-ingest parse-apqc|parse-moda|emit|validate`
 `ots-ingest parse --source apqc|moda`, `ots-ingest emit --industry generic|telecom --stream o2c|...|all`, `ots-ingest validate`. Idempotent, reads cache.
 
-## Phase 2 — Semantic layer upgrade (`services/api`)
+## Phase 2 — Semantic layer upgrade (`services/api`) — DONE 2026-07-08 (integration-tested vs live Fuseki)
 
-- [ ] Fuseki baseline graphs `urn:ots:baseline:{industry}:{stream}`; thesaurus graphs `urn:ots:thesaurus:{framework}`; engagement init copies baseline graph (SPARQL `COPY`/INSERT from graph) instead of TTL file load.
-- [ ] `GET /api/v1/baselines` (list industries+streams), `initialize?industry=`.
-- [ ] `GET /api/v1/thesaurus/search?q=&framework=` (SPARQL regex over prefLabel/altLabel).
-- [ ] `POST /api/v1/ontology/{eng}/{stream}/concept-mapping` — class↔skos concept (`skos:exactMatch`).
-- [ ] Loader script/startup: load `data/baselines/**` + `data/thesaurus/*` into Fuseki.
+- [x] Baselines load from `data/baselines/{industry}/{stream}.ttl` w/ legacy flat fallback; thesaurus graphs `urn:ots:thesaurus:{framework}` lazy-loaded from `data/thesaurus/*.ttl`.
+- [x] `GET /api/v1/ontology/baselines` (industries+streams+thesauri), `initialize?industry=` (+ CLEAR SILENT fix for force on fresh dataset).
+- [x] `GET /api/v1/ontology/thesaurus/{framework}/search?q=` (SPARQL regex on prefLabel).
+- [x] `POST /api/v1/ontology/{eng}/{stream}/concept-mapping` (+ `/remove`) — `ots:mapsToConcept` triples; `mappedConcepts` on OwlClassModel.
+- Note: decided against COPY-from-baseline-graph — direct TTL load per engagement is simpler and tested.
 
 ## Phase 3 — Workshop features
 

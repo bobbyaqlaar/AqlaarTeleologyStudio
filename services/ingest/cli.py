@@ -68,6 +68,22 @@ def parse_apqc() -> None:
 
 
 @app.command()
+def parse_industry(
+    pdf: Path = typer.Argument(help="APQC industry PCF PDF path"),
+    industry: str = typer.Option(..., help="industry slug, e.g. telecom"),
+) -> None:
+    """Parse an APQC industry PCF PDF into cache/apqc_{industry}.jsonl."""
+    from services.ingest.parsers import apqc_pdf
+
+    elements = apqc_pdf.parse(pdf, industry)
+    CACHE.mkdir(parents=True, exist_ok=True)
+    out = CACHE / f"apqc_{industry}.jsonl"
+    out.write_text("\n".join(e.model_dump_json() for e in elements))
+    categories = sum(1 for e in elements if e.level == 1)
+    typer.echo(f"Parsed {len(elements)} elements ({categories} categories) → {out}")
+
+
+@app.command()
 def parse_moda() -> None:
     """Parse the TM Forum MODA dump; report coverage."""
     processes, entities, stats = moda.parse(MODA_DUMP)
