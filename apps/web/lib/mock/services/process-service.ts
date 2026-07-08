@@ -1,3 +1,4 @@
+import { apiFetch } from "@/lib/api/backend";
 import {
   addProcessComment,
   analyzeProcessGaps,
@@ -17,48 +18,81 @@ import type {
   ValueStreamType,
 } from "@/lib/types";
 
+/** Postgres-backed via FastAPI; each call falls back to the in-memory mock
+ * store when the API is unreachable. Successful API responses are mirrored
+ * into the mock store so sync helpers (task lists, gap analysis) see them. */
 export const processService = {
-  load(
+  async load(
     engagementId: string,
     streamType: ValueStreamType,
     industry?: string,
   ): Promise<ProcessState> {
-    return loadProcessState(engagementId, streamType, industry);
+    try {
+      const state = await apiFetch<ProcessState>(
+        `/api/v1/process/${engagementId}/${streamType}`,
+      );
+      return saveProcessState(state);
+    } catch {
+      return loadProcessState(engagementId, streamType, industry);
+    }
   },
 
-  saveXml(
+  async saveXml(
     engagementId: string,
     streamType: ValueStreamType,
     bpmnXml: string,
   ): Promise<ProcessState> {
-    return Promise.resolve(saveBpmnXml(engagementId, streamType, bpmnXml));
+    try {
+      const state = await apiFetch<ProcessState>(
+        `/api/v1/process/${engagementId}/${streamType}`,
+        { method: "PUT", body: JSON.stringify({ bpmnXml }) },
+      );
+      return saveProcessState(state);
+    } catch {
+      return saveBpmnXml(engagementId, streamType, bpmnXml);
+    }
   },
 
-  setFunctionUnit(
+  async setFunctionUnit(
     engagementId: string,
     streamType: ValueStreamType,
     elementId: string,
     functionUnit: FunctionalUnit | undefined,
   ): Promise<ProcessState> {
-    return Promise.resolve(
-      setElementFunctionUnit(
+    try {
+      const state = await apiFetch<ProcessState>(
+        `/api/v1/process/${engagementId}/${streamType}/elements/${elementId}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({ functionUnit: functionUnit ?? null }),
+        },
+      );
+      return saveProcessState(state);
+    } catch {
+      return setElementFunctionUnit(
         engagementId,
         streamType,
         elementId,
         functionUnit,
-      ),
-    );
+      );
+    }
   },
 
-  setSystems(
+  async setSystems(
     engagementId: string,
     streamType: ValueStreamType,
     elementId: string,
     systems: string[],
   ): Promise<ProcessState> {
-    return Promise.resolve(
-      setElementSystems(engagementId, streamType, elementId, systems),
-    );
+    try {
+      const state = await apiFetch<ProcessState>(
+        `/api/v1/process/${engagementId}/${streamType}/elements/${elementId}`,
+        { method: "PATCH", body: JSON.stringify({ systems }) },
+      );
+      return saveProcessState(state);
+    } catch {
+      return setElementSystems(engagementId, streamType, elementId, systems);
+    }
   },
 
   saveMeta(state: ProcessState): Promise<ProcessState> {

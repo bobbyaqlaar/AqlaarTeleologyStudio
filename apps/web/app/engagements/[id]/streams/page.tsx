@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { AppShell } from "@/components/shell/app-shell";
 import { StreamGrid } from "@/components/streams/stream-grid";
 import { FunctionUnitLegend } from "@/components/functions/function-unit-legend";
-import { getEngagementById } from "@/lib/mock/store";
+import { engagementService } from "@/lib/mock/services/engagement-service";
 
 interface StreamsPageProps {
   params: Promise<{ id: string }>;
@@ -13,7 +13,7 @@ export default async function StreamsPage({
   params,
 }: StreamsPageProps): Promise<React.ReactNode> {
   const { id } = await params;
-  const engagement = getEngagementById(id);
+  const engagement = await engagementService.get(id);
 
   if (!engagement) {
     notFound();

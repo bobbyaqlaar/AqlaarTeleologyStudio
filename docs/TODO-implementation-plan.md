@@ -98,11 +98,14 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 
 ## Phase 4 — Persistence + production
 
-- [ ] Postgres + SQLModel + Alembic in services/api: engagements, participants, bpmn_documents, comments, teleology_rows, connectors, review_state, system_mappings. Port mock TS services to fetch-backed impls (keep interfaces).
+- [x] Postgres core (2026-07-09): docker-compose postgres:17 (host port 5434 — 5432/5433 taken by other projects). services/api: db.py (create_all + seed Acme/Globex), db_models.py, engagements_router (list/create/get/load-baseline/approval), process_router (state seeds from industry .bpmn, PUT xml, PATCH element meta functionUnit+systems). Web: lib/api/backend.ts helper; engagement/stream/process services fetch-first w/ mock fallback (UI-only mode preserved); all 8 server pages read via engagementService. E2E-verified: engagement created via API appears in UI, function tag survives full reload from Postgres. API needs `uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel --with "psycopg[binary]"` locally (system pip is PEP-668 locked) or docker.
+- [ ] Postgres remaining: comments, teleology_rows, connectors, review_state tables + routers + service swaps; Alembic migrations (create_all only today); engagement delete/archive endpoint.
 - [ ] Live LLM gap analysis endpoint (Claude API; compare engagement BPMN vs baseline KG).
 - [ ] OIDC auth, audit events, PDF export, Playwright E2E (spec §15 order).
 
 ## Session log
+
+- 2026-07-09: Role-switcher dropdown bug fixed (label moved into RadioGroup, commit 3856849). Phase 4 core Postgres landed + E2E-verified (see Phase 4 section). **Next:** remaining Postgres tables (comments/teleology/connectors/review), live LLM gap analysis endpoint, systems coverage matrix, Alembic, auth/audit/PDF/Playwright.
 
 - 2026-07-08 (late night): Phase 3 complete. Industry picker, thesaurus panel, system tagging, API-served BPMN — all E2E-verified in running app (telecom flow: load O2C → 20 eTOM tasks render → tag Salesforce on step → ontology shows 25 eTOM classes → map class to APQC 9.2.2 concept, chip persists in Fuseki). `npm run build` green. **Next: Phase 4** — Postgres persistence (fixes server/client mock-store split), live LLM gap analysis, coverage matrix, auth/audit/PDF/E2E.
 

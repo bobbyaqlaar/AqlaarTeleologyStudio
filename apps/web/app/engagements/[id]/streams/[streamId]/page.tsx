@@ -10,7 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { getEngagementById } from "@/lib/mock/store";
+import { engagementService } from "@/lib/mock/services/engagement-service";
 import { VALUE_STREAM_META } from "@/lib/constants/value-streams";
 import { cn } from "@/lib/utils";
 import type { ValueStreamType } from "@/lib/types";
@@ -31,7 +31,7 @@ export default async function StreamDetailPage({
   }
 
   const streamType = streamId as ValueStreamType;
-  const engagement = getEngagementById(id);
+  const engagement = await engagementService.get(id);
 
   if (!engagement) {
     notFound();

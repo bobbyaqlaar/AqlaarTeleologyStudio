@@ -1,8 +1,7 @@
 import { notFound } from "next/navigation";
 import { AppShell } from "@/components/shell/app-shell";
 import { ProcessWorkspace } from "@/components/process/process-workspace";
-import { getEngagementById } from "@/lib/mock/store";
-import { ensureProcessState } from "@/lib/mock/process-store";
+import { engagementService } from "@/lib/mock/services/engagement-service";
 import { VALUE_STREAM_META } from "@/lib/constants/value-streams";
 import type { ValueStreamType } from "@/lib/types";
 
@@ -22,7 +21,7 @@ export default async function ProcessPage({
   }
 
   const streamType = streamId as ValueStreamType;
-  const engagement = getEngagementById(id);
+  const engagement = await engagementService.get(id);
 
   if (!engagement) {
     notFound();
@@ -33,10 +32,6 @@ export default async function ProcessPage({
   if (!stream) {
     notFound();
   }
-
-  // Baseline-loaded state lives in the client-side mock store, so the server
-  // render can't gate on it reliably; the workspace loads the baseline itself.
-  ensureProcessState(id, streamType);
 
   const loadedStreams = engagement.valueStreams
     .filter((item) => item.baselineLoaded || item.type === streamType)
