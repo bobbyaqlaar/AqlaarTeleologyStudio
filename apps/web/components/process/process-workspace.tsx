@@ -10,6 +10,7 @@ import { SystemTagPanel } from "@/components/bpmn/system-tag-panel";
 import { BpmnTaskList } from "@/components/bpmn/bpmn-task-list";
 import { CommentThread } from "@/components/comments/comment-thread";
 import { GapSuggestionsDrawer } from "@/components/ai/gap-suggestions-drawer";
+import { SystemCoverageMatrix } from "@/components/process/system-coverage-matrix";
 import { FunctionUnitLegend } from "@/components/functions/function-unit-legend";
 import { StreamTabs } from "@/components/streams/stream-tabs";
 import { Button } from "@/components/ui/button";
@@ -67,7 +68,12 @@ export function ProcessWorkspace({
   const editorRef = useRef<BpmnEditorHandle>(null);
   const [processState, setProcessState] = useState<ProcessState | null>(null);
   const [tasks, setTasks] = useState<
-    Array<{ id: string; name: string; functionUnit?: FunctionalUnit }>
+    Array<{
+      id: string;
+      name: string;
+      functionUnit?: FunctionalUnit;
+      systems?: string[];
+    }>
   >([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [selectedName, setSelectedName] = useState<string | null>(null);
@@ -128,6 +134,7 @@ export function ProcessWorkspace({
       systems,
     );
     setProcessState(next);
+    await refreshTasks();
   };
 
   const handleAssignFunction = async (
@@ -264,6 +271,8 @@ export function ProcessWorkspace({
             loading={analyzing}
             onSelectElement={handleSelectTask}
           />
+
+          <SystemCoverageMatrix tasks={tasks} onSelectTask={handleSelectTask} />
         </div>
 
         <div className="flex flex-col gap-4">
