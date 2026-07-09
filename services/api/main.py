@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from db import init_db
 from engagements_router import router as engagements_router
 from fuseki_client import FusekiClient
+from gaps_router import router as gaps_router
 from models import HealthResponse
 from ontology_router import router as ontology_router
 from process_router import router as process_router
@@ -44,6 +45,7 @@ app.add_middleware(
 app.include_router(ontology_router)
 app.include_router(engagements_router)
 app.include_router(process_router)
+app.include_router(gaps_router)
 
 
 @app.get("/health", response_model=HealthResponse)

@@ -122,6 +122,24 @@ export const commentService = {
   },
 };
 
+async function analyzeGaps(
+  engagementId: string,
+  streamType: ValueStreamType,
+): Promise<AiGapSuggestion[]> {
+  try {
+    const result = await apiFetch<{ suggestions: AiGapSuggestion[] }>(
+      `/api/v1/gaps/${engagementId}/${streamType}/analyze`,
+      { method: "POST" },
+    );
+    return result.suggestions;
+  } catch {
+    return analyzeProcessGaps(engagementId, streamType);
+  }
+}
+
+/** Live gap analysis via the API (Claude-backed when the server has
+ * Anthropic credentials, heuristics otherwise); local heuristics fallback
+ * when the API is unreachable. */
 export const aiGapService = {
   analyzeDebounced: (() => {
     const timers = new Map<string, ReturnType<typeof setTimeout>>();
@@ -141,7 +159,7 @@ export const aiGapService = {
         timers.set(
           key,
           setTimeout(() => {
-            resolve(analyzeProcessGaps(engagementId, streamType));
+            void analyzeGaps(engagementId, streamType).then(resolve);
             timers.delete(key);
           }, 600),
         );
@@ -153,6 +171,6 @@ export const aiGapService = {
     engagementId: string,
     streamType: ValueStreamType,
   ): Promise<AiGapSuggestion[]> {
-    return Promise.resolve(analyzeProcessGaps(engagementId, streamType));
+    return analyzeGaps(engagementId, streamType);
   },
 };
