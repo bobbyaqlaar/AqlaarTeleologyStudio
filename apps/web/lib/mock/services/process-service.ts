@@ -104,21 +104,61 @@ export const processService = {
   },
 };
 
+/** Postgres-backed via FastAPI; mock fallback for UI-only mode. */
 export const commentService = {
-  list(
+  async list(
     engagementId: string,
     streamType: ValueStreamType,
     targetId?: string,
   ): Promise<ProcessComment[]> {
-    return Promise.resolve(
-      listProcessComments(engagementId, streamType, targetId),
-    );
+    try {
+      const params = targetId ? `?targetId=${encodeURIComponent(targetId)}` : "";
+      return await apiFetch<ProcessComment[]>(
+        `/api/v1/comments/${engagementId}/${streamType}${params}`,
+      );
+    } catch {
+      return listProcessComments(engagementId, streamType, targetId);
+    }
   },
 
-  add(
+  async listOpen(engagementId: string): Promise<ProcessComment[]> {
+    try {
+      return await apiFetch<ProcessComment[]>(
+        `/api/v1/comments/${engagementId}/open`,
+      );
+    } catch {
+      const { listOpenProcessComments } = await import(
+        "@/lib/mock/process-store"
+      );
+      return listOpenProcessComments(engagementId);
+    }
+  },
+
+  async add(
     input: Omit<ProcessComment, "id" | "createdAt">,
   ): Promise<ProcessComment> {
-    return Promise.resolve(addProcessComment(input));
+    try {
+      return await apiFetch<ProcessComment>("/api/v1/comments", {
+        method: "POST",
+        body: JSON.stringify(input),
+      });
+    } catch {
+      return addProcessComment(input);
+    }
+  },
+
+  async resolve(commentId: string): Promise<ProcessComment | null> {
+    try {
+      return await apiFetch<ProcessComment>(
+        `/api/v1/comments/${commentId}/resolve`,
+        { method: "POST" },
+      );
+    } catch {
+      const { resolveProcessComment } = await import(
+        "@/lib/mock/process-store"
+      );
+      return resolveProcessComment(commentId) ?? null;
+    }
   },
 };
 

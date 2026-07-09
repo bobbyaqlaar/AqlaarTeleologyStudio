@@ -24,6 +24,9 @@ services:
       context: ./services/api
     ports:
       - "8000:8000"
+    env_file:
+      - path: .env
+        required: false
     environment:
       FUSEKI_URL: http://fuseki:3030
       FUSEKI_DATASET: ots

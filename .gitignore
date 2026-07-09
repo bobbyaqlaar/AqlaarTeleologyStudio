@@ -17,6 +17,11 @@ out/
 # macOS
 .DS_Store
 
+# Secrets
+.env
+.env.*
+!.env.example
+
 # Crawler venv (not a project env)
 ReferenceDocs/crawler-env/
 
