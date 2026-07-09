@@ -90,7 +90,8 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 
 - [x] `hr` function unit added to enum (types, function-units.ts, globals.css lime token, validate.py, spec §5, README) — Bobby approved 2026-07-08. h2r subtrees now tagged `hr`.
 - [x] Industry field: `Industry` type, engagement + create dialog select (constants/industries.ts), ontology initialize?industry= and BPMN load are industry-aware. Globex seed = telecom demo engagement (5 streams unloaded).
-- [x] System mapping: `SystemDef` + `systems[]` on BpmnElementMeta, static catalog constants/systems.ts (DataSources.xlsx was APQC links, not systems), SystemTagPanel beside function panel, processService.setSystems. Coverage matrix view still TODO (nice-to-have). Persisted mock-only until Phase 4.
+- [x] System mapping: `SystemDef` + `systems[]` on BpmnElementMeta, static catalog constants/systems.ts (DataSources.xlsx was APQC links, not systems), SystemTagPanel beside function panel, processService.setSystems. Now Postgres-persisted.
+- [x] Systems coverage matrix (2026-07-09, commit 5416eef): collapsible steps×systems table on process page, unmapped steps flagged, rows click-select canvas elements.
 - [x] ThesaurusPanel in ontology workspace: framework select (apqc/etom/sid), debounced search, map/unmap class→concept via API (`ots:mapsToConcept`), mapped chips on class. E2E-tested against live Fuseki.
 - [x] Generated .bpmn served from API (`GET /baselines/{industry}/{stream}/bpmn`); process-store loadProcessState fetches it (fixture fallback when API offline); task lists parsed from XML. Verified: telecom o2c renders 20 eTOM tasks in bpmn-js.
 - [x] Fixed: process/ontology pages no longer 404 on client-loaded baselines (server mock store can't see client loads — real fix is Postgres, Phase 4). CORS widened to any localhost port (dev).
@@ -107,6 +108,7 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 
 ## Session log
 
+- 2026-07-09 (night): systems coverage matrix shipped + verified (commit 5416eef). Remaining Phase 4: Alembic, connectors persistence (low value), audit trail, PDF export, SSO, Playwright E2E.
 - 2026-07-09 (evening): comments + teleology in Postgres, review queue live-composed (commit 3d60321). .env key checked: valid but **no credits on Anthropic account — Bobby to top up**; until then gap analysis = heuristics-only. Remaining Phase 4: connectors persistence (low value), Alembic, systems coverage matrix, auth/audit/PDF/Playwright.
 - 2026-07-09 (later): LLM gap analysis endpoint live + UI-verified (drawer now API-driven, shows systems-coverage gaps). NOTE: no Anthropic credentials on this machine — heuristics-only in dev until Bobby sets ANTHROPIC_API_KEY (or `ant auth login`) for the API process; then Claude suggestions appear automatically. **Next:** Postgres for comments/teleology/connectors/review, systems coverage matrix, Alembic, auth/audit/PDF/Playwright.
 - 2026-07-09: Role-switcher dropdown bug fixed (label moved into RadioGroup, commit 3856849). Phase 4 core Postgres landed + E2E-verified (see Phase 4 section). **Next:** remaining Postgres tables (comments/teleology/connectors/review), live LLM gap analysis endpoint, systems coverage matrix, Alembic, auth/audit/PDF/Playwright.
