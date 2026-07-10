@@ -10,6 +10,7 @@ from fastapi.middleware.cors import CORSMiddleware
 # Repo-root .env (ANTHROPIC_API_KEY etc.); real env vars take precedence.
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
+from audit import router as audit_router
 from comments_router import router as comments_router
 from db import init_db
 from engagements_router import router as engagements_router
@@ -55,6 +56,7 @@ app.include_router(process_router)
 app.include_router(gaps_router)
 app.include_router(comments_router)
 app.include_router(teleology_router)
+app.include_router(audit_router)
 
 
 @app.get("/health", response_model=HealthResponse)

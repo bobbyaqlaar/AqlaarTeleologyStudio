@@ -10,6 +10,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 from sqlmodel import select
 
+from audit import Actor, ActorDep, record_audit
 from db import get_session
 from db_models import TeleologyRowDB, ValueStreamRow
 
@@ -146,6 +147,7 @@ def update_row(
     engagement_id: str,
     row_id: str,
     payload: UpdateRowRequest,
+    actor: Actor = ActorDep,
 ) -> TeleologyRowModel:
     with get_session() as session:
         row = _get_row_or_404(session, engagement_id, row_id)
@@ -159,6 +161,19 @@ def update_row(
             row.org_ambitions = {**EMPTY_ORG, **(row.org_ambitions or {}), **payload.org_ambitions}
         row.updated_at = _now()
         session.add(row)
+        record_audit(
+            session,
+            actor,
+            action="teleology.row_updated",
+            artefact_type="teleology_row",
+            artefact_id=row_id,
+            engagement_id=engagement_id,
+            detail={
+                "streamType": row.stream_type,
+                "functionUnit": row.function_unit,
+                "fields": sorted(payload.model_dump(exclude_unset=True).keys()),
+            },
+        )
         session.commit()
         session.refresh(row)
         return _to_model(row)
@@ -168,6 +183,7 @@ def update_row(
 def add_function_row(
     engagement_id: str,
     payload: AddFunctionRowRequest,
+    actor: Actor = ActorDep,
 ) -> TeleologyRowModel:
     with get_session() as session:
         existing = session.exec(
@@ -193,6 +209,18 @@ def add_function_row(
             updated_at=_now(),
         )
         session.add(row)
+        record_audit(
+            session,
+            actor,
+            action="teleology.row_added",
+            artefact_type="teleology_row",
+            artefact_id=row.id,
+            engagement_id=engagement_id,
+            detail={
+                "streamType": payload.stream_type,
+                "functionUnit": payload.function_unit,
+            },
+        )
         session.commit()
         session.refresh(row)
         return _to_model(row)
@@ -203,14 +231,30 @@ def set_status(
     engagement_id: str,
     row_id: str,
     payload: StatusRequest,
+    actor: Actor = ActorDep,
 ) -> TeleologyRowModel:
     if payload.approval_status not in VALID_STATUSES:
         raise HTTPException(status_code=400, detail="Invalid approval status")
     with get_session() as session:
         row = _get_row_or_404(session, engagement_id, row_id)
+        previous = row.approval_status
         row.approval_status = payload.approval_status
         row.updated_at = _now()
         session.add(row)
+        record_audit(
+            session,
+            actor,
+            action="teleology.status_changed",
+            artefact_type="teleology_row",
+            artefact_id=row_id,
+            engagement_id=engagement_id,
+            detail={
+                "streamType": row.stream_type,
+                "functionUnit": row.function_unit,
+                "from": previous,
+                "to": payload.approval_status,
+            },
+        )
         session.commit()
         session.refresh(row)
         return _to_model(row)

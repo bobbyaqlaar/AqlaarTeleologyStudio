@@ -59,6 +59,23 @@ class CommentRow(SQLModel, table=True):
     created_at: str
 
 
+class AuditEventRow(SQLModel, table=True):
+    """Append-only audit trail: who did what to which artefact, when."""
+
+    __tablename__ = "audit_events"
+
+    id: int | None = Field(default=None, primary_key=True)
+    actor_id: str
+    actor_name: str
+    actor_role: str = "consultant"
+    action: str  # e.g. "engagement.created", "process.element_tagged"
+    artefact_type: str  # engagement | value_stream | process_state | ...
+    artefact_id: str
+    engagement_id: str | None = Field(default=None, index=True)
+    detail: dict = Field(default_factory=dict, sa_column=Column(JSONB))
+    created_at: str
+
+
 class TeleologyRowDB(SQLModel, table=True):
     __tablename__ = "teleology_rows"
 

@@ -7,6 +7,7 @@ from __future__ import annotations
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
+from audit import Actor, ActorDep, record_audit
 from db import get_session, now_iso
 from db_models import EngagementRow, ProcessStateRow
 from fuseki_client import FusekiClient
@@ -96,6 +97,7 @@ def save_xml(
     engagement_id: str,
     stream_type: str,
     payload: SaveXmlRequest,
+    actor: Actor = ActorDep,
 ) -> ProcessStateModel:
     _validate(stream_type)
     with get_session() as session:
@@ -103,6 +105,15 @@ def save_xml(
         row.bpmn_xml = payload.bpmn_xml
         row.updated_at = now_iso()
         session.add(row)
+        record_audit(
+            session,
+            actor,
+            action="process.xml_saved",
+            artefact_type="process_state",
+            artefact_id=f"{engagement_id}/{stream_type}",
+            engagement_id=engagement_id,
+            detail={"streamType": stream_type, "bytes": len(payload.bpmn_xml)},
+        )
         session.commit()
         session.refresh(row)
         return _to_model(row)
@@ -117,6 +128,7 @@ def set_element_meta(
     stream_type: str,
     element_id: str,
     payload: ElementMetaRequest,
+    actor: Actor = ActorDep,
 ) -> ProcessStateModel:
     _validate(stream_type)
     with get_session() as session:
@@ -138,6 +150,15 @@ def set_element_meta(
         row.element_meta = meta
         row.updated_at = now_iso()
         session.add(row)
+        record_audit(
+            session,
+            actor,
+            action="process.element_tagged",
+            artefact_type="bpmn_element",
+            artefact_id=element_id,
+            engagement_id=engagement_id,
+            detail={"streamType": stream_type, **entry},
+        )
         session.commit()
         session.refresh(row)
         return _to_model(row)

@@ -10,6 +10,7 @@ from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 from sqlmodel import select
 
+from audit import Actor, ActorDep, record_audit
 from db import STREAM_TYPES, get_session, now_iso
 from db_models import EngagementRow, ValueStreamRow
 
@@ -107,7 +108,9 @@ def list_engagements() -> list[EngagementModel]:
 
 
 @router.post("", response_model=EngagementModel)
-def create_engagement(payload: CreateEngagementRequest) -> EngagementModel:
+def create_engagement(
+    payload: CreateEngagementRequest, actor: Actor = ActorDep
+) -> EngagementModel:
     with get_session() as session:
         engagement_id = f"eng-{uuid.uuid4().hex[:8]}"
         timestamp = now_iso()
@@ -141,6 +144,15 @@ def create_engagement(payload: CreateEngagementRequest) -> EngagementModel:
         ]
         for stream in streams:
             session.add(stream)
+        record_audit(
+            session,
+            actor,
+            action="engagement.created",
+            artefact_type="engagement",
+            artefact_id=engagement_id,
+            engagement_id=engagement_id,
+            detail={"name": payload.name, "client": payload.client, "industry": payload.industry},
+        )
         session.commit()
         session.refresh(row)
         return _to_model(row, _streams_for(session, engagement_id))
@@ -157,7 +169,9 @@ def get_engagement(engagement_id: str) -> EngagementModel:
     "/{engagement_id}/streams/{stream_type}/load-baseline",
     response_model=EngagementModel,
 )
-def load_baseline(engagement_id: str, stream_type: str) -> EngagementModel:
+def load_baseline(
+    engagement_id: str, stream_type: str, actor: Actor = ActorDep
+) -> EngagementModel:
     with get_session() as session:
         row = _get_or_404(session, engagement_id)
         stream = session.exec(
@@ -172,6 +186,15 @@ def load_baseline(engagement_id: str, stream_type: str) -> EngagementModel:
         row.updated_at = now_iso()
         session.add(stream)
         session.add(row)
+        record_audit(
+            session,
+            actor,
+            action="stream.baseline_loaded",
+            artefact_type="value_stream",
+            artefact_id=stream.id,
+            engagement_id=engagement_id,
+            detail={"streamType": stream_type, "baselineId": stream.baseline_id},
+        )
         session.commit()
         return _to_model(row, _streams_for(session, engagement_id))
 
@@ -184,6 +207,7 @@ def set_stream_approval(
     engagement_id: str,
     stream_type: str,
     payload: ApprovalRequest,
+    actor: Actor = ActorDep,
 ) -> EngagementModel:
     with get_session() as session:
         row = _get_or_404(session, engagement_id)
@@ -195,9 +219,23 @@ def set_stream_approval(
         ).first()
         if not stream:
             raise HTTPException(status_code=404, detail="Stream not found")
+        previous = stream.approval_status
         stream.approval_status = payload.approval_status
         row.updated_at = now_iso()
         session.add(stream)
         session.add(row)
+        record_audit(
+            session,
+            actor,
+            action="stream.approval_changed",
+            artefact_type="value_stream",
+            artefact_id=stream.id,
+            engagement_id=engagement_id,
+            detail={
+                "streamType": stream_type,
+                "from": previous,
+                "to": payload.approval_status,
+            },
+        )
         session.commit()
         return _to_model(row, _streams_for(session, engagement_id))

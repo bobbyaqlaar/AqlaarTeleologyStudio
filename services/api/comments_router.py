@@ -10,6 +10,7 @@ from fastapi import APIRouter, HTTPException, Query
 from pydantic import BaseModel, ConfigDict, Field
 from sqlmodel import select
 
+from audit import Actor, ActorDep, record_audit
 from db import get_session
 from db_models import CommentRow
 
@@ -118,19 +119,41 @@ def create_comment(payload: CreateCommentRequest) -> CommentModel:
             created_at=datetime.now(timezone.utc).isoformat(),
         )
         session.add(row)
+        record_audit(
+            session,
+            Actor(id=payload.author_id, name=payload.author_name, role=payload.role),
+            action="comment.created",
+            artefact_type="comment",
+            artefact_id=row.id,
+            engagement_id=payload.engagement_id,
+            detail={
+                "streamType": payload.stream_type,
+                "targetId": payload.target_id,
+                "targetLabel": payload.target_label,
+            },
+        )
         session.commit()
         session.refresh(row)
         return _to_model(row)
 
 
 @router.post("/{comment_id}/resolve", response_model=CommentModel)
-def resolve_comment(comment_id: str) -> CommentModel:
+def resolve_comment(comment_id: str, actor: Actor = ActorDep) -> CommentModel:
     with get_session() as session:
         row = session.get(CommentRow, comment_id)
         if not row:
             raise HTTPException(status_code=404, detail="Comment not found")
         row.resolved = True
         session.add(row)
+        record_audit(
+            session,
+            actor,
+            action="comment.resolved",
+            artefact_type="comment",
+            artefact_id=comment_id,
+            engagement_id=row.engagement_id,
+            detail={"streamType": row.stream_type, "targetId": row.target_id},
+        )
         session.commit()
         session.refresh(row)
         return _to_model(row)
