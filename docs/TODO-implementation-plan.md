@@ -106,7 +106,26 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 - [x] Live LLM gap analysis (2026-07-09, commit d6dbff4): services/api/gaps_router.py — heuristics always (missing fn tags + unmapped systems), Claude claude-opus-4-8 w/ adaptive thinking + JSON-schema output when credentials present (env ANTHROPIC_API_KEY or `ant auth` profile — NONE on this machine yet, so LLM path untested live; set key + re-test), graceful degrade. Web aiGapService fetch-first. Model override: OTS_GAP_MODEL env.
 - [ ] OIDC auth, audit events, PDF export, Playwright E2E (spec §15 order).
 
+## RESUME HERE (next session)
+
+Read this file top to bottom first. Current state: **Phases 0–3 complete; Phase 4 core complete** (Postgres for engagements/streams/process-state/comments/teleology, LLM gap analysis, coverage matrix). Everything E2E-verified. Working tree clean at commit `7af8f24` on `main`.
+
+**Next tasks, in recommended order:**
+1. **Alembic migrations** — schema is `SQLModel.metadata.create_all` today; add alembic to services/api, autogenerate the initial revision from db_models.py, switch startup to run migrations.
+2. **Audit trail** — event-sourced table (actor, action, artefact, timestamp) written from each mutating router; simple viewer or CSV export.
+3. **Watermarked PDF export** — engagement summary (streams, BPMN snapshot, teleology matrix, approvals) via the anthropic-skills:pdf skill or reportlab in the API.
+4. **Playwright E2E** — the consultant flow already verified manually: create engagement (telecom) → load O2C → tag function+system → thesaurus map → teleology row → review approve. Remember: Base UI components need real user events, not synthetic `.click()`.
+5. **SSO (OIDC)** + connectors persistence (lowest value — connectors are demo-only).
+
+**How to run the stack locally:**
+- `docker compose up -d postgres fuseki` then from `services/api`: `uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel --with "psycopg[binary]" --with anthropic --with python-dotenv python -m uvicorn main:app --port 8000` (system pip is PEP-668 locked; or `docker compose up api`)
+- Web: `cd apps/web && npm run dev` (port 3000 is taken by another project's container — dev server auto-ports; API CORS already allows any localhost port)
+- Anthropic key lives in root `.env` (gitignored, loaded via python-dotenv). **Key valid but account had zero credits on 2026-07-09** — LLM gap analysis silently degrades to heuristics until topped up; retest with `POST /api/v1/gaps/eng-globex-002/o2c/analyze` expecting `"source": "heuristic+llm"`.
+- MODA crawl cache (`services/ingest/cache/`, 293MB) is gitignored — in a fresh clone, re-run `uv run python services/ingest/crawl_moda.py` before re-parsing eTOM/SID.
+
 ## Session log
+
+- 2026-07-09 (wrap-up): README + this doc updated for handoff; context window exhausted. All work committed through `7af8f24`.
 
 - 2026-07-09 (night): systems coverage matrix shipped + verified (commit 5416eef). Remaining Phase 4: Alembic, connectors persistence (low value), audit trail, PDF export, SSO, Playwright E2E.
 - 2026-07-09 (evening): comments + teleology in Postgres, review queue live-composed (commit 3d60321). .env key checked: valid but **no credits on Anthropic account — Bobby to top up**; until then gap analysis = heuristics-only. Remaining Phase 4: connectors persistence (low value), Alembic, systems coverage matrix, auth/audit/PDF/Playwright.
