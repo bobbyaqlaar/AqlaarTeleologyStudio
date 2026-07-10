@@ -1,15 +1,20 @@
 """Postgres engine + schema + seed for engagement/process persistence.
 
-Schema is created with SQLModel.metadata.create_all on startup — Alembic
-migrations come later (docs/TODO-implementation-plan.md Phase 4).
+Schema is managed by Alembic (services/api/migrations); startup runs
+`upgrade head`. Databases created before Alembic (via create_all) are
+stamped to head on first boot so upgrades apply cleanly from then on.
 """
 
 from __future__ import annotations
 
 import os
 from datetime import datetime, timezone
+from pathlib import Path
 
-from sqlmodel import Session, SQLModel, create_engine, select
+from alembic import command
+from alembic.config import Config
+from sqlalchemy import inspect
+from sqlmodel import Session, create_engine, select
 
 from db_models import (
     CommentRow,
@@ -33,8 +38,29 @@ def now_iso() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
+_API_DIR = Path(__file__).resolve().parent
+
+
+def _alembic_config() -> Config:
+    cfg = Config(str(_API_DIR / "alembic.ini"))
+    cfg.set_main_option("script_location", str(_API_DIR / "migrations"))
+    cfg.set_main_option("sqlalchemy.url", DATABASE_URL)
+    return cfg
+
+
+def run_migrations() -> None:
+    cfg = _alembic_config()
+    inspector = inspect(engine)
+    if inspector.has_table("engagements") and not inspector.has_table(
+        "alembic_version"
+    ):
+        # Schema predates Alembic (create_all era) — adopt it as revision head.
+        command.stamp(cfg, "head")
+    command.upgrade(cfg, "head")
+
+
 def init_db() -> None:
-    SQLModel.metadata.create_all(engine)
+    run_migrations()
     seed()
 
 
