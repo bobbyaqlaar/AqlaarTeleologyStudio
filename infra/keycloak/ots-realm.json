@@ -1,0 +1,46 @@
+{
+  "realm": "ots",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "roles": {
+    "realm": [
+      { "name": "consultant", "description": "Can edit engagements and artefacts" },
+      { "name": "stakeholder", "description": "Can approve artefacts in their scope" }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "ots-web",
+      "name": "OTS web app",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "redirectUris": ["http://localhost:*", "http://127.0.0.1:*"],
+      "webOrigins": ["+"],
+      "attributes": { "pkce.code.challenge.method": "S256" }
+    }
+  ],
+  "users": [
+    {
+      "username": "alex",
+      "enabled": true,
+      "firstName": "Alex",
+      "lastName": "Morgan",
+      "email": "alex@ots.dev",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "alex", "temporary": false }],
+      "realmRoles": ["consultant"]
+    },
+    {
+      "username": "jordan",
+      "enabled": true,
+      "firstName": "Jordan",
+      "lastName": "Lee",
+      "email": "jordan@ots.dev",
+      "emailVerified": true,
+      "credentials": [{ "type": "password", "value": "jordan", "temporary": false }],
+      "realmRoles": ["stakeholder"]
+    }
+  ]
+}

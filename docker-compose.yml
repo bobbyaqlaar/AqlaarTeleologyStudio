@@ -19,6 +19,19 @@ services:
     volumes:
       - fuseki-data:/fuseki
 
+  # Dev OIDC provider (SSO). Realm "ots" is imported from infra/keycloak
+  # with demo users alex/alex (consultant) and jordan/jordan (stakeholder).
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.0
+    command: start-dev --import-realm --http-port 8081
+    ports:
+      - "8081:8081"
+    environment:
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    volumes:
+      - ./infra/keycloak:/opt/keycloak/data/import:ro
+
   api:
     build:
       context: ./services/api

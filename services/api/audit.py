@@ -18,6 +18,7 @@ from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, ConfigDict, Field
 from sqlmodel import select
 
+from auth import AUTH_MODE, claims_to_identity, decode_bearer, unauthorized
 from db import get_session, now_iso
 from db_models import AuditEventRow
 
@@ -32,10 +33,23 @@ class Actor:
 
 
 def get_actor(
+    authorization: str | None = Header(default=None),
     user_id: str | None = Header(default=None, alias="X-OTS-User-Id"),
     user_name: str | None = Header(default=None, alias="X-OTS-User-Name"),
     user_role: str | None = Header(default=None, alias="X-OTS-User-Role"),
 ) -> Actor:
+    # SSO path: a valid OIDC bearer token wins over headers (see auth.py).
+    if AUTH_MODE != "off" and authorization and authorization.startswith("Bearer "):
+        try:
+            claims = decode_bearer(authorization)
+        except Exception as exc:
+            raise unauthorized(f"Invalid bearer token: {exc}") from exc
+        sub, name, role = claims_to_identity(claims)
+        return Actor(id=sub, name=name, role=role)
+
+    if AUTH_MODE == "required":
+        raise unauthorized("Bearer token required")
+
     return Actor(
         id=user_id or "user-consultant-1",
         name=user_name or "Alex Morgan",
