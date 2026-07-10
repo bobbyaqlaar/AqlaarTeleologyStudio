@@ -14,6 +14,7 @@ from audit import router as audit_router
 from comments_router import router as comments_router
 from db import init_db
 from engagements_router import router as engagements_router
+from export_router import router as export_router
 from fuseki_client import FusekiClient
 from gaps_router import router as gaps_router
 from models import HealthResponse
@@ -57,6 +58,7 @@ app.include_router(gaps_router)
 app.include_router(comments_router)
 app.include_router(teleology_router)
 app.include_router(audit_router)
+app.include_router(export_router)
 
 
 @app.get("/health", response_model=HealthResponse)
