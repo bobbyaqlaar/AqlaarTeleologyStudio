@@ -30,7 +30,7 @@ export default defineConfig({
       command:
         'uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel ' +
         '--with "psycopg[binary]" --with anthropic --with python-dotenv ' +
-        "--with httpx --with alembic --with reportlab " +
+        '--with httpx --with alembic --with reportlab --with "pyjwt[crypto]" ' +
         "python -m uvicorn main:app --port 8000",
       cwd: "../../services/api",
       url: "http://localhost:8000/health",
