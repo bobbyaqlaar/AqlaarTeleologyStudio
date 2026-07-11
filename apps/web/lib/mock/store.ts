@@ -31,7 +31,6 @@ const seedEngagements: Engagement[] = [
       baselineLoaded: baseline.streamType === "o2c",
       approvalStatus: baseline.streamType === "o2c" ? "in_review" : "draft",
     })),
-    currentStep: "streams",
     createdAt: "2026-05-01T09:00:00.000Z",
     updatedAt: "2026-06-08T14:30:00.000Z",
   },
@@ -56,7 +55,6 @@ const seedEngagements: Engagement[] = [
       baselineLoaded: false,
       approvalStatus: "draft",
     })),
-    currentStep: "streams",
     createdAt: "2026-06-05T11:00:00.000Z",
     updatedAt: "2026-06-05T11:00:00.000Z",
   },
@@ -103,7 +101,6 @@ export function addEngagement(
       },
     ],
     valueStreams: createValueStreams(),
-    currentStep: "streams",
     createdAt: now,
     updatedAt: now,
   };

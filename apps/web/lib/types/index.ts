@@ -53,7 +53,6 @@ export interface Engagement {
   industry: Industry;
   participants: Participant[];
   valueStreams: ValueStream[];
-  currentStep: WorkflowStep;
   createdAt: string;
   updatedAt: string;
 }

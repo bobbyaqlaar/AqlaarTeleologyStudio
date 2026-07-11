@@ -14,7 +14,6 @@ class EngagementRow(SQLModel, table=True):
     description: str | None = None
     industry: str = "generic"
     status: str = "draft"
-    current_step: str = "streams"
     participants: list = Field(default_factory=list, sa_column=Column(JSONB))
     created_at: str
     updated_at: str

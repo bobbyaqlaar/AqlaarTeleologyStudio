@@ -40,7 +40,6 @@ class EngagementModel(BaseModel):
     industry: str
     participants: list[dict]
     value_streams: list[ValueStreamModel] = Field(alias="valueStreams")
-    current_step: str = Field(alias="currentStep")
     created_at: str = Field(alias="createdAt")
     updated_at: str = Field(alias="updatedAt")
 
@@ -79,7 +78,6 @@ def _to_model(row: EngagementRow, streams: list[ValueStreamRow]) -> EngagementMo
             )
             for s in streams
         ],
-        current_step=row.current_step,
         created_at=row.created_at,
         updated_at=row.updated_at,
     )
@@ -123,7 +121,6 @@ def create_engagement(
             description=payload.description,
             industry=payload.industry,
             status="draft",
-            current_step="streams",
             participants=[
                 {
                     "userId": "user-consultant-1",
