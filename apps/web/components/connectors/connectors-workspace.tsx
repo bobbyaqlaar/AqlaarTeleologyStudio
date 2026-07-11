@@ -108,18 +108,29 @@ export function ConnectorsWorkspace({
   const handleConnect = async (connectorType: ConnectorType): Promise<void> => {
     setBusy(true);
     setStatusMessage(null);
-    const updated = await connectorService.connect(
-      engagementId,
-      connectorType,
-      instanceUrls[connectorType],
-    );
-    if (updated) {
-      setConnections((current) =>
-        current.map((item) =>
-          item.connectorType === connectorType ? updated : item,
-        ),
+    try {
+      const updated = await connectorService.connect(
+        engagementId,
+        connectorType,
+        instanceUrls[connectorType],
       );
-      setStatusMessage(`${CONNECTOR_FIXTURE_MAP[connectorType].label} connected (mock).`);
+      if (updated) {
+        setConnections((current) =>
+          current.map((item) =>
+            item.connectorType === connectorType ? updated : item,
+          ),
+        );
+        setStatusMessage(
+          `${CONNECTOR_FIXTURE_MAP[connectorType].label} connected.`,
+        );
+      }
+    } catch (error) {
+      // Server rejected the connect (credentials missing/invalid) — show why.
+      setStatusMessage(
+        error instanceof Error
+          ? `${CONNECTOR_FIXTURE_MAP[connectorType].label}: ${error.message}`
+          : "Connect failed.",
+      );
     }
     setBusy(false);
   };

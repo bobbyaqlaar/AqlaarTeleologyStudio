@@ -58,6 +58,31 @@ class CommentRow(SQLModel, table=True):
     created_at: str
 
 
+class ConnectorConnectionRow(SQLModel, table=True):
+    __tablename__ = "connector_connections"
+
+    engagement_id: str = Field(primary_key=True, foreign_key="engagements.id")
+    connector_type: str = Field(primary_key=True)  # salesforce | jira
+    connected: bool = False
+    instance_url: str = ""
+    last_sync_at: str | None = None
+    last_preview_at: str | None = None
+    last_applied_at: str | None = None
+
+
+class ConnectorMappingRow(SQLModel, table=True):
+    __tablename__ = "connector_field_mappings"
+
+    id: str = Field(primary_key=True)
+    engagement_id: str = Field(foreign_key="engagements.id", index=True)
+    connector_type: str
+    source_field: str
+    target_field: str
+    target_type: str  # bpmn_task | owl_class | process_meta
+    target_label: str
+    stream_type: str
+
+
 class AuditEventRow(SQLModel, table=True):
     """Append-only audit trail: who did what to which artefact, when."""
 

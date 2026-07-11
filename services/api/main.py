@@ -12,6 +12,7 @@ load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 from audit import router as audit_router
 from comments_router import router as comments_router
+from connectors_router import router as connectors_router
 from db import init_db
 from engagements_router import router as engagements_router
 from export_router import router as export_router
@@ -59,6 +60,7 @@ app.include_router(comments_router)
 app.include_router(teleology_router)
 app.include_router(audit_router)
 app.include_router(export_router)
+app.include_router(connectors_router)
 
 
 @app.get("/health", response_model=HealthResponse)
