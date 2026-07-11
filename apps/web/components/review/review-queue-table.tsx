@@ -50,6 +50,8 @@ const ARTEFACT_LABELS: Record<ReviewQueueItem["artefactType"], string> = {
   value_stream: "Value stream",
   teleology_row: "Teleology",
   process_feedback: "BPMN feedback",
+  solution_option: "Solution option",
+  initiative: "Initiative",
 };
 
 export function ReviewQueueTable({

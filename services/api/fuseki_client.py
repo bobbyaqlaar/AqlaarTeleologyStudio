@@ -243,6 +243,41 @@ class FusekiClient:
             """
         )
 
+    async def set_goal_link(
+        self,
+        graph_uri: str,
+        class_uri: str,
+        teleology_row_id: str,
+    ) -> None:
+        """Assert that an ontology class supports a teleology row (goal)."""
+        await self.update(
+            f"""
+            PREFIX ots: <http://ots.local/ontology/>
+            INSERT DATA {{
+              GRAPH <{graph_uri}> {{
+                {self._iri(class_uri)} ots:supportsGoal "{self._escape(teleology_row_id)}" .
+              }}
+            }}
+            """
+        )
+
+    async def remove_goal_link(
+        self,
+        graph_uri: str,
+        class_uri: str,
+        teleology_row_id: str,
+    ) -> None:
+        await self.update(
+            f"""
+            PREFIX ots: <http://ots.local/ontology/>
+            DELETE DATA {{
+              GRAPH <{graph_uri}> {{
+                {self._iri(class_uri)} ots:supportsGoal "{self._escape(teleology_row_id)}" .
+              }}
+            }}
+            """
+        )
+
     async def query(self, sparql: str) -> dict[str, Any]:
         async with httpx.AsyncClient(timeout=30.0) as client:
             response = await client.post(
@@ -271,13 +306,14 @@ class FusekiClient:
         PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
         PREFIX owl: <http://www.w3.org/2002/07/owl#>
 
-        SELECT ?class ?label ?functionUnit ?bpmnElement ?concept WHERE {{
+        SELECT ?class ?label ?functionUnit ?bpmnElement ?concept ?goalRow WHERE {{
           GRAPH <{graph_uri}> {{
             ?class a owl:Class .
             OPTIONAL {{ ?class rdfs:label ?label }}
             OPTIONAL {{ ?class ots:functionUnit ?functionUnit }}
             OPTIONAL {{ ?class ots:linkedBpmnElement ?bpmnElement }}
             OPTIONAL {{ ?class ots:mapsToConcept ?concept }}
+            OPTIONAL {{ ?class ots:supportsGoal ?goalRow }}
           }}
         }}
         ORDER BY ?label
@@ -294,6 +330,7 @@ class FusekiClient:
                     "functionUnit": binding.get("functionUnit", {}).get("value"),
                     "linkedBpmnElements": [],
                     "mappedConcepts": [],
+                    "supportsGoals": [],
                 }
 
             bpmn = binding.get("bpmnElement", {}).get("value")
@@ -303,6 +340,10 @@ class FusekiClient:
             concept = binding.get("concept", {}).get("value")
             if concept and concept not in class_map[class_uri]["mappedConcepts"]:
                 class_map[class_uri]["mappedConcepts"].append(concept)
+
+            goal_row = binding.get("goalRow", {}).get("value")
+            if goal_row and goal_row not in class_map[class_uri]["supportsGoals"]:
+                class_map[class_uri]["supportsGoals"].append(goal_row)
 
         return list(class_map.values())
 

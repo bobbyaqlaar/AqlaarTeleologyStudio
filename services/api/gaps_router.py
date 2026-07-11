@@ -4,38 +4,29 @@ POST /api/v1/gaps/{engagement}/{stream}/analyze reads the persisted process
 state (BPMN XML + element meta) and the engagement's ontology classes, then:
 
 1. always runs deterministic heuristics (missing function tags / systems), and
-2. when Anthropic credentials are available, asks Claude to compare the
-   customized process against the industry baseline and suggest gaps —
-   merged after the heuristics. Any LLM failure degrades to heuristics-only.
+2. asks the shared LLM module (Claude primary, OpenRouter exception fallback)
+   to compare the customized process against the industry baseline and suggest
+   gaps — merged after the heuristics. LLM failure degrades to heuristics-only.
 
 Response items match the web app's AiGapSuggestion type.
 """
 
 from __future__ import annotations
 
-import json
-import os
 import re
-from functools import lru_cache
 
-import httpx
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel, ConfigDict, Field
 
 from db import get_session
 from db_models import EngagementRow, ProcessStateRow
 from fuseki_client import FusekiClient
+from llm import LlmUnavailable, generate_json
 
 router = APIRouter(prefix="/api/v1/gaps", tags=["gaps"])
 fuseki = FusekiClient()
 
 VALID_STREAMS = {"o2c", "p2p", "c2m", "h2r", "t2r"}
-GAP_MODEL = os.getenv("OTS_GAP_MODEL", "claude-opus-4-8")
-# OpenRouter is the exception fallback when the Anthropic call fails (no
-# credits, model unavailable, network). "openrouter/auto" routes to whatever
-# capable model OpenRouter has live; "openrouter/free" is a zero-cost option.
-OPENROUTER_GAP_MODEL = os.getenv("OTS_GAP_FALLBACK_MODEL", "openrouter/auto")
-OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 TASK_TAG_RE = re.compile(r"<bpmn:task\s+([^>]*?)/?>")
 
@@ -92,7 +83,7 @@ class GapAnalysisResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True, ser_json_by_alias=True)
 
     suggestions: list[GapSuggestionModel]
-    source: str  # "heuristic" | "heuristic+llm"
+    source: str  # "heuristic" | "heuristic+llm" | "heuristic+llm(openrouter)"
 
 
 def _extract_tasks(bpmn_xml: str) -> list[dict[str, str]]:
@@ -161,20 +152,6 @@ def _heuristics(
     return suggestions
 
 
-@lru_cache(maxsize=1)
-def _anthropic_client():
-    """Anthropic client, or None when the SDK/credentials are unavailable."""
-    try:
-        import anthropic
-
-        client = anthropic.Anthropic()
-        # The zero-arg constructor resolves env vars or an `ant auth` profile;
-        # if neither exists it raises here rather than at request time.
-        return client
-    except Exception:
-        return None
-
-
 def _build_user_prompt(
     stream_type: str,
     industry: str,
@@ -213,89 +190,6 @@ def _parse_suggestions(payload: dict) -> list[GapSuggestionModel]:
     return suggestions
 
 
-async def _llm_suggestions(
-    stream_type: str,
-    industry: str,
-    tasks: list[dict[str, str]],
-    element_meta: dict,
-    ontology_labels: list[str],
-) -> list[GapSuggestionModel]:
-    client = _anthropic_client()
-    if client is None:
-        raise RuntimeError("Anthropic credentials unavailable")
-
-    user_prompt = _build_user_prompt(
-        stream_type, industry, tasks, element_meta, ontology_labels
-    )
-
-    response = client.messages.create(
-        model=GAP_MODEL,
-        max_tokens=2048,
-        thinking={"type": "adaptive"},
-        system=SYSTEM_PROMPT,
-        output_config={"format": {"type": "json_schema", "schema": GAP_SCHEMA}},
-        messages=[{"role": "user", "content": user_prompt}],
-    )
-
-    if response.stop_reason == "refusal":
-        return []
-
-    text = next((b.text for b in response.content if b.type == "text"), "{}")
-    return _parse_suggestions(json.loads(text))
-
-
-async def _openrouter_suggestions(
-    stream_type: str,
-    industry: str,
-    tasks: list[dict[str, str]],
-    element_meta: dict,
-    ontology_labels: list[str],
-) -> list[GapSuggestionModel]:
-    """Exception fallback: same gap analysis via OpenRouter (spec §13).
-
-    Uses the OpenAI-compatible chat endpoint with the auto-router, so no
-    response_format is sent (support varies by routed model) — the schema is
-    enforced by prompt and the reply parsed leniently.
-    """
-    api_key = os.getenv("OPENROUTER_API_KEY")
-    if not api_key:
-        raise RuntimeError("OpenRouter credentials unavailable")
-
-    system_prompt = (
-        SYSTEM_PROMPT
-        + "\n\nRespond with ONLY a JSON object matching this schema, no prose, "
-        "no markdown fences:\n"
-        + json.dumps(GAP_SCHEMA)
-    )
-    user_prompt = _build_user_prompt(
-        stream_type, industry, tasks, element_meta, ontology_labels
-    )
-
-    async with httpx.AsyncClient(timeout=90) as http:
-        response = await http.post(
-            OPENROUTER_URL,
-            headers={
-                "Authorization": f"Bearer {api_key}",
-                "X-Title": "OTS Gap Analysis",
-            },
-            json={
-                "model": OPENROUTER_GAP_MODEL,
-                "max_tokens": 2048,
-                "messages": [
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt},
-                ],
-            },
-        )
-    response.raise_for_status()
-    text = response.json()["choices"][0]["message"]["content"]
-    # Lenient extraction: routed models sometimes wrap JSON in fences/prose.
-    start, end = text.find("{"), text.rfind("}")
-    if start == -1 or end <= start:
-        raise ValueError("No JSON object in OpenRouter reply")
-    return _parse_suggestions(json.loads(text[start : end + 1]))
-
-
 @router.post("/{engagement_id}/{stream_type}/analyze", response_model=GapAnalysisResponse)
 async def analyze(engagement_id: str, stream_type: str) -> GapAnalysisResponse:
     if stream_type not in VALID_STREAMS:
@@ -323,22 +217,16 @@ async def analyze(engagement_id: str, stream_type: str) -> GapAnalysisResponse:
     except Exception:
         labels = []
 
+    user_prompt = _build_user_prompt(stream_type, industry, tasks, element_meta, labels)
     try:
-        llm = await _llm_suggestions(stream_type, industry, tasks, element_meta, labels)
+        payload, llm_source = await generate_json(
+            SYSTEM_PROMPT, user_prompt, GAP_SCHEMA, max_tokens=2048
+        )
+        llm = _parse_suggestions(payload)
         if llm:
             suggestions.extend(llm)
-            source = "heuristic+llm"
-    except Exception:
-        # Claude unavailable (no credits, model down, no credentials) —
-        # retry once via OpenRouter before degrading to heuristics (spec §13).
-        try:
-            llm = await _openrouter_suggestions(
-                stream_type, industry, tasks, element_meta, labels
-            )
-            if llm:
-                suggestions.extend(llm)
-                source = "heuristic+llm(openrouter)"
-        except Exception:
-            pass  # degrade to heuristics-only per spec §13
+            source = "heuristic+llm" if llm_source == "claude" else "heuristic+llm(openrouter)"
+    except LlmUnavailable:
+        pass  # degrade to heuristics-only per spec §13
 
     return GapAnalysisResponse(suggestions=suggestions, source=source)

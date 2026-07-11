@@ -1,6 +1,10 @@
 /** Shared fetch helper for the FastAPI backend (isomorphic: server
  * components and client components both use it). Callers catch failures
- * and fall back to the in-memory mock stores so UI-only mode still works. */
+ * and fall back to the in-memory mock stores so UI-only mode still works.
+ * Client-side calls carry the SSO Bearer token when signed in, otherwise
+ * X-OTS-User-* demo identity headers. */
+
+import { authHeaders } from "@/lib/auth/session";
 
 export const API_BASE =
   process.env.NEXT_PUBLIC_OTS_API_URL ?? "http://localhost:8000";
@@ -21,6 +25,7 @@ export async function apiFetch<T>(
     ...init,
     headers: {
       "Content-Type": "application/json",
+      ...authHeaders(),
       ...init?.headers,
     },
   });

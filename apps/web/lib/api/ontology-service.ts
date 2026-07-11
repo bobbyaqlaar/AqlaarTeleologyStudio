@@ -1,3 +1,4 @@
+import { authHeaders } from "@/lib/auth/session";
 import type {
   FunctionalUnit,
   Industry,
@@ -27,6 +28,7 @@ async function request<T>(
     ...init,
     headers: {
       "Content-Type": "application/json",
+      ...authHeaders(),
       ...init?.headers,
     },
   });
@@ -127,6 +129,36 @@ export const ontologyService = {
       method: "POST",
       body: JSON.stringify({ classUri, bpmnElementId }),
     });
+  },
+
+  async linkGoal(
+    engagementId: string,
+    streamType: ValueStreamType,
+    classUri: string,
+    teleologyRowId: string,
+  ): Promise<OwlClass> {
+    return request(
+      `/api/v1/ontology/${engagementId}/${streamType}/goal-links`,
+      {
+        method: "POST",
+        body: JSON.stringify({ classUri, teleologyRowId }),
+      },
+    );
+  },
+
+  async unlinkGoal(
+    engagementId: string,
+    streamType: ValueStreamType,
+    classUri: string,
+    teleologyRowId: string,
+  ): Promise<OwlClass> {
+    return request(
+      `/api/v1/ontology/${engagementId}/${streamType}/goal-links/remove`,
+      {
+        method: "POST",
+        body: JSON.stringify({ classUri, teleologyRowId }),
+      },
+    );
   },
 
   async unlinkBpmnElement(

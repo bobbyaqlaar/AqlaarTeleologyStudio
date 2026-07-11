@@ -100,6 +100,54 @@ class AuditEventRow(SQLModel, table=True):
     created_at: str
 
 
+class SolutionOptionRow(SQLModel, table=True):
+    """AI-drafted, stream-scoped option that closes a gap between the current
+    process/ontology state and the teleology. Lifecycle: draft → accepted /
+    dismissed; accepting never auto-mutates approved artefacts."""
+
+    __tablename__ = "solution_options"
+
+    id: str = Field(primary_key=True)
+    engagement_id: str = Field(foreign_key="engagements.id", index=True)
+    stream_type: str
+    function_unit: str | None = None
+    teleology_row_id: str | None = None
+    title: str
+    option_type: str = "strategic"  # quick_win | strategic | transformational
+    rationale: str = Field(sa_column=Column(Text))
+    proposed_changes: list = Field(default_factory=list, sa_column=Column(JSONB))
+    impacted_steps: list = Field(default_factory=list, sa_column=Column(JSONB))
+    impacted_classes: list = Field(default_factory=list, sa_column=Column(JSONB))
+    effort: str = "medium"  # low | medium | high
+    impact: str = "medium"  # low | medium | high
+    status: str = "draft"  # draft | accepted | dismissed
+    source: str = "claude"
+    created_at: str
+    updated_at: str
+
+
+class InitiativeRow(SQLModel, table=True):
+    """Cross-stream transformation initiative candidate: the bigger-picture
+    object that links gaps/options across several value streams."""
+
+    __tablename__ = "initiatives"
+
+    id: str = Field(primary_key=True)
+    engagement_id: str = Field(foreign_key="engagements.id", index=True)
+    name: str
+    narrative: str = Field(sa_column=Column(Text))
+    streams: list = Field(default_factory=list, sa_column=Column(JSONB))
+    function_units: list = Field(default_factory=list, sa_column=Column(JSONB))
+    stream_links: list = Field(default_factory=list, sa_column=Column(JSONB))
+    consolidates: list = Field(default_factory=list, sa_column=Column(JSONB))
+    org_impact: dict = Field(default_factory=dict, sa_column=Column(JSONB))
+    horizon: str = "next"  # now | next | later
+    status: str = "draft"  # draft | accepted | dismissed
+    source: str = "claude"
+    created_at: str
+    updated_at: str
+
+
 class TeleologyRowDB(SQLModel, table=True):
     __tablename__ = "teleology_rows"
 

@@ -14,7 +14,7 @@ OTS holds industry-standard process and ontology baselines, supports enterprise 
 
 ## Phase 1 — Current Build (v1)
 
-**Status (2026-07-09):** UI iterations **A–E complete**, plus: ingestion agent (APQC PCF v8 + TM Forum eTOM/SID → TTL/SKOS/BPMN baselines, generic + telecom), **Postgres persistence** (engagements, streams, process state, comments, teleology), thesaurus concept mapping, step→system tagging with coverage matrix, live LLM gap analysis (needs Anthropic credits). Remaining: Alembic, audit trail, PDF export, real connectors, SSO, Playwright E2E — see [docs/TODO-implementation-plan.md](docs/TODO-implementation-plan.md).
+**Status (2026-07-11):** Phase 1 complete (UI A–E, Postgres, Fuseki, ingestion, connectors, audit, PDF, Playwright E2E). **Phase 2 (in progress):** teleology drafting agent, **alignment view** (current vs teleology), **gap-bridge agent** (stream-scoped solution options), **initiative candidates** (cross-stream), **Workshop Mode** (same-screen stakeholder walkthrough), **web SSO** (OIDC PKCE + Keycloak). See [docs/TODO-implementation-plan.md](docs/TODO-implementation-plan.md) and [2026-07-11 design spec](docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-design.md).
 
 Services are fetch-first against FastAPI/Postgres/Fuseki with in-memory mock fallback, so `npm run dev` alone still works for UI-only exploration.
 
@@ -45,6 +45,14 @@ The app stepper follows this sequence. You edit; stakeholders comment and approv
 | **4 — Teleology** | Teleology | Capture goals, gaps, ambitions vs revenue / cost / CX / TTM |
 | **5 — Review** | Review | Stakeholders approve; you resolve feedback |
 
+**Phase 2 surfaces** (sidebar, after teleology):
+
+| Surface | Route | What you do |
+|---------|-------|-------------|
+| **Alignment** | `/engagements/[id]/alignment` | Heatmap: current state vs teleology; run **Bridge gaps with AI** for stream-scoped solution options |
+| **Initiatives** | `/engagements/[id]/initiatives` | Cross-stream transformation candidates (e.g. one initiative linking O2C + P2P + C2M) |
+| **Workshop mode** | `/engagements/[id]/workshop` | Full-screen same-screen walkthrough: process steps → ontology → teleology; parking lot + inline edits |
+
 **Connectors** (optional): Salesforce / Jira import preview to pre-fill templates before or during workshops — see `/engagements/[id]/connectors`.
 
 Detailed guide: [Design spec §2–3](docs/superpowers/specs/2026-06-11-ots-phase1-design.md#2-streams-vs-processes)
@@ -56,7 +64,7 @@ Detailed guide: [Design spec §2–3](docs/superpowers/specs/2026-06-11-ots-phas
 | Consultant | Edit BPMN, OWL, teleology; run connectors; submit for review; resolve feedback |
 | Stakeholder | Comment and approve/reject within assigned function unit scope |
 
-Dev role switcher in the header toggles consultant vs stakeholder (with function-unit scope).
+Dev role switcher in the header toggles consultant vs stakeholder (with function-unit scope). **SSO:** sign in via Keycloak (OIDC PKCE); Bearer token sent on API calls; dev switcher remains fallback when unsigned.
 
 ### Enterprise function units
 
@@ -81,8 +89,9 @@ Vertical industry ontologies (TM Forum SID/eTOM, BIAN, Microsoft CDM) and the st
 | C | OWL graph viewer, class editor, BPMN links | **Fuseki + FastAPI** | ✅ |
 | D | Teleology matrix + function drill-down | Mock | ✅ |
 | E | Connectors + Review approval queue | Mock | ✅ |
+| **F** | Alignment, gap-bridge + initiatives agents, Workshop mode, web SSO | **API + Fuseki + Postgres** | ✅ |
 
-**After E (done):** Postgres core, live LLM gap analysis, ingestion agent, industry baselines, thesaurus mapping, system tagging + coverage matrix. **Still open:** audit trail, Alembic, PDF export, real Salesforce/Jira APIs, SSO, Playwright E2E.
+**After E (done):** Postgres core, live LLM gap analysis, ingestion agent, industry baselines, thesaurus mapping, system tagging + coverage matrix, Alembic, audit trail, PDF export, real connectors, Playwright E2E, API OIDC. **Iteration F (2026-07-11):** alignment report, solution options, initiative candidates, workshop presenter, web login.
 
 ### What ships in each iteration
 
@@ -92,7 +101,8 @@ Vertical industry ontologies (TM Forum SID/eTOM, BIAN, Microsoft CDM) and the st
 | **B** | `bpmn-js` editor, function tagging, stakeholder comment thread, debounced AI gap drawer, stream tabs |
 | **C** | React Flow OWL graph (`subClassOf` + `precedes` edges), class tree/editor, BPMN link panel, Fuseki SPARQL |
 | **D** | Teleology matrix table, row editor, org themes (revenue/cost/CX/TTM), function drill-down rows, submit/approve |
-| **E** | Salesforce + Jira connector cards, field map, import preview/apply (mock); Review queue (streams, teleology, BPMN feedback) |
+| **E** | Salesforce + Jira connector cards, field map, import preview/apply; Review queue (streams, teleology, BPMN feedback) |
+| **F** | Alignment heatmap + current vs teleology; gap-bridge + initiative agents; Workshop mode; `ots:supportsGoal` links; OIDC web login |
 
 ### UX standards
 
@@ -115,9 +125,10 @@ Full spec: [`docs/superpowers/specs/2026-06-11-ots-phase1-design.md`](docs/super
 Next.js (apps/web)  →  FastAPI (services/api)  →  Fuseki (OWL/RDF)
         │                     │
         │                     └──  Postgres (engagements, streams, process
-        │                          state, comments, teleology) + Claude API
-        │                          (gap analysis)
-        └── mock fallbacks (used when the API is offline; connectors still mock-only)
+        │                          state, comments, teleology, solution_options,
+        │                          initiatives, audit) + Claude/OpenRouter (gaps,
+        │                          drafting agents)
+        └── mock fallbacks (used when the API is offline; agents/alignment have no mock)
 
 services/ingest (uv)  →  ReferenceDocs (APQC xlsx/PDF, TM Forum MODA crawl)
                           → data/baselines/{industry}/{stream}.{ttl,bpmn}
@@ -126,10 +137,10 @@ services/ingest (uv)  →  ReferenceDocs (APQC xlsx/PDF, TM Forum MODA crawl)
 
 - **Frontend:** Next.js 16 App Router, React 19, TypeScript strict, Tailwind, shadcn/ui (base-ui), Geist fonts
 - **OWL graph UI:** `@xyflow/react` + dagre layout for class nodes and relationship edges
-- **API:** FastAPI sidecar for SPARQL, graph init, class CRUD, BPMN↔OWL links
+- **API:** FastAPI sidecar for SPARQL, graph init, class CRUD, BPMN↔OWL links, alignment report, solution/initiative lifecycle
 - **Semantic store:** Apache Jena Fuseki 5.1 (named graph per engagement stream)
 - **Baselines:** `data/baselines/{industry}/{stream}.ttl` + `.bpmn` — generated by `uv run ots-ingest` from APQC PCF v8 (generic) and TM Forum eTOM (telecom), with provenance, `ots:precedes` flow edges, and function-unit tags
-- **Auth (dev):** Role switcher (consultant/stakeholder); SSO before production
+- **Auth:** Keycloak dev realm + OIDC PKCE in web; API JWT verification; dev role switcher when unsigned
 
 ### Fuseki named graphs
 
@@ -144,10 +155,12 @@ urn:ots:engagement:{engagementId}:stream:{streamType}
 ```
 OTS/
 ├── apps/web/              # Next.js frontend
-│   ├── app/engagements/   # Routes (streams, process, ontology, teleology, connectors, review)
-│   ├── components/        # shell, bpmn, ontology, teleology, connectors, review, …
+│   ├── app/engagements/   # Routes (streams, process, ontology, teleology, alignment, initiatives, workshop, connectors, review)
+│   ├── app/auth/          # OIDC callback
+│   ├── components/        # shell, bpmn, ontology, teleology, alignment, initiatives, workshop, connectors, review, …
 │   └── lib/
-│       ├── api/           # ontology-service → FastAPI
+│       ├── api/           # ontology, alignment, solutions, agent services → FastAPI
+│       ├── auth/          # OIDC PKCE + session headers
 │       └── mock/          # engagement, process, teleology, connector, review stores
 ├── services/api/          # FastAPI + Fuseki client
 ├── data/baselines/        # Seed TTL per value stream (o2c, p2p, c2m, h2r, t2r)
@@ -194,6 +207,9 @@ Pre-seeded engagement `eng-acme-001` with O2C baseline loaded:
 | Process (O2C) | `/engagements/eng-acme-001/streams/o2c/process` |
 | Ontology (O2C) | `/engagements/eng-acme-001/streams/o2c/ontology` |
 | Teleology | `/engagements/eng-acme-001/teleology` |
+| Alignment | `/engagements/eng-acme-001/alignment` |
+| Initiatives | `/engagements/eng-acme-001/initiatives` |
+| Workshop | `/engagements/eng-acme-001/workshop` |
 | Connectors | `/engagements/eng-acme-001/connectors` |
 | Review | `/engagements/eng-acme-001/review` |
 
@@ -212,21 +228,22 @@ UI imports services, not fixtures directly. Swap to FastAPI/Postgres post-E with
 | `engagementService` | `lib/mock/services/engagement-service.ts` | CRUD engagements |
 | `streamService` | `lib/mock/services/stream-service.ts` | Load baseline |
 | `processService` / `commentService` / `aiGapService` | `lib/mock/services/process-service.ts` | BPMN, comments, gap analysis |
-| `ontologyService` | `lib/api/ontology-service.ts` | Graph CRUD via FastAPI |
+| `ontologyService` | `lib/api/ontology-service.ts` | Graph CRUD, goal links via FastAPI |
+| `alignmentService` | `lib/api/alignment-service.ts` | Current vs teleology report (API-only) |
+| `solutionsService` | `lib/api/solutions-service.ts` | Solution options + initiatives (API-only) |
+| `agentService` | `lib/api/agent-service.ts` | Draft teleology, bridge gaps, draft initiatives |
 | `teleologyService` | `lib/mock/services/teleology-service.ts` | Matrix, drill-down, approvals |
 | `connectorService` | `lib/mock/services/connector-service.ts` | Connect, field map, preview, apply |
-| `reviewService` | `lib/mock/services/review-service.ts` | Approval queue, feedback resolution |
+| `reviewService` | `lib/mock/services/review-service.ts` | Approval queue (+ accepted options/initiatives) |
 
 ---
 
 ## Long-term capabilities (post-v1)
 
-- Postgres persistence for engagements, BPMN, teleology, comments, connectors
-- Event-sourced audit trail
-- Watermarked PDF export
-- Real Salesforce and Jira connector APIs
-- Live LLM gap analysis
-- SSO (SAML/OIDC)
-- Playwright E2E
+Most Phase 1 items are done. Remaining polish:
+
+- PDF download button in web UI (API export exists)
+- Audit trail viewer in web UI (API + CSV exist)
+- Engagement delete/archive endpoint
+- Phase 2 agents: process-map + ontology drafting (teleology + gap-bridge + initiatives shipped)
 - Industry standards crawl agent (quarterly or on-demand refresh)
-- Phase 2 autonomous agent pipeline

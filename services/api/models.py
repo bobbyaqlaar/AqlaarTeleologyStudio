@@ -19,6 +19,7 @@ class OwlClassModel(BaseModel):
     function_unit: str | None = Field(default=None, alias="functionUnit")
     linked_bpmn_elements: list[str] = Field(default_factory=list, alias="linkedBpmnElements")
     mapped_concepts: list[str] = Field(default_factory=list, alias="mappedConcepts")
+    supports_goals: list[str] = Field(default_factory=list, alias="supportsGoals")
 
 
 class OntologyEdgeModel(BaseModel):
@@ -83,6 +84,13 @@ class ConceptMappingRequest(BaseModel):
 
     class_uri: str = Field(alias="classUri")
     concept_uri: str = Field(alias="conceptUri")
+
+
+class GoalLinkRequest(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
+    class_uri: str = Field(alias="classUri")
+    teleology_row_id: str = Field(alias="teleologyRowId")
 
 
 class HealthResponse(BaseModel):

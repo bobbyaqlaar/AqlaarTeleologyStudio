@@ -133,6 +133,8 @@ export interface OwlClass {
   functionUnit?: FunctionalUnit;
   linkedBpmnElements: string[];
   mappedConcepts: string[];
+  /** Teleology row ids this class supports (ots:supportsGoal). */
+  supportsGoals: string[];
 }
 
 export type ThesaurusFramework = "apqc" | "etom" | "sid";
@@ -263,10 +265,130 @@ export interface UpdateFieldMappingInput {
   targetType?: ConnectorTargetType;
 }
 
+// --- Alignment (current state vs teleology) --------------------------------
+
+export interface AlignmentScoreBreakdown {
+  goalsDefined: number; // /20
+  processEvidence: number; // /20
+  systemCoverage: number; // /20
+  ontologyCoverage: number; // /20
+  goalTraceability: number; // /10
+  feedbackClear: number; // /10
+}
+
+export interface AlignmentUnitEvidence {
+  stepCount: number;
+  stepsWithSystems: number;
+  systems: string[];
+  ontologyClasses: number;
+  bpmnLinkedClasses: number;
+  goalLinkedClasses: number;
+  openComments: number;
+  stepNames: string[];
+}
+
+export interface AlignmentUnit {
+  functionUnit: FunctionalUnit | null;
+  teleologyRowId: string | null;
+  approvalStatus: ApprovalStatus;
+  goals: string[];
+  gaps: string[];
+  ambitions: string[];
+  orgAmbitions: OrgAmbitions;
+  evidence: AlignmentUnitEvidence;
+  score: number;
+  scoreBreakdown: AlignmentScoreBreakdown;
+}
+
+export interface AlignmentStream {
+  streamType: ValueStreamType;
+  approvalStatus: ApprovalStatus;
+  units: AlignmentUnit[];
+}
+
+export interface AlignmentReport {
+  engagementId: string;
+  generatedAt: string;
+  streams: AlignmentStream[];
+}
+
+// --- Solution options + initiatives (gap-bridge agents) --------------------
+
+export type SolutionOptionType =
+  | "quick_win"
+  | "strategic"
+  | "transformational";
+
+export type SolutionStatus = "draft" | "accepted" | "dismissed";
+
+export type ProposedChangeKind =
+  | "add_step"
+  | "modify_step"
+  | "tag_system"
+  | "add_class"
+  | "link_class_goal"
+  | "update_teleology"
+  | "other";
+
+export interface ProposedChange {
+  kind: ProposedChangeKind;
+  description: string;
+  targetId?: string | null;
+  targetLabel?: string | null;
+}
+
+export interface SolutionOption {
+  id: string;
+  engagementId: string;
+  streamType: ValueStreamType;
+  functionUnit: FunctionalUnit | null;
+  teleologyRowId: string | null;
+  title: string;
+  optionType: SolutionOptionType;
+  rationale: string;
+  proposedChanges: ProposedChange[];
+  impactedSteps: Array<{ name: string }>;
+  impactedClasses: Array<{ label: string; uri?: string | null }>;
+  effort: "low" | "medium" | "high";
+  impact: "low" | "medium" | "high";
+  status: SolutionStatus;
+  source: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type InitiativeHorizon = "now" | "next" | "later";
+
+export interface InitiativeStreamLink {
+  streamType: ValueStreamType;
+  role: string;
+  stepNames: string[];
+  classLabels: string[];
+}
+
+export interface Initiative {
+  id: string;
+  engagementId: string;
+  name: string;
+  narrative: string;
+  streams: ValueStreamType[];
+  functionUnits: FunctionalUnit[];
+  streamLinks: InitiativeStreamLink[];
+  consolidates: string[];
+  orgImpact: Partial<Record<OrgTheme, string>>;
+  horizon: InitiativeHorizon;
+  status: SolutionStatus;
+  source: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export type ReviewArtefactType =
   | "value_stream"
   | "teleology_row"
-  | "process_feedback";
+  | "process_feedback"
+  | "solution_option"
+  | "initiative";
 
 export interface ReviewQueueItem {
   id: string;

@@ -2,9 +2,12 @@ import type { WorkflowStep } from "@/lib/types";
 import {
   Cable,
   ClipboardCheck,
+  Gauge,
   GitBranch,
   LayoutDashboard,
   Network,
+  Presentation,
+  Rocket,
   Target,
   type LucideIcon,
 } from "lucide-react";
@@ -59,6 +62,27 @@ export const ENGAGEMENT_NAV: NavItem[] = [
     iteration: 4,
   },
   {
+    id: "alignment",
+    label: "Alignment",
+    href: (id) => `/engagements/${id}/alignment`,
+    icon: Gauge,
+    iteration: 6,
+  },
+  {
+    id: "initiatives",
+    label: "Initiatives",
+    href: (id) => `/engagements/${id}/initiatives`,
+    icon: Rocket,
+    iteration: 6,
+  },
+  {
+    id: "workshop",
+    label: "Workshop mode",
+    href: (id) => `/engagements/${id}/workshop`,
+    icon: Presentation,
+    iteration: 6,
+  },
+  {
     id: "connectors",
     label: "Connectors",
     href: (id) => `/engagements/${id}/connectors`,
@@ -88,4 +112,4 @@ export const WORKFLOW_STEPS: {
   { step: "review", label: "Review", number: 5 },
 ];
 
-export const CURRENT_ITERATION = 5;
+export const CURRENT_ITERATION = 6;

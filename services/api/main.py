@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 load_dotenv(Path(__file__).resolve().parents[2] / ".env")
 
 from agents_router import router as agents_router
+from alignment_router import router as alignment_router
 from audit import router as audit_router
 from comments_router import router as comments_router
 from connectors_router import router as connectors_router
@@ -22,6 +23,7 @@ from gaps_router import router as gaps_router
 from models import HealthResponse
 from ontology_router import router as ontology_router
 from process_router import router as process_router
+from solutions_router import router as solutions_router
 from teleology_router import router as teleology_router
 
 fuseki = FusekiClient()
@@ -63,6 +65,8 @@ app.include_router(audit_router)
 app.include_router(export_router)
 app.include_router(connectors_router)
 app.include_router(agents_router)
+app.include_router(alignment_router)
+app.include_router(solutions_router)
 
 
 @app.get("/health", response_model=HealthResponse)

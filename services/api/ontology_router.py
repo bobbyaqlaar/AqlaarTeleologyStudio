@@ -7,6 +7,7 @@ from fuseki_client import DEFAULT_INDUSTRY, FusekiClient, FusekiError, VALID_STR
 from models import (
     BaselineCatalogResponse,
     ConceptMappingRequest,
+    GoalLinkRequest,
     InitializeResponse,
     LinkRequest,
     OntologyEdgeModel,
@@ -215,6 +216,39 @@ async def unmap_concept(
 
     try:
         await fuseki.remove_concept_mapping(graph_uri, payload.class_uri, payload.concept_uri)
+        return await _class_or_404(graph_uri, payload.class_uri)
+    except FusekiError as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error)) from error
+
+
+@router.post("/{engagement_id}/{stream_type}/goal-links", response_model=OwlClassModel)
+async def link_goal(
+    engagement_id: str,
+    stream_type: str,
+    payload: GoalLinkRequest,
+) -> OwlClassModel:
+    """Assert ots:supportsGoal: this class supports a teleology row (goal)."""
+    _validate_stream(stream_type)
+    graph_uri = fuseki.graph_uri(engagement_id, stream_type)
+
+    try:
+        await fuseki.set_goal_link(graph_uri, payload.class_uri, payload.teleology_row_id)
+        return await _class_or_404(graph_uri, payload.class_uri)
+    except FusekiError as error:
+        raise HTTPException(status_code=error.status_code, detail=str(error)) from error
+
+
+@router.post("/{engagement_id}/{stream_type}/goal-links/remove", response_model=OwlClassModel)
+async def unlink_goal(
+    engagement_id: str,
+    stream_type: str,
+    payload: GoalLinkRequest,
+) -> OwlClassModel:
+    _validate_stream(stream_type)
+    graph_uri = fuseki.graph_uri(engagement_id, stream_type)
+
+    try:
+        await fuseki.remove_goal_link(graph_uri, payload.class_uri, payload.teleology_row_id)
         return await _class_or_404(graph_uri, payload.class_uri)
     except FusekiError as error:
         raise HTTPException(status_code=error.status_code, detail=str(error)) from error

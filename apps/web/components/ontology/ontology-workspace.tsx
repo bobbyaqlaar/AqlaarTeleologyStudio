@@ -8,11 +8,13 @@ import {
   ontologyService,
 } from "@/lib/api/ontology-service";
 import { processService } from "@/lib/mock/services/process-service";
+import { teleologyService } from "@/lib/mock/services/teleology-service";
 import { StreamTabs } from "@/components/streams/stream-tabs";
 import { OwlGraphViewer } from "@/components/ontology/owl-graph-viewer";
 import { OwlClassTree } from "@/components/ontology/owl-class-tree";
 import { OwlClassPanel } from "@/components/ontology/owl-class-panel";
 import { BpmnLinkPanel } from "@/components/ontology/bpmn-link-panel";
+import { GoalLinkPanel } from "@/components/ontology/goal-link-panel";
 import { ThesaurusPanel } from "@/components/ontology/thesaurus-panel";
 import { FunctionUnitLegend } from "@/components/functions/function-unit-legend";
 import { Button, buttonVariants } from "@/components/ui/button";
@@ -23,6 +25,7 @@ import type {
   Industry,
   OntologyGraph,
   OwlClass,
+  TeleologyRow,
   ValueStreamType,
 } from "@/lib/types";
 
@@ -44,6 +47,7 @@ export function OntologyWorkspace({
   const [tasks, setTasks] = useState<
     Array<{ id: string; name: string; functionUnit?: FunctionalUnit }>
   >([]);
+  const [teleologyRows, setTeleologyRows] = useState<TeleologyRow[]>([]);
   const [selectedClass, setSelectedClass] = useState<OwlClass | null>(null);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -62,13 +66,19 @@ export function OntologyWorkspace({
       setApiOnline(health.fuseki);
 
       await ontologyService.initialize(engagementId, streamType, industry);
-      const [graphData, taskData] = await Promise.all([
+      const [graphData, taskData, teleologyData] = await Promise.all([
         ontologyService.getGraph(engagementId, streamType),
         processService.listTasks(engagementId, streamType),
+        teleologyService.getMatrix(engagementId).catch(() => null),
       ]);
 
       setGraph(graphData);
       setTasks(taskData);
+      setTeleologyRows(
+        teleologyData
+          ? teleologyData.rows.filter((row) => row.streamType === streamType)
+          : [],
+      );
       setSelectedClass((current) => {
         if (!current) {
           return graphData.classes[0] ?? null;
@@ -190,6 +200,44 @@ export function OntologyWorkspace({
       );
     } finally {
       setSavingClass(false);
+    }
+  };
+
+  const handleGoalLink = async (
+    teleologyRowId: string,
+    action: "link" | "unlink",
+  ): Promise<void> => {
+    if (!selectedClass || !canEdit) {
+      return;
+    }
+    setLinking(true);
+    try {
+      const updated =
+        action === "link"
+          ? await ontologyService.linkGoal(
+              engagementId,
+              streamType,
+              selectedClass.uri,
+              teleologyRowId,
+            )
+          : await ontologyService.unlinkGoal(
+              engagementId,
+              streamType,
+              selectedClass.uri,
+              teleologyRowId,
+            );
+      applyClassUpdate(updated);
+      setStatusMessage(
+        action === "link"
+          ? `${updated.label} now supports the selected goal.`
+          : "Goal link removed.",
+      );
+    } catch (err) {
+      setError(
+        err instanceof OntologyApiError ? err.message : "Goal link failed.",
+      );
+    } finally {
+      setLinking(false);
     }
   };
 
@@ -385,6 +433,14 @@ export function OntologyWorkspace({
             }}
             onLink={(taskId) => void handleLink(taskId)}
             onUnlink={(taskId, classUri) => void handleUnlink(taskId, classUri)}
+          />
+          <GoalLinkPanel
+            teleologyRows={teleologyRows}
+            selectedClass={selectedClass}
+            canEdit={canEdit}
+            linking={linking}
+            onLink={(rowId) => void handleGoalLink(rowId, "link")}
+            onUnlink={(rowId) => void handleGoalLink(rowId, "unlink")}
           />
         </div>
       </div>

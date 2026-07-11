@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, GitBranch } from "lucide-react";
+import { ArrowRight, Gauge, GitBranch, Presentation, Rocket } from "lucide-react";
 import { AppShell } from "@/components/shell/app-shell";
 import { FunctionUnitLegend } from "@/components/functions/function-unit-legend";
 import { Badge } from "@/components/ui/badge";
@@ -132,6 +132,52 @@ export default async function EngagementDashboardPage({
             </div>
           </CardContent>
         </Card>
+
+        {loadedCount > 0 ? (
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base">Consultant toolkit</CardTitle>
+              <CardDescription>
+                Guide stakeholders through processes and ontology, compare
+                current state against teleology, and draft AI solution options.
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid gap-3 sm:grid-cols-3">
+              <Link
+                href={`/engagements/${engagement.id}/workshop`}
+                className="flex flex-col gap-2 rounded-lg border border-border bg-muted/20 p-4 transition-colors hover:bg-muted/40"
+              >
+                <Presentation className="size-5 text-primary" />
+                <p className="text-sm font-medium">Workshop mode</p>
+                <p className="text-xs text-muted-foreground">
+                  Same-screen walkthrough with inline edits and parking lot.
+                </p>
+              </Link>
+              <Link
+                href={`/engagements/${engagement.id}/alignment`}
+                className="flex flex-col gap-2 rounded-lg border border-border bg-muted/20 p-4 transition-colors hover:bg-muted/40"
+              >
+                <Gauge className="size-5 text-primary" />
+                <p className="text-sm font-medium">Alignment</p>
+                <p className="text-xs text-muted-foreground">
+                  Current vs teleology heatmap and stream-scoped solution
+                  options.
+                </p>
+              </Link>
+              <Link
+                href={`/engagements/${engagement.id}/initiatives`}
+                className="flex flex-col gap-2 rounded-lg border border-border bg-muted/20 p-4 transition-colors hover:bg-muted/40"
+              >
+                <Rocket className="size-5 text-primary" />
+                <p className="text-sm font-medium">Initiatives</p>
+                <p className="text-xs text-muted-foreground">
+                  Cross-stream transformation candidates that link O2C, P2P,
+                  C2M, and more.
+                </p>
+              </Link>
+            </CardContent>
+          </Card>
+        ) : null}
 
         <FunctionUnitLegend compact />
       </div>

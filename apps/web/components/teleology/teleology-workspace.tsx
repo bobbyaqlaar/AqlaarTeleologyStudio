@@ -302,6 +302,12 @@ export function TeleologyWorkspace({
             {VALUE_STREAM_META[activeStream].label}
           </p>
           <Link
+            href={`/engagements/${engagementId}/alignment`}
+            className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+          >
+            View alignment
+          </Link>
+          <Link
             href={`/engagements/${engagementId}/review`}
             className={cn(buttonVariants({ size: "sm" }), "gap-2")}
           >

@@ -1,4 +1,5 @@
 import { apiFetch } from "@/lib/api/backend";
+import { solutionsService } from "@/lib/api/solutions-service";
 import { FUNCTION_UNIT_MAP } from "@/lib/constants/function-units";
 import { VALUE_STREAM_META } from "@/lib/constants/value-streams";
 import { updateStreamApprovalStatus } from "@/lib/mock/store";
@@ -8,9 +9,11 @@ import { teleologyService } from "@/lib/mock/services/teleology-service";
 import type {
   ApprovalStatus,
   Engagement,
+  Initiative,
   ReviewQueue,
   ReviewQueueItem,
   ReviewSummary,
+  SolutionOption,
   ValueStreamType,
 } from "@/lib/types";
 
@@ -53,6 +56,22 @@ async function buildQueue(engagementId: string): Promise<ReviewQueue> {
     teleologyService.getMatrix(engagementId),
     commentService.listOpen(engagementId),
   ]);
+
+  // API-only extras — absent in UI-only (mock) mode.
+  let acceptedOptions: SolutionOption[] = [];
+  let acceptedInitiatives: Initiative[] = [];
+  try {
+    const [allOptions, allInitiatives] = await Promise.all([
+      solutionsService.listOptions(engagementId),
+      solutionsService.listInitiatives(engagementId),
+    ]);
+    acceptedOptions = allOptions.filter((o) => o.status === "accepted");
+    acceptedInitiatives = allInitiatives.filter(
+      (i) => i.status === "accepted",
+    );
+  } catch {
+    // backend offline — queue works without agent artefacts
+  }
 
   const items: ReviewQueueItem[] = [];
 
@@ -114,6 +133,41 @@ async function buildQueue(engagementId: string): Promise<ReviewQueue> {
       commentBody: comment.body,
       targetId: comment.targetId,
       href: `/engagements/${engagementId}/streams/${comment.streamType}/process`,
+    });
+  }
+
+  for (const option of acceptedOptions) {
+    items.push({
+      id: `option:${option.id}`,
+      engagementId,
+      artefactType: "solution_option",
+      streamType: option.streamType,
+      functionUnit: option.functionUnit ?? undefined,
+      title: option.title,
+      subtitle: `Accepted ${option.optionType.replace("_", " ")} · effort ${option.effort} · impact ${option.impact}`,
+      approvalStatus: "approved",
+      updatedAt: option.updatedAt,
+      href: `/engagements/${engagementId}/alignment`,
+    });
+  }
+
+  for (const initiative of acceptedInitiatives) {
+    const firstStream = initiative.streams[0];
+    if (!firstStream) {
+      continue;
+    }
+    items.push({
+      id: `initiative:${initiative.id}`,
+      engagementId,
+      artefactType: "initiative",
+      streamType: firstStream,
+      title: initiative.name,
+      subtitle: `Accepted initiative spanning ${initiative.streams
+        .map((s) => VALUE_STREAM_META[s]?.shortLabel ?? s)
+        .join(" + ")}`,
+      approvalStatus: "approved",
+      updatedAt: initiative.updatedAt,
+      href: `/engagements/${engagementId}/initiatives`,
     });
   }
 
