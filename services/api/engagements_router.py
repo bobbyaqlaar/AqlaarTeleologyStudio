@@ -12,9 +12,11 @@ from sqlmodel import select
 
 from audit import Actor, ActorDep, record_audit
 from db import STREAM_TYPES, get_session, now_iso
-from db_models import EngagementRow, ValueStreamRow
+from db_models import EngagementRow, ProcessStateRow, TeleologyRowDB, ValueStreamRow
+from fuseki_client import FusekiClient
 
 router = APIRouter(prefix="/api/v1/engagements", tags=["engagements"])
+fuseki = FusekiClient()
 
 
 class ValueStreamModel(BaseModel):
@@ -156,6 +158,76 @@ def create_engagement(
         session.commit()
         session.refresh(row)
         return _to_model(row, _streams_for(session, engagement_id))
+
+
+class EngagementProgressModel(BaseModel):
+    """Real per-step completion, derived from artefact state (spec §10:
+    the stepper shows checkmarks on complete — not positional guesses)."""
+
+    model_config = ConfigDict(populate_by_name=True, ser_json_by_alias=True)
+
+    streams: bool
+    process: bool
+    ontology: bool
+    teleology: bool
+    connectors: bool
+    review: bool
+    first_loaded_stream: str | None = Field(default=None, alias="firstLoadedStream")
+
+
+@router.get("/{engagement_id}/progress", response_model=EngagementProgressModel)
+async def get_progress(engagement_id: str) -> EngagementProgressModel:
+    with get_session() as session:
+        _get_or_404(session, engagement_id)
+        streams = _streams_for(session, engagement_id)
+        loaded = [s for s in streams if s.baseline_loaded]
+
+        process_done = False
+        for state in session.exec(
+            select(ProcessStateRow).where(
+                ProcessStateRow.engagement_id == engagement_id
+            )
+        ).all():
+            meta = state.element_meta or {}
+            if any(entry.get("functionUnit") for entry in meta.values()):
+                process_done = True
+                break
+
+        teleology_done = any(
+            row.goals or row.gaps or row.ambitions
+            for row in session.exec(
+                select(TeleologyRowDB).where(
+                    TeleologyRowDB.engagement_id == engagement_id
+                )
+            ).all()
+        )
+
+        review_done = bool(loaded) and all(
+            s.approval_status == "approved" for s in loaded
+        )
+        loaded_types = [s.type for s in loaded]
+
+    ontology_done = False
+    for stream_type in loaded_types:
+        try:
+            classes = await fuseki.fetch_graph(
+                fuseki.graph_uri(engagement_id, stream_type)
+            )
+        except Exception:
+            break  # Fuseki down — leave ontology as not-done
+        if any(c["mappedConcepts"] or c["linkedBpmnElements"] for c in classes):
+            ontology_done = True
+            break
+
+    return EngagementProgressModel(
+        streams=bool(loaded),
+        process=process_done,
+        ontology=ontology_done,
+        teleology=teleology_done,
+        connectors=False,  # optional step — never gates the journey
+        review=review_done,
+        first_loaded_stream=loaded_types[0] if loaded_types else None,
+    )
 
 
 @router.get("/{engagement_id}", response_model=EngagementModel)

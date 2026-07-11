@@ -65,6 +65,17 @@ export interface CreateEngagementInput {
   industry?: Industry;
 }
 
+/** Real per-step completion, derived from artefact state by the API. */
+export interface EngagementProgress {
+  streams: boolean;
+  process: boolean;
+  ontology: boolean;
+  teleology: boolean;
+  connectors: boolean;
+  review: boolean;
+  firstLoadedStream: ValueStreamType | null;
+}
+
 export interface BaselineTemplate {
   id: string;
   streamType: ValueStreamType;

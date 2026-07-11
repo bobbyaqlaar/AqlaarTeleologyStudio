@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { Plus } from "lucide-react";
+import { ArrowRight, Plus } from "lucide-react";
 import { FUNCTION_UNITS } from "@/lib/constants/function-units";
 import { VALUE_STREAM_META, VALUE_STREAM_ORDER } from "@/lib/constants/value-streams";
 import { teleologyService } from "@/lib/mock/services/teleology-service";
@@ -263,10 +263,19 @@ export function TeleologyWorkspace({
             );
           })}
         </div>
-        <p className="text-xs text-muted-foreground">
-          {streamRows.length} row{streamRows.length === 1 ? "" : "s"} ·{" "}
-          {VALUE_STREAM_META[activeStream].label}
-        </p>
+        <div className="flex items-center gap-3">
+          <p className="text-xs text-muted-foreground">
+            {streamRows.length} row{streamRows.length === 1 ? "" : "s"} ·{" "}
+            {VALUE_STREAM_META[activeStream].label}
+          </p>
+          <Link
+            href={`/engagements/${engagementId}/review`}
+            className={cn(buttonVariants({ size: "sm" }), "gap-2")}
+          >
+            Continue to review
+            <ArrowRight className="size-4" />
+          </Link>
+        </div>
       </div>
 
       {statusMessage ? (

@@ -29,7 +29,6 @@ test("consultant flow: create → load O2C → tag → thesaurus map → teleolo
   await pickOption(page, "Telecom (TM Forum eTOM)");
   await page.getByRole("button", { name: "Create and open streams" }).click();
   await expect(page).toHaveURL(/\/engagements\/eng-[a-f0-9]+\/streams$/);
-  const engagementId = /\/engagements\/(eng-[a-f0-9]+)\//.exec(page.url())![1];
 
   // 2. Load the O2C baseline
   const o2cCard = page
@@ -73,8 +72,9 @@ test("consultant flow: create → load O2C → tag → thesaurus map → teleolo
   await mapButton.click();
   await expect(page.getByText(/Mapped .+ to thesaurus concept\./)).toBeVisible();
 
-  // 5. Capture teleology and submit for review
-  await page.goto(`/engagements/${engagementId}/teleology`);
+  // 5. Capture teleology and submit for review (via the forward CTA)
+  await page.getByRole("link", { name: "Continue to teleology" }).click();
+  await expect(page).toHaveURL(/\/teleology$/);
   await expect(page.getByText("Stream teleology")).toBeVisible();
   await page.getByPlaceholder("Add goal…").fill("Cut order cycle time by 30%");
   await page.getByPlaceholder("Add goal…").press("Enter");
@@ -86,8 +86,17 @@ test("consultant flow: create → load O2C → tag → thesaurus map → teleolo
     page.getByText("Submitted for stakeholder review."),
   ).toBeVisible();
 
-  // 6. Approve as stakeholder (role is client state — switch after navigating)
-  await page.goto(`/engagements/${engagementId}/review`);
+  // 6. Approve as stakeholder (via the forward CTA; role is client state)
+  await page.getByRole("link", { name: "Continue to review" }).click();
+  await expect(page).toHaveURL(/\/review$/);
+
+  // Stepper reflects real progress: streams, process, ontology, teleology
+  // are complete (checkmarks); review is not yet.
+  await expect(
+    page
+      .locator('ol[aria-label="Engagement progress"] svg.lucide-check')
+  ).toHaveCount(4);
+
   const queueItem = page
     .locator("tr")
     .filter({ hasText: "O2C stream teleology" });

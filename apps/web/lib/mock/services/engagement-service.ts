@@ -4,7 +4,11 @@ import {
   getEngagementById,
   getEngagementsSnapshot,
 } from "@/lib/mock/store";
-import type { CreateEngagementInput, Engagement } from "@/lib/types";
+import type {
+  CreateEngagementInput,
+  Engagement,
+  EngagementProgress,
+} from "@/lib/types";
 
 /** Postgres-backed via FastAPI; falls back to the in-memory mock store when
  * the API is unreachable (UI-only dev mode). */
@@ -33,6 +37,31 @@ export const engagementService = {
       });
     } catch {
       return addEngagement(input);
+    }
+  },
+
+  /** Per-step completion for the stepper. Mock fallback can only derive the
+   * streams/review signals from the engagement object. */
+  async getProgress(id: string): Promise<EngagementProgress> {
+    try {
+      return await apiFetch<EngagementProgress>(
+        `/api/v1/engagements/${id}/progress`,
+      );
+    } catch {
+      const engagement = getEngagementById(id) ?? null;
+      const loaded =
+        engagement?.valueStreams.filter((s) => s.baselineLoaded) ?? [];
+      return {
+        streams: loaded.length > 0,
+        process: false,
+        ontology: false,
+        teleology: false,
+        connectors: false,
+        review:
+          loaded.length > 0 &&
+          loaded.every((s) => s.approvalStatus === "approved"),
+        firstLoadedStream: loaded[0]?.type ?? null,
+      };
     }
   },
 };

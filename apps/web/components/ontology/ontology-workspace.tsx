@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import { AlertCircle, RefreshCw } from "lucide-react";
+import Link from "next/link";
+import { AlertCircle, ArrowRight, RefreshCw } from "lucide-react";
 import {
   OntologyApiError,
   ontologyService,
@@ -14,7 +15,8 @@ import { OwlClassPanel } from "@/components/ontology/owl-class-panel";
 import { BpmnLinkPanel } from "@/components/ontology/bpmn-link-panel";
 import { ThesaurusPanel } from "@/components/ontology/thesaurus-panel";
 import { FunctionUnitLegend } from "@/components/functions/function-unit-legend";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useRole } from "@/lib/context/role-context";
 import type {
   FunctionalUnit,
@@ -298,15 +300,24 @@ export function OntologyWorkspace({
           loadedStreams={loadedStreams}
           activeStream={streamType}
         />
-        <div className="flex items-center gap-2 text-xs text-muted-foreground">
-          <span
-            className={
-              apiOnline ? "text-emerald-500" : "text-amber-500"
-            }
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 text-xs text-muted-foreground">
+            <span
+              className={
+                apiOnline ? "text-emerald-500" : "text-amber-500"
+              }
+            >
+              Fuseki {apiOnline ? "online" : "degraded"}
+            </span>
+            <span className="hidden font-mono lg:inline">{graph.graphUri}</span>
+          </div>
+          <Link
+            href={`/engagements/${engagementId}/teleology`}
+            className={cn(buttonVariants({ size: "sm" }), "gap-2")}
           >
-            Fuseki {apiOnline ? "online" : "degraded"}
-          </span>
-          <span className="font-mono">{graph.graphUri}</span>
+            Continue to teleology
+            <ArrowRight className="size-4" />
+          </Link>
         </div>
       </div>
 
