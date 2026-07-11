@@ -27,3 +27,4 @@ ReferenceDocs/crawler-env/
 
 # Ingest parse caches
 services/ingest/cache/
+test-results/
