@@ -113,14 +113,24 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 - [ ] SSO — web login flow: OIDC code+PKCE login in apps/web against the Keycloak realm (issuer http://localhost:8081/realms/ots), send access token as Authorization header via apiFetch, drive useRole from the token's realm role instead of the dev role-switcher. NOTE this Next.js version has breaking changes — read node_modules/next/dist/docs before writing auth code.
 - [ ] Optional polish: web UI download button for the PDF export; connectors persistence (demo-only, lowest value); engagement delete/archive endpoint.
 
-## RESUME HERE (next session)
+## Post-review fixes + Phase 2 kickoff (2026-07-11)
 
-Read this file top to bottom first. Current state: **Phases 0–4 complete except the web login flow** — Postgres (Alembic-managed) for engagements/streams/process-state/comments/teleology/audit, LLM gap analysis w/ OpenRouter fallback, coverage matrix, audit trail + CSV export, watermarked PDF export, Playwright E2E for the consultant flow, API-side OIDC against a Keycloak dev realm. Everything E2E-verified.
+Holistic review (journey/redundancy/efficiency) done in-session; fixes shipped in order, each E2E-verified:
+
+- [x] **Guided journey fixed** (98dc3f8): GET /api/v1/engagements/{id}/progress derives real per-step completion (streams loaded / tagged elements / Fuseki mappings / teleology content / all-approved) + firstLoadedStream. Stepper renders checkmarks from that state, allows forward navigation once a baseline is loaded, no longer hardcodes o2c. New CTAs: ontology → "Continue to teleology", teleology → "Continue to review". E2E now navigates via CTAs and asserts 4 stepper checkmarks. (Correction to the review: the sidebar always had engagement nav; the stepper + missing CTAs were the real gap.)
+- [x] **Dead code removed** (79efc68): review-store.ts (unreferenced), Engagement.current_step/currentStep everywhere incl. DB column (migration a0f728e4421a), check-bpmn.mjs → scripts/, tsbuildinfo ignored.
+- [x] **Real Salesforce + Jira connectors** (fd6f425): /api/v1/connectors — Postgres state (migration 6bf9aa68a23f, auto-seeded per engagement), live credential validation on connect (Jira basic auth /myself; Salesforce OAuth client-credentials), live sample values on preview (real ready/conflict/unmapped), apply writes into element_meta.connectorData; all audit-logged. Server creds: OTS_JIRA_EMAIL/OTS_JIRA_API_TOKEN, OTS_SF_CLIENT_ID/OTS_SF_CLIENT_SECRET (none in .env yet — connect returns 503 hint until set; verified live 401 from Atlassian surfaces in the UI status line). Web connector-service is fetch-first; BackendApiError reasons surface instead of mock-pretending.
+- [x] **Phase 2 — first drafting agent** (this commit): POST /api/v1/agents/{id}/{stream}/draft-teleology reads the tagged BPMN map + connectorData + open comments + ontology labels and drafts the teleology matrix (stream row + per-function drill-downs) via shared llm.py (Claude primary → OpenRouter fallback). Never touches in_review/approved rows; refreshes draft rows; audit event agent.teleology_drafted w/ source. Web: "Draft with AI" button in teleology workspace (consultant only, API-only, failures surfaced). Verified: API draft for globex (grounded gaps naming real steps), UI draft on an E2E engagement — approved stream row skipped, sales drill-down created.
 
 **Next tasks, in recommended order:**
 1. **SSO web login flow** — OIDC code+PKCE in apps/web against Keycloak (see the SSO item in Phase 4 above for what's already in place). Read node_modules/next/dist/docs first — this Next.js version has breaking changes.
-2. **Optional polish** — PDF download button in the web UI; engagement delete/archive endpoint; connectors persistence (demo-only, lowest value).
-3. **Anthropic credits** — once Bobby tops up, `POST /api/v1/gaps/eng-globex-002/o2c/analyze` should return `"source": "heuristic+llm"` (Claude primary). Today it returns `"heuristic+llm(openrouter)"` via the fallback.
+2. **Phase 2 continuation** — next agents per spec §16: draft process-map customizations (suggest renamed/added BPMN steps from connector + comment evidence), draft ontology mappings; then agent runs on a schedule/trigger rather than a button. Reuse llm.py + the draft-then-verify pattern (never touch non-draft artefacts). Consider migrating gaps_router onto llm.py to kill the duplicated fallback logic.
+3. **Optional polish** — PDF download button in the web UI; engagement delete/archive endpoint (E2E runs accumulate "E2E Telecom …" engagements); surface audit trail in the UI; web sends X-OTS-User-* headers.
+4. **Anthropic credits** — once topped up, gap analysis + drafting agent switch to Claude automatically (today both run via OpenRouter fallback).
+
+## RESUME HERE (older notes)
+
+Current state through 2026-07-10: **Phases 0–4 complete except the web login flow** — Postgres (Alembic-managed) for engagements/streams/process-state/comments/teleology/audit/connectors, LLM gap analysis w/ OpenRouter fallback, coverage matrix, audit trail + CSV export, watermarked PDF export, Playwright E2E for the consultant flow, API-side OIDC against a Keycloak dev realm. Everything E2E-verified.
 
 **How to run the stack locally:**
 - `docker compose up -d postgres fuseki keycloak` then from `services/api`: `uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel --with "psycopg[binary]" --with anthropic --with python-dotenv --with httpx --with alembic --with reportlab --with "pyjwt[crypto]" python -m uvicorn main:app --port 8000` (system pip is PEP-668 locked; or `docker compose up api`). Add `OTS_OIDC_ISSUER=http://localhost:8081/realms/ots` to enable SSO (optional mode; `OTS_AUTH_MODE=required` to enforce).

@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Plus } from "lucide-react";
+import { ArrowRight, Loader2, Plus, Sparkles } from "lucide-react";
+import { agentService } from "@/lib/api/agent-service";
 import { FUNCTION_UNITS } from "@/lib/constants/function-units";
 import { VALUE_STREAM_META, VALUE_STREAM_ORDER } from "@/lib/constants/value-streams";
 import { teleologyService } from "@/lib/mock/services/teleology-service";
@@ -57,6 +58,7 @@ export function TeleologyWorkspace({
   const [addFunctionUnit, setAddFunctionUnit] = useState<FunctionalUnit | "">(
     "",
   );
+  const [drafting, setDrafting] = useState(false);
 
   const loadMatrix = useCallback(async (): Promise<void> => {
     setLoading(true);
@@ -191,6 +193,37 @@ export function TeleologyWorkspace({
     setSaving(false);
   };
 
+  const handleDraftWithAi = async (): Promise<void> => {
+    if (!canEdit) {
+      return;
+    }
+    setDrafting(true);
+    setStatusMessage(null);
+    try {
+      const result = await agentService.draftTeleology(
+        engagementId,
+        activeStream,
+      );
+      await loadMatrix();
+      const touched = result.rows.filter(
+        (row) => row.action !== "skipped_not_draft",
+      ).length;
+      const skipped = result.rows.length - touched;
+      setStatusMessage(
+        `AI drafted ${touched} row(s)` +
+          (skipped > 0 ? ` (${skipped} kept — already in review/approved)` : "") +
+          " — review and edit before submitting.",
+      );
+    } catch (error) {
+      setStatusMessage(
+        error instanceof Error
+          ? `Drafting failed: ${error.message}`
+          : "Drafting failed.",
+      );
+    }
+    setDrafting(false);
+  };
+
   const handleAddFunctionRow = async (): Promise<void> => {
     if (!addFunctionUnit || !canEdit) {
       return;
@@ -293,35 +326,53 @@ export function TeleologyWorkspace({
                 Stream row plus optional function drill-down per loaded baseline.
               </p>
             </div>
-            {canEdit && availableFunctionUnits.length > 0 ? (
+            {canEdit ? (
               <div className="flex flex-wrap items-center gap-2">
-                <Select
-                  value={addFunctionUnit}
-                  onValueChange={(value) =>
-                    setAddFunctionUnit(value as FunctionalUnit)
-                  }
-                >
-                  <SelectTrigger className="w-[200px]" size="sm">
-                    <SelectValue placeholder="Function drill-down" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {availableFunctionUnits.map((unit) => (
-                      <SelectItem key={unit.id} value={unit.id}>
-                        {unit.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
                 <Button
                   size="sm"
                   variant="outline"
                   className="gap-1.5"
-                  disabled={!addFunctionUnit || saving}
-                  onClick={() => void handleAddFunctionRow()}
+                  disabled={drafting || saving}
+                  onClick={() => void handleDraftWithAi()}
                 >
-                  <Plus className="size-4" />
-                  Add row
+                  {drafting ? (
+                    <Loader2 className="size-4 animate-spin" />
+                  ) : (
+                    <Sparkles className="size-4" />
+                  )}
+                  Draft with AI
                 </Button>
+                {availableFunctionUnits.length > 0 ? (
+                  <>
+                    <Select
+                      value={addFunctionUnit}
+                      onValueChange={(value) =>
+                        setAddFunctionUnit(value as FunctionalUnit)
+                      }
+                    >
+                      <SelectTrigger className="w-[200px]" size="sm">
+                        <SelectValue placeholder="Function drill-down" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {availableFunctionUnits.map((unit) => (
+                          <SelectItem key={unit.id} value={unit.id}>
+                            {unit.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      className="gap-1.5"
+                      disabled={!addFunctionUnit || saving}
+                      onClick={() => void handleAddFunctionRow()}
+                    >
+                      <Plus className="size-4" />
+                      Add row
+                    </Button>
+                  </>
+                ) : null}
               </div>
             ) : null}
           </div>
