@@ -144,9 +144,74 @@ Design spec: `docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-de
 3. **Anthropic credits** — once topped up, gap analysis + drafting agents switch to Claude automatically (today both run via OpenRouter fallback).
 4. **Playwright E2E** — extend consultant-flow spec to cover alignment → bridge gaps → initiatives → workshop exit (optional).
 
-## RESUME HERE
+## RESUME HERE — WIP: two drafting agents + delete endpoint (2026-07-12)
 
-Current state through **2026-07-11**: Phases 0–4 complete. **Phase 2 alignment stack shipped:** alignment report + heatmap UI, gap-bridge agent (solution options), initiative candidates agent, Workshop mode, web SSO, `ots:supportsGoal` links, Alembic `b3d1c04f9e21`. Postgres holds engagements/streams/process/comments/teleology/solution_options/initiatives/audit/connectors. LLM via shared `llm.py` (Claude → OpenRouter fallback).
+**Working state:** commit `d1f0ef9` is a clearly-marked **WIP** — the API side of two new
+draft-then-verify agents is written and syntax-checked but **NOT runtime-verified and has NO
+web UI yet**. Continue in this exact order:
+
+### Step 0 — Verify the WIP API side (do this before writing any new code)
+1. Start the stack (commands below) and restart the API so `d1f0ef9` is live.
+2. `POST /api/v1/agents/eng-globex-002/o2c/draft-process-tags` — expect suggestions for the
+   ~19 untagged O2C steps, each persisted as `element_meta[taskId].aiSuggestion`
+   (`{functionUnit, systems, rationale, source}`); confirm in Postgres. Re-run on a fully
+   tagged stream → `suggestions: []`, `source: "none"`.
+3. `POST /api/v1/agents/<id>/o2c/draft-ontology-links` on an engagement with an initialized
+   graph (any E2E one) — expect `bpmnLinks` (classUri/taskId pairs, both from real data) and
+   `conceptMappings` (conceptUri only from real thesaurus candidates). Nothing is written to
+   Fuseki — verify by re-fetching the graph. Audit events: `agent.process_tags_drafted`,
+   `agent.ontology_links_drafted`.
+4. Gotcha to check: `draft_ontology_links` calls `fuseki.search_thesaurus(framework, label, limit=3)`
+   — confirm the return dicts use key `uri` (not `concept`); adjust the candidate-building
+   loop if the fuseki client returns different keys. THIS IS UNTESTED.
+
+### Step 1 — Web UI for draft-process-tags (accept/dismiss = the verify step)
+1. `agentService.draftProcessTags(engagementId, streamType)` in `apps/web/lib/api/agent-service.ts`
+   (mirror the existing three methods; result = `{suggestions: [{taskId, taskName, functionUnit, systems, rationale}], source}`).
+2. `processService`: add `applySuggestion(engagementId, streamType, elementId, s)` → single
+   PATCH `{functionUnit, systems, aiSuggestion: null}`; and `dismissSuggestion(...)` → PATCH
+   `{aiSuggestion: null}`. (PATCH handling for `aiSuggestion` already landed in process_router.)
+3. `FunctionTagPanel` (components/bpmn/function-tag-panel.tsx): when
+   `elementMeta[id].aiSuggestion` exists and canEdit, render the proposal (function label,
+   system names, rationale) with **Accept** / **Dismiss** buttons wired to the two service
+   methods; refresh tasks + processState after.
+4. "Draft tags with AI" button in `process-workspace.tsx` header (next to Save) — mirror the
+   teleology "Draft with AI" button incl. Loader2/Sparkles, error surfacing, status message
+   showing count + source, and reload of process state after run.
+5. The `ProcessState.elementMeta` web type (`BpmnElementMeta`) needs an optional
+   `aiSuggestion` field in `apps/web/lib/types/index.ts`.
+
+### Step 2 — Web UI for draft-ontology-links
+1. `agentService.draftOntologyLinks(engagementId, streamType)`.
+2. New panel in `ontology-workspace.tsx` right column (above ThesaurusPanel): "AI link
+   suggestions" — button to run the agent; list each `bpmnLinks` item (classLabel ↔ taskName +
+   rationale) with **Apply** → `ontologyService.linkBpmnElement(...)`, and each
+   `conceptMappings` item with **Apply** → `ontologyService.mapConcept(...)`; **Dismiss**
+   removes from local state. Proposals are stateless (lost on reload) — that's by design.
+3. After each apply, refresh the graph so linked/mapped state updates and duplicate applies
+   are impossible.
+
+### Step 3 — Engagement delete endpoint
+1. `DELETE /api/v1/engagements/{id}` in engagements_router: delete children FK-first
+   (comments, teleology_rows, process_states, value_streams, connector_connections,
+   connector_field_mappings, solution_options, initiatives — check for any newer FK tables
+   from `b3d1c04f9e21`), then the engagement. Keep audit_events rows (engagement_id there is
+   a plain column, not an FK) and record `engagement.deleted` BEFORE deleting. Best-effort
+   `fuseki.clear_graph(...)` for all 5 stream graphs.
+2. Web: `engagementService.delete(id)` (fetch-first; mock fallback = remove from store —
+   add `removeEngagement` to `lib/mock/store.ts`); delete button w/ confirm dialog on the
+   engagement card in the engagements list (consultant only).
+3. Use it to purge the accumulated "E2E Telecom …" test engagements, and add cleanup to the
+   E2E spec teardown via `request.delete` so they stop accumulating.
+
+### Step 4 — Regression + wrap-up
+- `cd apps/web && npx tsc --noEmit` clean; `npm run test:e2e` green (kill any running
+  `next dev` first — one instance per dir).
+- Update this section to done, add a session-log line, update auto-memory, commit per feature
+  (journey conventions: E2E-verify before each commit; WIP d1f0ef9 gets superseded by the
+  verified commits — mention in the message).
+
+**Current state through 2026-07-11 (before the WIP):** Phases 0–4 complete. Phase 2 alignment stack shipped: alignment report + heatmap UI, gap-bridge agent (solution options), initiative candidates agent, Workshop mode, web SSO, `ots:supportsGoal` links, Alembic `b3d1c04f9e21`. Postgres holds engagements/streams/process/comments/teleology/solution_options/initiatives/audit/connectors. LLM via shared `llm.py` (Claude → OpenRouter fallback).
 
 **How to run the stack locally:**
 - `docker compose up -d postgres fuseki keycloak` then from `services/api`: `uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel --with "psycopg[binary]" --with anthropic --with python-dotenv --with httpx --with alembic --with reportlab --with "pyjwt[crypto]" python -m uvicorn main:app --port 8000` (system pip is PEP-668 locked; or `docker compose up api`). Add `OTS_OIDC_ISSUER=http://localhost:8081/realms/ots` to enable SSO (optional mode; `OTS_AUTH_MODE=required` to enforce).
@@ -156,6 +221,8 @@ Current state through **2026-07-11**: Phases 0–4 complete. **Phase 2 alignment
 - MODA crawl cache (`services/ingest/cache/`, 293MB) is gitignored — in a fresh clone, re-run `uv run python services/ingest/crawl_moda.py` before re-parsing eTOM/SID.
 
 ## Session log
+
+- 2026-07-12: WIP commit d1f0ef9 — API side of draft-process-tags (element_meta.aiSuggestion + PATCH clear support) and draft-ontology-links (stateless grounded proposals) agents written, syntax-checked, NOT verified. Web UI, verification, and engagement delete endpoint are next — detailed steps in RESUME HERE.
 
 - 2026-07-11: Phase 2 alignment stack — alignment API/UI, gap-bridge + initiative agents, Workshop mode, web SSO, goal links, consultant toolkit on dashboard. Design spec `2026-07-11-workshop-alignment-gap-bridge-design.md`. `tsc` clean; migration `b3d1c04f9e21` applied.
 
