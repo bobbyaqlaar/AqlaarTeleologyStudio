@@ -84,10 +84,19 @@ export interface BaselineTemplate {
   ontologyClasses: number;
 }
 
+export interface AiTagSuggestion {
+  functionUnit: FunctionalUnit;
+  systems: string[];
+  rationale: string;
+  source?: string;
+}
+
 export interface BpmnElementMeta {
   functionUnit?: FunctionalUnit;
   /** Enterprise systems realizing this step (system catalog ids). */
   systems?: string[];
+  /** AI-proposed tags — cleared on accept or dismiss. */
+  aiSuggestion?: AiTagSuggestion | null;
 }
 
 export interface SystemDef {

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Filter, Save } from "lucide-react";
+import { Filter, Loader2, Save, Sparkles } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import type { BpmnEditorHandle } from "@/components/bpmn/bpmn-editor";
@@ -25,6 +25,7 @@ import {
 import { FUNCTION_UNITS } from "@/lib/constants/function-units";
 import { VALUE_STREAM_META } from "@/lib/constants/value-streams";
 import { useRole } from "@/lib/context/role-context";
+import { agentService } from "@/lib/api/agent-service";
 import {
   aiGapService,
   processService,
@@ -84,6 +85,7 @@ export function ProcessWorkspace({
   const [suggestions, setSuggestions] = useState<AiGapSuggestion[]>([]);
   const [analyzing, setAnalyzing] = useState(false);
   const [saving, setSaving] = useState(false);
+  const [draftingTags, setDraftingTags] = useState(false);
   const [saveMessage, setSaveMessage] = useState<string | null>(null);
 
   const refreshTasks = useCallback(async (): Promise<void> => {
@@ -121,6 +123,62 @@ export function ProcessWorkspace({
   const selectedSystems = selectedId
     ? (processState?.elementMeta[selectedId]?.systems ?? [])
     : [];
+  const selectedAiSuggestion = selectedId
+    ? processState?.elementMeta[selectedId]?.aiSuggestion
+    : undefined;
+
+  const handleDraftTagsWithAi = async (): Promise<void> => {
+    if (!canEdit) {
+      return;
+    }
+    setDraftingTags(true);
+    setSaveMessage(null);
+    try {
+      const result = await agentService.draftProcessTags(engagementId, streamType);
+      const next = await processService.load(engagementId, streamType, industry);
+      setProcessState(next);
+      await refreshTasks();
+      setSaveMessage(
+        result.suggestions.length > 0
+          ? `AI proposed tags for ${result.suggestions.length} step(s) (source: ${result.source}) — review each suggestion.`
+          : `No untagged steps to draft (source: ${result.source}).`,
+      );
+    } catch (error) {
+      setSaveMessage(
+        error instanceof Error
+          ? `Tag drafting failed: ${error.message}`
+          : "Tag drafting failed.",
+      );
+    }
+    setDraftingTags(false);
+  };
+
+  const handleAcceptSuggestion = async (): Promise<void> => {
+    if (!selectedId || !canEdit || !selectedAiSuggestion) {
+      return;
+    }
+    const next = await processService.applySuggestion(
+      engagementId,
+      streamType,
+      selectedId,
+      selectedAiSuggestion,
+    );
+    setProcessState(next);
+    await refreshTasks();
+    await runGapAnalysis();
+  };
+
+  const handleDismissSuggestion = async (): Promise<void> => {
+    if (!selectedId || !canEdit) {
+      return;
+    }
+    const next = await processService.dismissSuggestion(
+      engagementId,
+      streamType,
+      selectedId,
+    );
+    setProcessState(next);
+  };
 
   const handleSetSystems = async (systems: string[]): Promise<void> => {
     if (!selectedId || !canEdit) {
@@ -218,8 +276,22 @@ export function ProcessWorkspace({
           <div className="flex gap-2">
             <Button
               size="sm"
+              variant="outline"
               className="gap-2"
-              disabled={saving}
+              disabled={draftingTags || saving}
+              onClick={() => void handleDraftTagsWithAi()}
+            >
+              {draftingTags ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <Sparkles className="size-4" />
+              )}
+              Draft tags with AI
+            </Button>
+            <Button
+              size="sm"
+              className="gap-2"
+              disabled={saving || draftingTags}
               onClick={() => void handleSave()}
             >
               <Save className="size-4" />
@@ -281,8 +353,11 @@ export function ProcessWorkspace({
             elementName={selectedName}
             elementType={selectedType}
             functionUnit={selectedFunctionUnit}
+            aiSuggestion={selectedAiSuggestion}
             canEdit={canEdit}
             onAssign={(unit) => void handleAssignFunction(unit)}
+            onAcceptSuggestion={() => void handleAcceptSuggestion()}
+            onDismissSuggestion={() => void handleDismissSuggestion()}
           />
 
           <SystemTagPanel

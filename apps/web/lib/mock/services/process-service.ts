@@ -12,6 +12,7 @@ import {
 } from "@/lib/mock/process-store";
 import type {
   AiGapSuggestion,
+  AiTagSuggestion,
   FunctionalUnit,
   ProcessComment,
   ProcessState,
@@ -92,6 +93,61 @@ export const processService = {
       return saveProcessState(state);
     } catch {
       return setElementSystems(engagementId, streamType, elementId, systems);
+    }
+  },
+
+  async applySuggestion(
+    engagementId: string,
+    streamType: ValueStreamType,
+    elementId: string,
+    suggestion: Pick<AiTagSuggestion, "functionUnit" | "systems">,
+  ): Promise<ProcessState> {
+    try {
+      const state = await apiFetch<ProcessState>(
+        `/api/v1/process/${engagementId}/${streamType}/elements/${elementId}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+            functionUnit: suggestion.functionUnit,
+            systems: suggestion.systems,
+            aiSuggestion: null,
+          }),
+        },
+      );
+      return saveProcessState(state);
+    } catch {
+      const state = await loadProcessState(engagementId, streamType);
+      state.elementMeta[elementId] = {
+        ...state.elementMeta[elementId],
+        functionUnit: suggestion.functionUnit,
+        systems:
+          suggestion.systems.length > 0 ? suggestion.systems : undefined,
+        aiSuggestion: undefined,
+      };
+      return saveProcessState(state);
+    }
+  },
+
+  async dismissSuggestion(
+    engagementId: string,
+    streamType: ValueStreamType,
+    elementId: string,
+  ): Promise<ProcessState> {
+    try {
+      const state = await apiFetch<ProcessState>(
+        `/api/v1/process/${engagementId}/${streamType}/elements/${elementId}`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({ aiSuggestion: null }),
+        },
+      );
+      return saveProcessState(state);
+    } catch {
+      const state = await loadProcessState(engagementId, streamType);
+      const entry = { ...state.elementMeta[elementId] };
+      delete entry.aiSuggestion;
+      state.elementMeta[elementId] = entry;
+      return saveProcessState(state);
     }
   },
 

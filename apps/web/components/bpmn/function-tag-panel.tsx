@@ -1,8 +1,11 @@
 "use client";
 
+import { Sparkles } from "lucide-react";
 import { FUNCTION_UNIT_MAP, FUNCTION_UNITS } from "@/lib/constants/function-units";
-import type { FunctionalUnit } from "@/lib/types";
+import { SYSTEM_MAP } from "@/lib/constants/systems";
+import type { AiTagSuggestion, FunctionalUnit } from "@/lib/types";
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
   Select,
@@ -18,8 +21,11 @@ interface FunctionTagPanelProps {
   elementName: string | null;
   elementType: string | null;
   functionUnit?: FunctionalUnit;
+  aiSuggestion?: AiTagSuggestion | null;
   canEdit: boolean;
   onAssign: (functionUnit: FunctionalUnit | undefined) => void;
+  onAcceptSuggestion?: () => void;
+  onDismissSuggestion?: () => void;
 }
 
 export function FunctionTagPanel({
@@ -27,8 +33,11 @@ export function FunctionTagPanel({
   elementName,
   elementType,
   functionUnit,
+  aiSuggestion,
   canEdit,
   onAssign,
+  onAcceptSuggestion,
+  onDismissSuggestion,
 }: FunctionTagPanelProps): React.ReactNode {
   if (!elementId) {
     return (
@@ -40,6 +49,9 @@ export function FunctionTagPanel({
 
   const isTask = elementType?.includes("Task");
   const unitMeta = functionUnit ? FUNCTION_UNIT_MAP[functionUnit] : undefined;
+  const suggestedUnit = aiSuggestion
+    ? FUNCTION_UNIT_MAP[aiSuggestion.functionUnit]
+    : undefined;
 
   return (
     <div className="space-y-4 rounded-lg border border-border bg-card p-4">
@@ -50,6 +62,46 @@ export function FunctionTagPanel({
         <p className="mt-1 font-medium">{elementName ?? elementId}</p>
         <p className="font-mono text-xs text-muted-foreground">{elementId}</p>
       </div>
+
+      {isTask && aiSuggestion && canEdit ? (
+        <div className="space-y-3 rounded-md border border-violet-500/30 bg-violet-500/5 p-3">
+          <div className="flex items-center gap-2 text-xs font-medium text-violet-600 dark:text-violet-400">
+            <Sparkles className="size-3.5" />
+            AI tag suggestion
+          </div>
+          <div className="space-y-1 text-sm">
+            <p>
+              <span className="text-muted-foreground">Function: </span>
+              {suggestedUnit?.label ?? aiSuggestion.functionUnit}
+            </p>
+            {aiSuggestion.systems.length > 0 ? (
+              <p>
+                <span className="text-muted-foreground">Systems: </span>
+                {aiSuggestion.systems
+                  .map((id) => SYSTEM_MAP[id]?.name ?? id)
+                  .join(", ")}
+              </p>
+            ) : null}
+            {aiSuggestion.rationale ? (
+              <p className="text-xs text-muted-foreground">
+                {aiSuggestion.rationale}
+              </p>
+            ) : null}
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" onClick={() => onAcceptSuggestion?.()}>
+              Accept
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => onDismissSuggestion?.()}
+            >
+              Dismiss
+            </Button>
+          </div>
+        </div>
+      ) : null}
 
       {isTask ? (
         <div className="space-y-2">
