@@ -90,7 +90,7 @@ export async function completeLogin(): Promise<string> {
     throw new Error("OIDC state mismatch");
   }
 
-  const response = await fetch(`${ISSUER}/protocol/openid-connect/token`, {
+  const response = await fetch("/api/auth/token", {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({

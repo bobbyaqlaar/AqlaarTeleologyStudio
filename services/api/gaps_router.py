@@ -83,7 +83,7 @@ class GapAnalysisResponse(BaseModel):
     model_config = ConfigDict(populate_by_name=True, ser_json_by_alias=True)
 
     suggestions: list[GapSuggestionModel]
-    source: str  # "heuristic" | "heuristic+llm" | "heuristic+llm(openrouter)"
+    source: str  # "heuristic" | "heuristic+llm" | "heuristic+llm(claude)"
 
 
 def _extract_tasks(bpmn_xml: str) -> list[dict[str, str]]:
@@ -225,7 +225,11 @@ async def analyze(engagement_id: str, stream_type: str) -> GapAnalysisResponse:
         llm = _parse_suggestions(payload)
         if llm:
             suggestions.extend(llm)
-            source = "heuristic+llm" if llm_source == "claude" else "heuristic+llm(openrouter)"
+            source = (
+                "heuristic+llm"
+                if llm_source == "openrouter"
+                else "heuristic+llm(claude)"
+            )
     except LlmUnavailable:
         pass  # degrade to heuristics-only per spec §13
 

@@ -115,8 +115,13 @@ test("consultant flow: create → load O2C → tag → thesaurus map → teleolo
 
   await page.getByRole("link", { name: "Workshop mode" }).click();
   await expect(page).toHaveURL(/\/workshop$/);
-  await expect(page.getByText(/Workshop ·/)).toBeVisible();
-  await expect(page.getByText(/\d+ \/ \d+/)).toBeVisible();
+  await expect(page.getByText("Stakeholder workshop")).toBeVisible();
+  await expect(page.getByText(/1 \/ \d+/)).toBeVisible();
+  await page.locator("footer").getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.getByText(/2 \/ \d+/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Order to Cash" })).toBeVisible();
+  await page.locator("footer").getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.getByText(/3 \/ \d+/)).toBeVisible();
   await page.getByRole("link", { name: "Exit" }).click();
   await expect(page).toHaveURL(
     new RegExp(`/engagements/${engagementId ?? "eng-"}[^/]*$`),

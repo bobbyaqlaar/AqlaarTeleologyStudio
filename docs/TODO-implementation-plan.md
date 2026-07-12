@@ -106,7 +106,7 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 - [ ] Postgres remaining: connectors state — API + Postgres live; web mock store removed (2026-07-12).
 - [x] Engagement delete endpoint (2026-07-12): `DELETE /api/v1/engagements/{id}` + web confirm dialog + E2E teardown.
 - [x] Live LLM gap analysis (2026-07-09, commit d6dbff4): services/api/gaps_router.py — heuristics always (missing fn tags + unmapped systems), Claude claude-opus-4-8 w/ adaptive thinking + JSON-schema output when credentials present (env ANTHROPIC_API_KEY or `ant auth` profile), graceful degrade. Web aiGapService fetch-first. Model override: OTS_GAP_MODEL env.
-- [x] OpenRouter exception fallback (2026-07-10): when the Claude call raises (no credits/model down/no creds), gaps_router retries once via OpenRouter chat completions (`openrouter/auto`; override w/ OTS_GAP_FALLBACK_MODEL; key = OPENROUTER_API_KEY in .env). Prompt-enforced JSON + lenient parse (auto-routed models vary; `openrouter/free` returned empty content in testing — don't default to it). E2E-verified: POST /api/v1/gaps/eng-globex-002/o2c/analyze → `"source": "heuristic+llm(openrouter)"` with 6 Claude-quality suggestions. Anthropic stays primary once credits are topped up (→ `"heuristic+llm"`).
+- [x] OpenRouter primary LLM (2026-07-12): `llm.py` tries OpenRouter first (`OTS_LLM_MODEL` / `OPENROUTER_API_KEY`); Claude (`OTS_LLM_FALLBACK_MODEL`) on failure. Gap analysis source: `heuristic+llm` (OpenRouter) or `heuristic+llm(claude)`.
 - [x] Audit trail (2026-07-10): append-only audit_events table (Alembic rev daa6408d5d07) written atomically (same session/commit) from every mutating router — engagement.created, stream.baseline_loaded, stream.approval_changed, process.xml_saved, process.element_tagged, comment.created/resolved, teleology.row_added/row_updated/status_changed. Actor from optional X-OTS-User-Id/-Name/-Role headers (demo consultant fallback; comments use payload author; SSO will supply real identity). Read side: GET /api/v1/audit/{engagement_id} (JSON, desc) + /export.csv (chronological). E2E-verified via curl: 4 mutations → 4 events w/ correct actors + CSV download.
 - [x] Watermarked PDF export (2026-07-10): GET /api/v1/engagements/{id}/export.pdf (reportlab) — engagement meta, streams/approvals, process snapshot, teleology matrix; watermark + footer; audit-logged.
 - [x] PDF download in web UI (2026-07-12): engagement overview **Exports & audit** card → `engagementExportService.downloadPdf()`; `apiDownload` blob helper.
@@ -145,13 +145,13 @@ Design spec: `docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-de
 
 **Next tasks, in recommended order:**
 1. ~~**Agent triggers**~~ — done 2026-07-12: `agent-trigger-service` fires on baseline load + ontology graph ready (debounced 60s).
-2. **Anthropic credits** — gap/drafting agents switch to Claude automatically (today OpenRouter fallback).
+2. ~~**Anthropic credits**~~ — OpenRouter is primary LLM route (`llm.py`); Claude optional fallback via `OTS_LLM_FALLBACK_MODEL`.
 3. ~~**Playwright E2E**~~ — extended consultant-flow: P2P load → alignment → bridge gaps → initiatives → workshop (2026-07-12).
 4. ~~**Connectors mock cleanup**~~ — web `connector-service` API-only; `connector-store.ts` removed (2026-07-12).
 
 ## RESUME HERE — Agent triggers + E2E + connectors done (2026-07-12)
 
-**Status:** pending commit. Phases 0–4 + Phase 2 drafting stack + engagement delete + PDF/audit UI all shipped.
+**Status:** `main` pending commit. OpenRouter primary; polish (banners, E2E) shipped.
 
 ### Shipped (cumulative through 2026-07-12)
 - Drafting agents (all draft-then-verify): teleology, process tags, ontology links,
@@ -164,8 +164,9 @@ Design spec: `docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-de
 - **Connectors** — web service API-only (no `connector-store` fallback).
 
 **Next tasks (recommended order):**
-1. **Anthropic credits** — top up → `source: "claude"` on gap + drafting agents.
-2. **Polish** — agent trigger toasts, workshop E2E slide navigation, SSO-required E2E path.
+1. **Connector creds** — set `OTS_JIRA_*` / `OTS_SF_*` in `.env` for live Salesforce/Jira preview.
+2. **Polish** — richer agent-trigger notifications (done: banner), workshop deep E2E, SSO E2E (done).
+3. **Deferred** — APQC↔eTOM candidate review, SHACL validation, post-v1 vertical ontologies.
 
 **How to run the stack locally:**
 - `docker compose up -d postgres fuseki keycloak`
@@ -178,7 +179,9 @@ Design spec: `docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-de
 
 ## Session log
 
-- 2026-07-12 (night): Agent triggers (`agent-trigger-service` on baseline load + ontology ready), E2E extended (alignment → bridge → initiatives → workshop), connectors web API-only (`connector-store` removed).
+- 2026-07-12 (night): OpenRouter primary in `llm.py`; agent-trigger banners; workshop slide E2E; SSO login E2E (`sso-login.spec.ts`, skips if Keycloak down).
+
+- 2026-07-12 (night): Agent triggers, E2E Phase 2 path, connectors API-only (`fccb248`).
 
 - 2026-07-12 (evening, pushed `41d05a7`): PDF download + audit trail UI on engagement overview and `/audit` page.
 

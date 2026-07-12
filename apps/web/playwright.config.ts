@@ -4,7 +4,7 @@ import { defineConfig, devices } from "@playwright/test";
  * E2E for the consultant flow against the real stack.
  *
  * Prerequisites: `docker compose up -d postgres fuseki` from the repo root
- * (the API webServer below needs both). The web app and API are started
+ * (the API webServer below needs both). SSO tests also need `keycloak` on :8081.
  * automatically (and reused when already running).
  */
 export default defineConfig({

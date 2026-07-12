@@ -1,9 +1,9 @@
-"""Shared LLM JSON generation: Claude primary, OpenRouter exception fallback.
+"""Shared LLM JSON generation: OpenRouter primary, Claude exception fallback.
 
-Same resilience pattern proven in gaps_router (which predates this module):
-claude-opus-4-8 with adaptive thinking + JSON-schema output when Anthropic
-credentials work; any failure retries once through OpenRouter's
-OpenAI-compatible endpoint with prompt-enforced JSON and lenient parsing.
+OpenRouter (OTS_LLM_MODEL / legacy OTS_GAP_FALLBACK_MODEL) is tried first
+with prompt-enforced JSON and lenient parsing. Any failure retries once
+through Anthropic claude-opus-4-8 (OTS_LLM_FALLBACK_MODEL / OTS_GAP_MODEL)
+with adaptive thinking + JSON-schema output when credentials work.
 Raises LlmUnavailable when both paths fail so callers can surface it.
 """
 
@@ -15,13 +15,21 @@ from functools import lru_cache
 
 import httpx
 
-GAP_MODEL = os.getenv("OTS_GAP_MODEL", "claude-opus-4-8")
-OPENROUTER_MODEL = os.getenv("OTS_GAP_FALLBACK_MODEL", "openrouter/auto")
+OPENROUTER_MODEL = (
+    os.getenv("OTS_LLM_MODEL")
+    or os.getenv("OTS_GAP_FALLBACK_MODEL")
+    or "openrouter/auto"
+)
+CLAUDE_MODEL = (
+    os.getenv("OTS_LLM_FALLBACK_MODEL")
+    or os.getenv("OTS_GAP_MODEL")
+    or "claude-opus-4-8"
+)
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 
 
 class LlmUnavailable(Exception):
-    """Neither Claude nor the OpenRouter fallback produced a result."""
+    """Neither OpenRouter nor the Claude fallback produced a result."""
 
 
 @lru_cache(maxsize=1)
@@ -39,7 +47,7 @@ def _claude_json(system: str, user: str, schema: dict, max_tokens: int) -> dict:
     if client is None:
         raise RuntimeError("Anthropic credentials unavailable")
     response = client.messages.create(
-        model=GAP_MODEL,
+        model=CLAUDE_MODEL,
         max_tokens=max_tokens,
         thinking={"type": "adaptive"},
         system=system,
@@ -91,11 +99,11 @@ async def _openrouter_json(
 async def generate_json(
     system: str, user: str, schema: dict, max_tokens: int = 4096
 ) -> tuple[dict, str]:
-    """Returns (payload, source) where source is 'claude' or 'openrouter'."""
+    """Returns (payload, source) where source is 'openrouter' or 'claude'."""
     try:
-        return _claude_json(system, user, schema, max_tokens), "claude"
+        return await _openrouter_json(system, user, schema, max_tokens), "openrouter"
     except Exception:
         try:
-            return await _openrouter_json(system, user, schema, max_tokens), "openrouter"
+            return _claude_json(system, user, schema, max_tokens), "claude"
         except Exception as exc:
             raise LlmUnavailable(str(exc)) from exc

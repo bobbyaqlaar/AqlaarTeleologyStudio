@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/card";
 import { streamService } from "@/lib/mock/services/stream-service";
 import { agentTriggerService } from "@/lib/api/agent-trigger-service";
+import type { ProcessTagsTriggerResult } from "@/lib/api/agent-trigger-service";
+import { AgentTriggerBanner } from "@/components/ai/agent-trigger-banner";
 import { useRole } from "@/lib/context/role-context";
 import {
   BASELINE_TEMPLATES,
@@ -31,22 +33,22 @@ export function StreamGrid({ engagement }: StreamGridProps): React.ReactNode {
   const { canEdit } = useRole();
   const [streams, setStreams] = useState(engagement.valueStreams);
   const [loadingType, setLoadingType] = useState<ValueStreamType | null>(null);
-  const [triggerMessage, setTriggerMessage] = useState<string | null>(null);
+  const [trigger, setTrigger] = useState<ProcessTagsTriggerResult | null>(null);
 
   const handleLoadBaseline = async (streamType: ValueStreamType): Promise<void> => {
     setLoadingType(streamType);
-    setTriggerMessage(null);
+    setTrigger(null);
     try {
       const updated = await streamService.loadBaseline(engagement.id, streamType);
       if (updated) {
         setStreams(updated.valueStreams);
         if (canEdit) {
-          const trigger = await agentTriggerService.onBaselineLoaded(
+          const result = await agentTriggerService.onBaselineLoaded(
             engagement.id,
             streamType,
           );
-          if (trigger) {
-            setTriggerMessage(trigger.message);
+          if (result) {
+            setTrigger(result);
           }
         }
       }
@@ -57,8 +59,13 @@ export function StreamGrid({ engagement }: StreamGridProps): React.ReactNode {
 
   return (
     <div className="space-y-4">
-      {triggerMessage ? (
-        <p className="text-sm text-muted-foreground">{triggerMessage}</p>
+      {trigger ? (
+        <AgentTriggerBanner
+          message={trigger.message}
+          actionHref={`/engagements/${engagement.id}/streams/${trigger.streamType}/process`}
+          actionLabel="Open process map"
+          onDismiss={() => setTrigger(null)}
+        />
       ) : null}
     <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
       {streams.map((stream) => {

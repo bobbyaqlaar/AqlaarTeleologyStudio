@@ -13,6 +13,7 @@ import {
   type LinkProposal,
 } from "@/lib/api/agent-service";
 import { agentTriggerService } from "@/lib/api/agent-trigger-service";
+import { AgentTriggerBanner } from "@/components/ai/agent-trigger-banner";
 import { processService } from "@/lib/mock/services/process-service";
 import { teleologyService } from "@/lib/mock/services/teleology-service";
 import { StreamTabs } from "@/components/streams/stream-tabs";
@@ -70,6 +71,7 @@ export function OntologyWorkspace({
     ConceptProposal[]
   >([]);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [triggerBanner, setTriggerBanner] = useState<string | null>(null);
   const autoLinksTriggered = useRef(false);
 
   const loadData = useCallback(async (): Promise<void> => {
@@ -115,7 +117,7 @@ export function OntologyWorkspace({
         if (trigger) {
           setBpmnLinkSuggestions(trigger.bpmnLinks);
           setConceptMappingSuggestions(trigger.conceptMappings);
-          setStatusMessage(trigger.message);
+          setTriggerBanner(trigger.message);
         }
       }
     } catch (err) {
@@ -510,6 +512,12 @@ export function OntologyWorkspace({
         </div>
       </div>
 
+      {triggerBanner ? (
+        <AgentTriggerBanner
+          message={triggerBanner}
+          onDismiss={() => setTriggerBanner(null)}
+        />
+      ) : null}
       {statusMessage ? (
         <p className="text-sm text-muted-foreground">{statusMessage}</p>
       ) : null}

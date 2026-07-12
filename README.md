@@ -126,8 +126,8 @@ Next.js (apps/web)  →  FastAPI (services/api)  →  Fuseki (OWL/RDF)
         │                     │
         │                     └──  Postgres (engagements, streams, process
         │                          state, comments, teleology, solution_options,
-        │                          initiatives, audit) + Claude/OpenRouter (gaps,
-        │                          drafting agents)
+        │                          initiatives, audit) + OpenRouter primary /
+        │                          Claude fallback LLM (gaps, drafting agents)
         └── mock fallbacks for engagement/process/teleology when API offline;
             agents, alignment, connectors are API-only
 
