@@ -112,7 +112,7 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 - [x] Playwright E2E (2026-07-10): apps/web/e2e/consultant-flow.spec.ts + playwright.config.ts — full consultant flow against the real stack (create telecom engagement → load O2C → tag task w/ function+system → thesaurus map → teleology goal + submit → switch role to stakeholder → approve in review queue). Run: `cd apps/web && npm run test:e2e` (needs `docker compose up -d postgres fuseki`; web on :3100 + API on :8000 auto-started/reused via webServer). Gotchas: only one `next dev` per dir (stop other dev servers first); after picking a Base UI dropdown item, wait for `[data-base-ui-inert]` count 0 before clicking anything else (portal overlay intercepts pointer events); role is client-side state — switch roles after navigating, not before. Passed twice consecutively.
 - [x] SSO/OIDC — API side (2026-07-10): Keycloak 26 dev IdP in docker-compose (port 8081, realm "ots" auto-imported from infra/keycloak/ots-realm.json; users alex/alex = consultant, jordan/jordan = stakeholder; client ots-web public+PKCE+password-grant). services/api/auth.py verifies RS256 bearer tokens against the issuer JWKS (PyJWT); audit.get_actor prefers token identity (sub/name/realm-role) over X-OTS-* headers. Modes via OTS_AUTH_MODE: off (default, no issuer), optional (default w/ OTS_OIDC_ISSUER set — token wins, no token still works), required (mutations 401 without valid token). E2E-verified: jordan's Keycloak token → audit actor "Jordan Lee/stakeholder"; garbage token → 401; required mode → 401 w/o token, 200 w/ alex's token.
 - [x] SSO — web login flow (2026-07-11): OIDC code+PKCE in apps/web (`lib/auth/oidc.ts`, `/auth/callback`); `authHeaders()` sends Bearer token via `lib/api/backend.ts`; `RoleProvider` adopts session on mount; role switcher shows signed-in user + sign out; dev switcher + X-OTS-User-* fallback when unsigned. Keycloak realm: `http://localhost:8081/realms/ots`, client `ots-web`.
-- [ ] Optional polish: web UI download button for the PDF export; connectors persistence (demo-only, lowest value).
+- [ ] Optional polish: surface audit trail in the UI (done 2026-07-12); connectors persistence (demo-only, lowest value).
 
 ## Post-review fixes + Phase 2 kickoff (2026-07-11)
 
@@ -166,7 +166,7 @@ delete are runtime-verified and E2E-green.
   webServer fixed (repo-root `--app-dir`, readiness on `/api/v1/engagements`).
 
 **Next tasks (unchanged priority):**
-1. Optional polish — PDF download button in web UI; surface audit trail in UI.
+1. ~~Optional polish — PDF download button in web UI; surface audit trail in UI.~~ ✅ 2026-07-12
 2. Anthropic credits — gap/drafting agents auto-switch to Claude once topped up.
 3. Extend E2E — alignment → bridge gaps → initiatives → workshop (optional).
 4. Phase 2 continuation — agent schedule/trigger rather than button-only (spec §16).
@@ -179,6 +179,8 @@ delete are runtime-verified and E2E-green.
 - MODA crawl cache (`services/ingest/cache/`, 293MB) is gitignored — in a fresh clone, re-run `uv run python services/ingest/crawl_moda.py` before re-parsing eTOM/SID.
 
 ## Session log
+
+- 2026-07-12 (evening): PDF download button + audit trail UI — engagement dashboard Exports card, `/engagements/[id]/audit` page with event table + CSV export; sidebar nav entry; `apiDownload` helper.
 
 - 2026-07-12: Steps 0–4 complete — superseded WIP d1f0ef9. Verified draft-process-tags + draft-ontology-links agents (OpenRouter); shipped accept/dismiss UI (process tags) and AI link suggestions panel (ontology); DELETE engagement endpoint + card UI + E2E teardown; tsc + e2e green.
 

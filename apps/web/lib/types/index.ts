@@ -427,3 +427,16 @@ export interface ReviewQueue {
   items: ReviewQueueItem[];
   summary: ReviewSummary;
 }
+
+export interface AuditEvent {
+  id: number;
+  actorId: string;
+  actorName: string;
+  actorRole: UserRole | string;
+  action: string;
+  artefactType: string;
+  artefactId: string;
+  engagementId: string | null;
+  detail: Record<string, unknown>;
+  createdAt: string;
+}

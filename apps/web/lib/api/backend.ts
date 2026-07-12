@@ -47,3 +47,42 @@ export async function apiFetch<T>(
 
   return (await response.json()) as T;
 }
+
+/** Binary download (PDF, CSV, etc.) — does not force JSON Content-Type. */
+export async function apiDownload(
+  path: string,
+  init?: RequestInit,
+): Promise<Blob> {
+  const response = await fetch(`${API_BASE}${path}`, {
+    cache: "no-store",
+    ...init,
+    headers: {
+      ...authHeaders(),
+      ...init?.headers,
+    },
+  });
+
+  if (!response.ok) {
+    let detail = response.statusText;
+    try {
+      const body = (await response.json()) as { detail?: string };
+      detail = body.detail ?? detail;
+    } catch {
+      // ignore parse errors
+    }
+    throw new BackendApiError(detail);
+  }
+
+  return response.blob();
+}
+
+function triggerBrowserDownload(blob: Blob, filename: string): void {
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = filename;
+  anchor.click();
+  URL.revokeObjectURL(url);
+}
+
+export { triggerBrowserDownload };

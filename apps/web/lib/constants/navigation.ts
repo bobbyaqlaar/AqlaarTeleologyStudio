@@ -4,6 +4,7 @@ import {
   ClipboardCheck,
   Gauge,
   GitBranch,
+  History,
   LayoutDashboard,
   Network,
   Presentation,
@@ -97,6 +98,13 @@ export const ENGAGEMENT_NAV: NavItem[] = [
     icon: ClipboardCheck,
     step: "review",
     iteration: 5,
+  },
+  {
+    id: "audit",
+    label: "Audit trail",
+    href: (id) => `/engagements/${id}/audit`,
+    icon: History,
+    iteration: 6,
   },
 ];
 

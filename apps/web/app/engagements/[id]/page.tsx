@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Gauge, GitBranch, Presentation, Rocket } from "lucide-react";
 import { AppShell } from "@/components/shell/app-shell";
+import { EngagementExportsCard } from "@/components/engagements/engagement-exports-card";
 import { FunctionUnitLegend } from "@/components/functions/function-unit-legend";
 import { Badge } from "@/components/ui/badge";
 import { buttonVariants } from "@/components/ui/button";
@@ -178,6 +179,11 @@ export default async function EngagementDashboardPage({
             </CardContent>
           </Card>
         ) : null}
+
+        <EngagementExportsCard
+          engagementId={engagement.id}
+          engagementName={engagement.name}
+        />
 
         <FunctionUnitLegend compact />
       </div>
