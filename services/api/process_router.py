@@ -38,6 +38,8 @@ class ElementMetaRequest(BaseModel):
 
     function_unit: str | None = Field(default=None, alias="functionUnit")
     systems: list[str] | None = None
+    # AI tag proposal (draft-then-verify): send null to clear on accept/dismiss
+    ai_suggestion: dict | None = Field(default=None, alias="aiSuggestion")
 
 
 def _to_model(row: ProcessStateRow) -> ProcessStateModel:
@@ -146,6 +148,11 @@ def set_element_meta(
                 entry["systems"] = payload.systems
             else:
                 entry.pop("systems", None)
+        if "ai_suggestion" in fields:
+            if payload.ai_suggestion:
+                entry["aiSuggestion"] = payload.ai_suggestion
+            else:
+                entry.pop("aiSuggestion", None)
         meta[element_id] = entry
         row.element_meta = meta
         row.updated_at = now_iso()

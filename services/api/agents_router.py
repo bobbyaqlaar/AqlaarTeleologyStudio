@@ -767,3 +767,418 @@ async def draft_initiatives(
     return InitiativesResultModel(
         engagement_id=engagement_id, initiatives=models, source=source
     )
+
+
+# ---------------------------------------------------------------------------
+# Agent: draft process tags (function unit + systems per untagged step)
+
+FUNCTION_UNIT_IDS = [
+    "sales", "marketing", "customer_care", "finance", "procurement_scm",
+    "production", "operations", "hr", "products", "it", "networks",
+]
+
+# Mirror of apps/web/lib/constants/systems.ts SYSTEM_CATALOG ids
+SYSTEM_IDS = [
+    "sap-erp", "oracle-erp", "netsuite", "salesforce", "dynamics", "hubspot",
+    "workday", "successfactors", "servicenow", "jira", "coupa", "ariba",
+    "zuora", "stripe", "amdocs", "netcracker", "custom", "spreadsheet",
+]
+
+TAGS_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "suggestions": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "taskId": {"type": "string"},
+                    "functionUnit": {"type": "string", "enum": FUNCTION_UNIT_IDS},
+                    "systems": {
+                        "type": "array",
+                        "items": {"type": "string", "enum": SYSTEM_IDS},
+                    },
+                    "rationale": {"type": "string"},
+                },
+                "required": ["taskId", "functionUnit", "systems", "rationale"],
+                "additionalProperties": False,
+            },
+        }
+    },
+    "required": ["suggestions"],
+    "additionalProperties": False,
+}
+
+TAGS_SYSTEM_PROMPT = """You are a transformation consultant's drafting agent. \
+For each UNTAGGED step of a value-stream process map, propose which \
+enterprise function unit owns it and which enterprise systems (0-2, from \
+the given catalog) most likely run it today for this industry.
+
+Rules:
+- Only propose for the task ids listed as untagged; use those ids verbatim.
+- functionUnit must be one of the given ids; systems only from the catalog \
+(prefer industry-typical choices, e.g. amdocs/netcracker for telecom BSS/OSS; \
+use "spreadsheet" when a step is usually manual).
+- rationale: one short sentence a consultant can verify in a workshop.
+- These are DRAFTS for human verification — the consultant accepts or \
+dismisses each one."""
+
+
+class TagSuggestionModel(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, ser_json_by_alias=True)
+
+    task_id: str = Field(alias="taskId")
+    task_name: str = Field(alias="taskName")
+    function_unit: str = Field(alias="functionUnit")
+    systems: list[str]
+    rationale: str
+
+
+class TagsResultModel(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, ser_json_by_alias=True)
+
+    engagement_id: str = Field(alias="engagementId")
+    stream_type: str = Field(alias="streamType")
+    suggestions: list[TagSuggestionModel]
+    source: str
+
+
+@router.post(
+    "/{engagement_id}/{stream_type}/draft-process-tags",
+    response_model=TagsResultModel,
+)
+async def draft_process_tags(
+    engagement_id: str, stream_type: str, actor: Actor = ActorDep
+) -> TagsResultModel:
+    """Propose function/system tags for untagged steps. Proposals are stored
+    as element_meta.aiSuggestion — the real tags are only written when the
+    consultant accepts them in the process workspace."""
+    if stream_type not in VALID_STREAMS:
+        raise HTTPException(status_code=400, detail="Invalid stream type")
+
+    with get_session() as session:
+        engagement = session.get(EngagementRow, engagement_id)
+        if not engagement:
+            raise HTTPException(status_code=404, detail="Engagement not found")
+        industry = engagement.industry
+        state = session.get(ProcessStateRow, (engagement_id, stream_type))
+        if not state:
+            raise HTTPException(
+                status_code=409,
+                detail="Load the stream baseline and open the process map first.",
+            )
+        tasks = _extract_tasks(state.bpmn_xml)
+        element_meta = dict(state.element_meta or {})
+
+    untagged = [
+        t for t in tasks if not element_meta.get(t["id"], {}).get("functionUnit")
+    ]
+    if not untagged:
+        return TagsResultModel(
+            engagement_id=engagement_id,
+            stream_type=stream_type,
+            suggestions=[],
+            source="none",
+        )
+
+    tagged_lines = [
+        f"- {t['name']} → {element_meta[t['id']]['functionUnit']}"
+        for t in tasks
+        if element_meta.get(t["id"], {}).get("functionUnit")
+    ]
+    user_prompt = (
+        f"Industry: {industry} · Value stream: {stream_type.upper()}\n\n"
+        "Untagged steps (propose for each):\n"
+        + "\n".join(f"- id={t['id']} · {t['name']}" for t in untagged)
+        + (
+            "\n\nAlready-tagged steps (for consistency):\n" + "\n".join(tagged_lines)
+            if tagged_lines
+            else ""
+        )
+    )
+
+    try:
+        payload, source = await generate_json(
+            TAGS_SYSTEM_PROMPT, user_prompt, TAGS_SCHEMA, max_tokens=8192
+        )
+    except LlmUnavailable as exc:
+        raise HTTPException(
+            status_code=502, detail=f"Tag-drafting agent unavailable: {exc}"
+        ) from exc
+
+    names_by_id = {t["id"]: t["name"] for t in untagged}
+    results: list[TagSuggestionModel] = []
+    with get_session() as session:
+        state = session.get(ProcessStateRow, (engagement_id, stream_type))
+        meta = dict(state.element_meta or {})
+        for item in payload.get("suggestions", []):
+            task_id = item.get("taskId")
+            if task_id not in names_by_id:
+                continue  # hallucinated or already-tagged id — drop
+            suggestion = {
+                "functionUnit": item["functionUnit"],
+                "systems": [s for s in item.get("systems", []) if s in SYSTEM_IDS][:2],
+                "rationale": item.get("rationale", ""),
+                "source": source,
+            }
+            entry = dict(meta.get(task_id, {}))
+            entry["aiSuggestion"] = suggestion
+            meta[task_id] = entry
+            results.append(
+                TagSuggestionModel(
+                    task_id=task_id,
+                    task_name=names_by_id[task_id],
+                    function_unit=suggestion["functionUnit"],
+                    systems=suggestion["systems"],
+                    rationale=suggestion["rationale"],
+                )
+            )
+        state.element_meta = meta
+        state.updated_at = now_iso()
+        session.add(state)
+        record_audit(
+            session,
+            actor,
+            action="agent.process_tags_drafted",
+            artefact_type="process_state",
+            artefact_id=f"{engagement_id}/{stream_type}",
+            engagement_id=engagement_id,
+            detail={
+                "streamType": stream_type,
+                "source": source,
+                "suggested": len(results),
+                "untagged": len(untagged),
+            },
+        )
+        session.commit()
+
+    return TagsResultModel(
+        engagement_id=engagement_id,
+        stream_type=stream_type,
+        suggestions=results,
+        source=source,
+    )
+
+
+# ---------------------------------------------------------------------------
+# Agent: draft ontology links (class↔BPMN links + thesaurus concept mappings)
+
+LINKS_SCHEMA = {
+    "type": "object",
+    "properties": {
+        "bpmnLinks": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "classUri": {"type": "string"},
+                    "taskId": {"type": "string"},
+                    "rationale": {"type": "string"},
+                },
+                "required": ["classUri", "taskId", "rationale"],
+                "additionalProperties": False,
+            },
+        },
+        "conceptMappings": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "classUri": {"type": "string"},
+                    "conceptUri": {"type": "string"},
+                    "rationale": {"type": "string"},
+                },
+                "required": ["classUri", "conceptUri", "rationale"],
+                "additionalProperties": False,
+            },
+        },
+    },
+    "required": ["bpmnLinks", "conceptMappings"],
+    "additionalProperties": False,
+}
+
+LINKS_SYSTEM_PROMPT = """You are a transformation consultant's ontology \
+alignment agent. Given the OWL classes of a value stream, the BPMN process \
+steps, and candidate standard-framework thesaurus concepts per class, \
+propose:
+
+1. bpmnLinks — pairs where a class clearly corresponds to an unlinked \
+process step (same activity, different wording counts).
+2. conceptMappings — for classes with no mapped concept, the single best \
+candidate concept, chosen ONLY from that class's listed candidates. Skip \
+the class if no candidate is a genuine semantic match.
+
+Rules: use the given classUri/taskId/conceptUri values verbatim; never \
+invent identifiers; one short verifiable rationale each. These are DRAFTS — \
+a consultant applies or dismisses each one."""
+
+
+class LinkProposalModel(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, ser_json_by_alias=True)
+
+    class_uri: str = Field(alias="classUri")
+    class_label: str = Field(alias="classLabel")
+    task_id: str = Field(alias="taskId")
+    task_name: str = Field(alias="taskName")
+    rationale: str
+
+
+class ConceptProposalModel(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, ser_json_by_alias=True)
+
+    class_uri: str = Field(alias="classUri")
+    class_label: str = Field(alias="classLabel")
+    concept_uri: str = Field(alias="conceptUri")
+    concept_label: str = Field(alias="conceptLabel")
+    rationale: str
+
+
+class LinksResultModel(BaseModel):
+    model_config = ConfigDict(populate_by_name=True, ser_json_by_alias=True)
+
+    engagement_id: str = Field(alias="engagementId")
+    stream_type: str = Field(alias="streamType")
+    bpmn_links: list[LinkProposalModel] = Field(alias="bpmnLinks")
+    concept_mappings: list[ConceptProposalModel] = Field(alias="conceptMappings")
+    source: str
+
+
+@router.post(
+    "/{engagement_id}/{stream_type}/draft-ontology-links",
+    response_model=LinksResultModel,
+)
+async def draft_ontology_links(
+    engagement_id: str, stream_type: str, actor: Actor = ActorDep
+) -> LinksResultModel:
+    """Propose class↔step links and thesaurus mappings. Nothing is written
+    to Fuseki — the consultant applies each proposal through the existing
+    verified link/map endpoints, or dismisses it."""
+    if stream_type not in VALID_STREAMS:
+        raise HTTPException(status_code=400, detail="Invalid stream type")
+
+    with get_session() as session:
+        engagement = session.get(EngagementRow, engagement_id)
+        if not engagement:
+            raise HTTPException(status_code=404, detail="Engagement not found")
+        industry = engagement.industry
+        state = session.get(ProcessStateRow, (engagement_id, stream_type))
+        tasks = _extract_tasks(state.bpmn_xml) if state else []
+
+    try:
+        classes = await fuseki.fetch_graph(
+            fuseki.graph_uri(engagement_id, stream_type)
+        )
+    except Exception as exc:
+        raise HTTPException(
+            status_code=502, detail=f"Ontology graph unavailable: {exc}"
+        ) from exc
+    if not classes:
+        raise HTTPException(
+            status_code=409, detail="Initialize the ontology graph first."
+        )
+
+    linked_elements = {
+        el for c in classes for el in c.get("linkedBpmnElements", [])
+    }
+    unlinked_tasks = [t for t in tasks if t["id"] not in linked_elements]
+    unmapped_classes = [c for c in classes if not c.get("mappedConcepts")]
+
+    # Ground concept candidates in real thesaurus search results
+    framework = "etom" if industry == "telecom" else "apqc"
+    candidates: dict[str, list[dict]] = {}
+    for owl_class in unmapped_classes[:12]:
+        try:
+            hits = await fuseki.search_thesaurus(
+                framework, owl_class["label"], limit=3
+            )
+        except Exception:
+            hits = []
+        if hits:
+            candidates[owl_class["uri"]] = [
+                {"uri": h["uri"], "label": h["label"]} for h in hits
+            ]
+
+    lines = [f"Industry: {industry} · Value stream: {stream_type.upper()}", ""]
+    lines.append("OWL classes (uri · label · linked steps · mapped concepts):")
+    for c in classes:
+        lines.append(
+            f"- {c['uri']} · {c['label']} · linked={c.get('linkedBpmnElements') or 'none'}"
+            f" · mapped={'yes' if c.get('mappedConcepts') else 'no'}"
+        )
+    lines.append("")
+    lines.append("Unlinked BPMN steps (taskId · name):")
+    for t in unlinked_tasks:
+        lines.append(f"- {t['id']} · {t['name']}")
+    lines.append("")
+    if candidates:
+        lines.append(f"Thesaurus candidates ({framework}) per unmapped class:")
+        for uri, hits in candidates.items():
+            lines.append(f"- class {uri}:")
+            for h in hits:
+                lines.append(f"    · {h['uri']} · {h['label']}")
+
+    try:
+        payload, source = await generate_json(
+            LINKS_SYSTEM_PROMPT, "\n".join(lines), LINKS_SCHEMA, max_tokens=8192
+        )
+    except LlmUnavailable as exc:
+        raise HTTPException(
+            status_code=502, detail=f"Link-drafting agent unavailable: {exc}"
+        ) from exc
+
+    class_labels = {c["uri"]: c["label"] for c in classes}
+    task_names = {t["id"]: t["name"] for t in unlinked_tasks}
+    candidate_labels = {
+        (uri, h["uri"]): h["label"]
+        for uri, hits in candidates.items()
+        for h in hits
+    }
+
+    bpmn_links = [
+        LinkProposalModel(
+            class_uri=item["classUri"],
+            class_label=class_labels[item["classUri"]],
+            task_id=item["taskId"],
+            task_name=task_names[item["taskId"]],
+            rationale=item.get("rationale", ""),
+        )
+        for item in payload.get("bpmnLinks", [])
+        if item.get("classUri") in class_labels
+        and item.get("taskId") in task_names
+    ]
+    concept_mappings = [
+        ConceptProposalModel(
+            class_uri=item["classUri"],
+            class_label=class_labels[item["classUri"]],
+            concept_uri=item["conceptUri"],
+            concept_label=candidate_labels[(item["classUri"], item["conceptUri"])],
+            rationale=item.get("rationale", ""),
+        )
+        for item in payload.get("conceptMappings", [])
+        if (item.get("classUri"), item.get("conceptUri")) in candidate_labels
+    ]
+
+    with get_session() as session:
+        record_audit(
+            session,
+            actor,
+            action="agent.ontology_links_drafted",
+            artefact_type="ontology_graph",
+            artefact_id=f"{engagement_id}/{stream_type}",
+            engagement_id=engagement_id,
+            detail={
+                "streamType": stream_type,
+                "source": source,
+                "bpmnLinks": len(bpmn_links),
+                "conceptMappings": len(concept_mappings),
+            },
+        )
+        session.commit()
+
+    return LinksResultModel(
+        engagement_id=engagement_id,
+        stream_type=stream_type,
+        bpmn_links=bpmn_links,
+        concept_mappings=concept_mappings,
+        source=source,
+    )
