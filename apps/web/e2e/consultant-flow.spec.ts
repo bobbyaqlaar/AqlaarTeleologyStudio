@@ -17,8 +17,10 @@ async function pickOption(page: Page, option: string | RegExp): Promise<void> {
 
 test("consultant flow: create → load O2C → tag → thesaurus map → teleology → review approve", async ({
   page,
+  request,
 }) => {
   const name = `E2E Telecom ${Date.now()}`;
+  let engagementId: string | null = null;
 
   // 1. Create a telecom engagement
   await page.goto("/engagements");
@@ -29,6 +31,8 @@ test("consultant flow: create → load O2C → tag → thesaurus map → teleolo
   await pickOption(page, "Telecom (TM Forum eTOM)");
   await page.getByRole("button", { name: "Create and open streams" }).click();
   await expect(page).toHaveURL(/\/engagements\/eng-[a-f0-9]+\/streams$/);
+  const match = page.url().match(/\/engagements\/(eng-[a-f0-9]+)\//);
+  engagementId = match?.[1] ?? null;
 
   // 2. Load the O2C baseline
   const o2cCard = page
@@ -65,7 +69,7 @@ test("consultant flow: create → load O2C → tag → thesaurus map → teleolo
   // 4. Map an ontology class to a thesaurus concept
   await page.getByRole("link", { name: "Ontology", exact: true }).click();
   await expect(page).toHaveURL(/\/ontology$/);
-  await expect(page.getByText("Thesaurus")).toBeVisible();
+  await expect(page.getByText("Thesaurus", { exact: true })).toBeVisible();
   await page.getByPlaceholder("Search concepts…").fill("order");
   const mapButton = page.getByRole("button", { name: "Map" }).first();
   await expect(mapButton).toBeVisible();
@@ -111,4 +115,10 @@ test("consultant flow: create → load O2C → tag → thesaurus map → teleolo
   await queueItem.getByRole("button", { name: "Approve" }).click();
   await expect(page.getByText(/O2C stream teleology approved\./)).toBeVisible();
   await expect(queueItem.getByText("approved", { exact: true })).toBeVisible();
+
+  if (engagementId) {
+    await request.delete(
+      `http://localhost:8000/api/v1/engagements/${engagementId}`,
+    );
+  }
 });

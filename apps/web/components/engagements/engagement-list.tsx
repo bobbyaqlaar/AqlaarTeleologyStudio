@@ -53,7 +53,15 @@ export function EngagementList(): React.ReactNode {
       ) : (
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {engagements.map((engagement) => (
-            <EngagementCard key={engagement.id} engagement={engagement} />
+            <EngagementCard
+              key={engagement.id}
+              engagement={engagement}
+              onDeleted={(id) =>
+                setEngagements((current) =>
+                  current.filter((item) => item.id !== id),
+                )
+              }
+            />
           ))}
         </div>
       )}

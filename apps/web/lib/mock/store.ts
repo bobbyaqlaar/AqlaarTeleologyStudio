@@ -161,6 +161,15 @@ export function updateStreamApprovalStatus(
   return structuredClone(engagement);
 }
 
+export function removeEngagement(engagementId: string): boolean {
+  const index = engagements.findIndex((item) => item.id === engagementId);
+  if (index === -1) {
+    return false;
+  }
+  engagements.splice(index, 1);
+  return true;
+}
+
 export function resetEngagementStore(): void {
   engagements = structuredClone(seedEngagements);
 }

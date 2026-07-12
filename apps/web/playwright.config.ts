@@ -28,13 +28,22 @@ export default defineConfig({
     },
     {
       command:
-        'uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel ' +
+        'cd ../.. && uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel ' +
         '--with "psycopg[binary]" --with anthropic --with python-dotenv ' +
         '--with httpx --with alembic --with reportlab --with "pyjwt[crypto]" ' +
-        "python -m uvicorn main:app --port 8000",
-      cwd: "../../services/api",
-      url: "http://localhost:8000/health",
-      reuseExistingServer: true,
+        'python -m uvicorn main:app --app-dir services/api --port 8000',
+      cwd: ".",
+      env: {
+        OTS_DATABASE_URL: "postgresql+psycopg://ots:ots@localhost:5434/ots",
+        FUSEKI_URL: "http://localhost:3030",
+        FUSEKI_DATASET: "ots",
+        FUSEKI_USER: "admin",
+        FUSEKI_PASSWORD: "admin",
+        OTS_BASELINE_DIR: "data/baselines",
+        OTS_THESAURUS_DIR: "data/thesaurus",
+      },
+      url: "http://localhost:8000/api/v1/engagements",
+      reuseExistingServer: !process.env.CI,
       timeout: 120_000,
     },
   ],

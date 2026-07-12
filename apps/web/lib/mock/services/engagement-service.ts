@@ -3,6 +3,7 @@ import {
   addEngagement,
   getEngagementById,
   getEngagementsSnapshot,
+  removeEngagement,
 } from "@/lib/mock/store";
 import type {
   CreateEngagementInput,
@@ -62,6 +63,14 @@ export const engagementService = {
           loaded.every((s) => s.approvalStatus === "approved"),
         firstLoadedStream: loaded[0]?.type ?? null,
       };
+    }
+  },
+
+  async delete(id: string): Promise<void> {
+    try {
+      await apiFetch<void>(`/api/v1/engagements/${id}`, { method: "DELETE" });
+    } catch {
+      removeEngagement(id);
     }
   },
 };

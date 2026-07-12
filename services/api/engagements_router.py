@@ -12,7 +12,17 @@ from sqlmodel import select
 
 from audit import Actor, ActorDep, record_audit
 from db import STREAM_TYPES, get_session, now_iso
-from db_models import EngagementRow, ProcessStateRow, TeleologyRowDB, ValueStreamRow
+from db_models import (
+    CommentRow,
+    ConnectorConnectionRow,
+    ConnectorMappingRow,
+    EngagementRow,
+    InitiativeRow,
+    ProcessStateRow,
+    SolutionOptionRow,
+    TeleologyRowDB,
+    ValueStreamRow,
+)
 from fuseki_client import FusekiClient
 
 router = APIRouter(prefix="/api/v1/engagements", tags=["engagements"])
@@ -308,3 +318,80 @@ def set_stream_approval(
         )
         session.commit()
         return _to_model(row, _streams_for(session, engagement_id))
+
+
+@router.delete("/{engagement_id}", status_code=204)
+async def delete_engagement(
+    engagement_id: str, actor: Actor = ActorDep
+) -> None:
+    """Delete engagement and all child rows (FK-first). Audit events are kept;
+    engagement.deleted is recorded before removal. Fuseki graphs cleared best-effort."""
+    with get_session() as session:
+        row = _get_or_404(session, engagement_id)
+
+        record_audit(
+            session,
+            actor,
+            action="engagement.deleted",
+            artefact_type="engagement",
+            artefact_id=engagement_id,
+            engagement_id=engagement_id,
+            detail={"name": row.name, "client": row.client},
+        )
+
+        for comment in session.exec(
+            select(CommentRow).where(CommentRow.engagement_id == engagement_id)
+        ).all():
+            session.delete(comment)
+        for teleology in session.exec(
+            select(TeleologyRowDB).where(
+                TeleologyRowDB.engagement_id == engagement_id
+            )
+        ).all():
+            session.delete(teleology)
+        for process in session.exec(
+            select(ProcessStateRow).where(
+                ProcessStateRow.engagement_id == engagement_id
+            )
+        ).all():
+            session.delete(process)
+        for mapping in session.exec(
+            select(ConnectorMappingRow).where(
+                ConnectorMappingRow.engagement_id == engagement_id
+            )
+        ).all():
+            session.delete(mapping)
+        for connection in session.exec(
+            select(ConnectorConnectionRow).where(
+                ConnectorConnectionRow.engagement_id == engagement_id
+            )
+        ).all():
+            session.delete(connection)
+        for option in session.exec(
+            select(SolutionOptionRow).where(
+                SolutionOptionRow.engagement_id == engagement_id
+            )
+        ).all():
+            session.delete(option)
+        for initiative in session.exec(
+            select(InitiativeRow).where(
+                InitiativeRow.engagement_id == engagement_id
+            )
+        ).all():
+            session.delete(initiative)
+        for stream in session.exec(
+            select(ValueStreamRow).where(
+                ValueStreamRow.engagement_id == engagement_id
+            )
+        ).all():
+            session.delete(stream)
+
+        session.flush()
+        session.delete(row)
+        session.commit()
+
+    for stream_type in STREAM_TYPES:
+        try:
+            await fuseki.clear_graph(fuseki.graph_uri(engagement_id, stream_type))
+        except Exception:
+            pass
