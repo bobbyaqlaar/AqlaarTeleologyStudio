@@ -13,6 +13,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { streamService } from "@/lib/mock/services/stream-service";
+import { agentTriggerService } from "@/lib/api/agent-trigger-service";
+import { useRole } from "@/lib/context/role-context";
 import {
   BASELINE_TEMPLATES,
   VALUE_STREAM_META,
@@ -26,15 +28,27 @@ interface StreamGridProps {
 
 export function StreamGrid({ engagement }: StreamGridProps): React.ReactNode {
   const router = useRouter();
+  const { canEdit } = useRole();
   const [streams, setStreams] = useState(engagement.valueStreams);
   const [loadingType, setLoadingType] = useState<ValueStreamType | null>(null);
+  const [triggerMessage, setTriggerMessage] = useState<string | null>(null);
 
   const handleLoadBaseline = async (streamType: ValueStreamType): Promise<void> => {
     setLoadingType(streamType);
+    setTriggerMessage(null);
     try {
       const updated = await streamService.loadBaseline(engagement.id, streamType);
       if (updated) {
         setStreams(updated.valueStreams);
+        if (canEdit) {
+          const trigger = await agentTriggerService.onBaselineLoaded(
+            engagement.id,
+            streamType,
+          );
+          if (trigger) {
+            setTriggerMessage(trigger.message);
+          }
+        }
       }
     } finally {
       setLoadingType(null);
@@ -42,6 +56,10 @@ export function StreamGrid({ engagement }: StreamGridProps): React.ReactNode {
   };
 
   return (
+    <div className="space-y-4">
+      {triggerMessage ? (
+        <p className="text-sm text-muted-foreground">{triggerMessage}</p>
+      ) : null}
     <div className="grid gap-4 lg:grid-cols-2 xl:grid-cols-3">
       {streams.map((stream) => {
         const meta = VALUE_STREAM_META[stream.type];
@@ -130,6 +148,7 @@ export function StreamGrid({ engagement }: StreamGridProps): React.ReactNode {
           </Card>
         );
       })}
+    </div>
     </div>
   );
 }

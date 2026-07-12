@@ -14,7 +14,7 @@ OTS holds industry-standard process and ontology baselines, supports enterprise 
 
 ## Phase 1 — Current Build (v1)
 
-**Status (2026-07-11):** Phase 1 complete (UI A–E, Postgres, Fuseki, ingestion, connectors, audit, PDF, Playwright E2E). **Phase 2 (in progress):** teleology drafting agent, **alignment view** (current vs teleology), **gap-bridge agent** (stream-scoped solution options), **initiative candidates** (cross-stream), **Workshop Mode** (same-screen stakeholder walkthrough), **web SSO** (OIDC PKCE + Keycloak). See [docs/TODO-implementation-plan.md](docs/TODO-implementation-plan.md) and [2026-07-11 design spec](docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-design.md).
+**Status (2026-07-12):** Phase 1 complete (UI A–E, Postgres, Fuseki, ingestion, connectors, audit, PDF, Playwright E2E). **Phase 2:** teleology / process-tag / ontology-link drafting agents with **event triggers** (baseline load + ontology graph ready), **alignment view**, **gap-bridge** + **initiative** agents, **Workshop Mode**, **web SSO**, engagement delete, **PDF download** + **audit trail** UI. Connectors web layer is API-only (no mock store fallback). See [docs/TODO-implementation-plan.md](docs/TODO-implementation-plan.md) and [2026-07-11 design spec](docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-design.md).
 
 Services are fetch-first against FastAPI/Postgres/Fuseki with in-memory mock fallback, so `npm run dev` alone still works for UI-only exploration.
 
@@ -128,7 +128,8 @@ Next.js (apps/web)  →  FastAPI (services/api)  →  Fuseki (OWL/RDF)
         │                          state, comments, teleology, solution_options,
         │                          initiatives, audit) + Claude/OpenRouter (gaps,
         │                          drafting agents)
-        └── mock fallbacks (used when the API is offline; agents/alignment have no mock)
+        └── mock fallbacks for engagement/process/teleology when API offline;
+            agents, alignment, connectors are API-only
 
 services/ingest (uv)  →  ReferenceDocs (APQC xlsx/PDF, TM Forum MODA crawl)
                           → data/baselines/{industry}/{stream}.{ttl,bpmn}
@@ -159,9 +160,9 @@ OTS/
 │   ├── app/auth/          # OIDC callback
 │   ├── components/        # shell, bpmn, ontology, teleology, alignment, initiatives, workshop, connectors, review, …
 │   └── lib/
-│       ├── api/           # ontology, alignment, solutions, agent services → FastAPI
+│       ├── api/           # ontology, alignment, solutions, agent + trigger services → FastAPI
 │       ├── auth/          # OIDC PKCE + session headers
-│       └── mock/          # engagement, process, teleology, connector, review stores
+│       └── mock/          # engagement, process, teleology, review stores (connectors API-only)
 ├── services/api/          # FastAPI + Fuseki client
 ├── data/baselines/        # Seed TTL per value stream (o2c, p2p, c2m, h2r, t2r)
 ├── docker-compose.yml     # Fuseki + API
@@ -231,7 +232,9 @@ UI imports services, not fixtures directly. Swap to FastAPI/Postgres post-E with
 | `ontologyService` | `lib/api/ontology-service.ts` | Graph CRUD, goal links via FastAPI |
 | `alignmentService` | `lib/api/alignment-service.ts` | Current vs teleology report (API-only) |
 | `solutionsService` | `lib/api/solutions-service.ts` | Solution options + initiatives (API-only) |
-| `agentService` | `lib/api/agent-service.ts` | Draft teleology, bridge gaps, draft initiatives |
+| `agentService` | `lib/api/agent-service.ts` | Draft teleology, process tags, ontology links, bridge gaps, initiatives |
+| `auditService` | `lib/api/audit-service.ts` | Audit event list + CSV export |
+| `engagementExportService` | `lib/api/engagement-export-service.ts` | Watermarked PDF download |
 | `teleologyService` | `lib/mock/services/teleology-service.ts` | Matrix, drill-down, approvals |
 | `connectorService` | `lib/mock/services/connector-service.ts` | Connect, field map, preview, apply |
 | `reviewService` | `lib/mock/services/review-service.ts` | Approval queue (+ accepted options/initiatives) |
@@ -240,10 +243,10 @@ UI imports services, not fixtures directly. Swap to FastAPI/Postgres post-E with
 
 ## Long-term capabilities (post-v1)
 
-Most Phase 1 items are done. Remaining polish:
+Most Phase 1 + Phase 2 core items are done. Remaining:
 
-- PDF download button in web UI (API export exists)
-- Audit trail viewer in web UI (API + CSV exist)
-- Engagement delete/archive endpoint
-- Phase 2 agents: process-map + ontology drafting (teleology + gap-bridge + initiatives shipped)
+- Phase 2: agent schedule/trigger (not button-only); optional BPMN customization drafting agent
+- Anthropic credits — drafting/gap agents auto-switch from OpenRouter to Claude
+- Extend Playwright E2E: alignment → bridge gaps → initiatives → workshop (optional)
+- Connectors Postgres persistence (demo-only, lowest value)
 - Industry standards crawl agent (quarterly or on-demand refresh)

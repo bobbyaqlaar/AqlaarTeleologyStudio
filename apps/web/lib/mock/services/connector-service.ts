@@ -1,13 +1,4 @@
 import { apiFetch, BackendApiError } from "@/lib/api/backend";
-import {
-  applyImportPreview,
-  connectConnector,
-  disconnectConnector,
-  getConnectorConnectionsSnapshot,
-  getFieldMappingsSnapshot,
-  previewImport,
-  updateFieldMapping,
-} from "@/lib/mock/connector-store";
 import type {
   ApplyImportResult,
   ConnectorConnection,
@@ -18,20 +9,26 @@ import type {
   ValueStreamType,
 } from "@/lib/types";
 
+function simulatedPreviewError(
+  connectorType: ConnectorType,
+  streamType: ValueStreamType,
+): ImportPreviewResult {
+  return {
+    connectorType,
+    streamType,
+    items: [],
+    summary: { ready: 0, conflict: 0, unmapped: 0 },
+    error: "Simulated connector error (demo toggle).",
+  };
+}
+
 /** Live Salesforce/Jira via FastAPI (Postgres-backed state, real HTTP
- * clients on the server). Falls back to the in-memory mock store when the
- * API is unreachable (UI-only dev mode). Server-side errors that carry a
- * real reason (missing credentials, auth rejected) are surfaced, not
- * swallowed into the mock. */
+ * clients on the server). API-only — no in-memory mock fallback. */
 export const connectorService = {
   async listConnections(engagementId: string): Promise<ConnectorConnection[]> {
-    try {
-      return await apiFetch<ConnectorConnection[]>(
-        `/api/v1/connectors/${engagementId}`,
-      );
-    } catch {
-      return getConnectorConnectionsSnapshot(engagementId);
-    }
+    return apiFetch<ConnectorConnection[]>(
+      `/api/v1/connectors/${engagementId}`,
+    );
   },
 
   async listMappings(
@@ -39,22 +36,17 @@ export const connectorService = {
     connectorType?: ConnectorType,
     streamType?: ValueStreamType,
   ): Promise<FieldMapping[]> {
-    try {
-      const params = new URLSearchParams();
-      if (connectorType) params.set("connectorType", connectorType);
-      if (streamType) params.set("streamType", streamType);
-      const suffix = params.size > 0 ? `?${params.toString()}` : "";
-      return await apiFetch<FieldMapping[]>(
-        `/api/v1/connectors/${engagementId}/mappings${suffix}`,
-      );
-    } catch {
-      return getFieldMappingsSnapshot(engagementId, connectorType, streamType);
-    }
+    const params = new URLSearchParams();
+    if (connectorType) params.set("connectorType", connectorType);
+    if (streamType) params.set("streamType", streamType);
+    const suffix = params.size > 0 ? `?${params.toString()}` : "";
+    return apiFetch<FieldMapping[]>(
+      `/api/v1/connectors/${engagementId}/mappings${suffix}`,
+    );
   },
 
   /** Validates credentials against the live system. Throws BackendApiError
-   * with the server's reason (unconfigured / rejected) so the UI can show
-   * it; only falls back to mock when the API itself is unreachable. */
+   * with the server's reason (unconfigured / rejected). */
   async connect(
     engagementId: string,
     connectorType: ConnectorType,
@@ -69,7 +61,7 @@ export const connectorService = {
       if (error instanceof BackendApiError) {
         throw error;
       }
-      return connectConnector(engagementId, connectorType, instanceUrl) ?? null;
+      throw error;
     }
   },
 
@@ -77,14 +69,10 @@ export const connectorService = {
     engagementId: string,
     connectorType: ConnectorType,
   ): Promise<ConnectorConnection | null> {
-    try {
-      return await apiFetch<ConnectorConnection>(
-        `/api/v1/connectors/${engagementId}/${connectorType}/disconnect`,
-        { method: "POST" },
-      );
-    } catch {
-      return disconnectConnector(engagementId, connectorType) ?? null;
-    }
+    return apiFetch<ConnectorConnection>(
+      `/api/v1/connectors/${engagementId}/${connectorType}/disconnect`,
+      { method: "POST" },
+    );
   },
 
   async updateMapping(
@@ -92,18 +80,14 @@ export const connectorService = {
     mappingId: string,
     input: UpdateFieldMappingInput,
   ): Promise<FieldMapping | null> {
-    try {
-      return await apiFetch<FieldMapping>(
-        `/api/v1/connectors/${engagementId}/mappings/${mappingId}`,
-        { method: "PATCH", body: JSON.stringify(input) },
-      );
-    } catch {
-      return updateFieldMapping(engagementId, mappingId, input) ?? null;
-    }
+    return apiFetch<FieldMapping>(
+      `/api/v1/connectors/${engagementId}/mappings/${mappingId}`,
+      { method: "PATCH", body: JSON.stringify(input) },
+    );
   },
 
   /** Live sample values per mapped source field. `simulateError` is a
-   * demo affordance and stays on the mock path. */
+   * demo affordance that returns a client-side error payload. */
   async preview(
     engagementId: string,
     connectorType: ConnectorType,
@@ -111,7 +95,7 @@ export const connectorService = {
     simulateError = false,
   ): Promise<ImportPreviewResult> {
     if (simulateError) {
-      return previewImport(engagementId, connectorType, streamType, true);
+      return simulatedPreviewError(connectorType, streamType);
     }
     try {
       return await apiFetch<ImportPreviewResult>(
@@ -128,7 +112,7 @@ export const connectorService = {
           error: error.message,
         };
       }
-      return previewImport(engagementId, connectorType, streamType, false);
+      throw error;
     }
   },
 
@@ -151,7 +135,7 @@ export const connectorService = {
           message: `Import failed — ${error.message}`,
         };
       }
-      return applyImportPreview(engagementId, connectorType, streamType, preview);
+      throw error;
     }
   },
 };

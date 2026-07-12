@@ -2,9 +2,10 @@ import { expect, test, type Page } from "@playwright/test";
 
 /**
  * Full consultant workflow against the real stack (Postgres + Fuseki + API):
- * create engagement (telecom) → load O2C baseline → tag a task with a
+ * create engagement (telecom) → load O2C + P2P baselines → tag a task with a
  * function unit + system → map an ontology class to a thesaurus concept →
- * capture a teleology goal and submit → switch to stakeholder and approve.
+ * capture a teleology goal and submit → alignment + bridge gaps → draft
+ * initiatives → workshop exit → switch to stakeholder and approve.
  *
  * Base UI selects/dialogs ignore synthetic .click() — Playwright dispatches
  * trusted events, but option lists render in portals, so always await the
@@ -34,12 +35,19 @@ test("consultant flow: create → load O2C → tag → thesaurus map → teleolo
   const match = page.url().match(/\/engagements\/(eng-[a-f0-9]+)\//);
   engagementId = match?.[1] ?? null;
 
-  // 2. Load the O2C baseline
+  // 2. Load O2C and P2P baselines (initiatives need ≥2 streams)
   const o2cCard = page
     .locator('[data-slot="card"]')
     .filter({ hasText: "O2C · Order to Cash" });
   await o2cCard.getByRole("button", { name: "Load baseline" }).click();
   await expect(o2cCard.getByText("Loaded", { exact: true })).toBeVisible();
+
+  const p2pCard = page
+    .locator('[data-slot="card"]')
+    .filter({ hasText: "P2P · Procure to Pay" });
+  await p2pCard.getByRole("button", { name: "Load baseline" }).click();
+  await expect(p2pCard.getByText("Loaded", { exact: true })).toBeVisible();
+
   await o2cCard.getByRole("button", { name: "Edit process" }).click();
   await expect(page).toHaveURL(/\/streams\/o2c\/process$/);
 
@@ -90,8 +98,32 @@ test("consultant flow: create → load O2C → tag → thesaurus map → teleolo
     page.getByText("Submitted for stakeholder review."),
   ).toBeVisible();
 
-  // 6. Approve as stakeholder (via the forward CTA; role is client state)
-  await page.getByRole("link", { name: "Continue to review" }).click();
+  // 6. Alignment → bridge gaps → initiatives → workshop
+  await page.getByRole("link", { name: "Alignment", exact: true }).click();
+  await expect(page).toHaveURL(/\/alignment$/);
+  await page.getByRole("button", { name: "Bridge gaps with AI" }).click();
+  await expect(
+    page.getByText(/AI drafted \d+ solution option\(s\)/),
+  ).toBeVisible({ timeout: 120_000 });
+
+  await page.getByRole("link", { name: "Initiatives", exact: true }).click();
+  await expect(page).toHaveURL(/\/initiatives$/);
+  await page.getByRole("button", { name: "Draft initiatives with AI" }).click();
+  await expect(
+    page.getByText(/AI drafted \d+ initiative candidate\(s\)/),
+  ).toBeVisible({ timeout: 120_000 });
+
+  await page.getByRole("link", { name: "Workshop mode" }).click();
+  await expect(page).toHaveURL(/\/workshop$/);
+  await expect(page.getByText(/Workshop ·/)).toBeVisible();
+  await expect(page.getByText(/\d+ \/ \d+/)).toBeVisible();
+  await page.getByRole("link", { name: "Exit" }).click();
+  await expect(page).toHaveURL(
+    new RegExp(`/engagements/${engagementId ?? "eng-"}[^/]*$`),
+  );
+
+  // 7. Approve as stakeholder (via the forward CTA; role is client state)
+  await page.getByRole("link", { name: "Review", exact: true }).click();
   await expect(page).toHaveURL(/\/review$/);
 
   // Stepper reflects real progress: streams, process, ontology, teleology

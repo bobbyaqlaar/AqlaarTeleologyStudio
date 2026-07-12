@@ -103,16 +103,18 @@ pySHACL shapes file `services/ingest/shapes.ttl`; checks: every class has label,
 - [x] Postgres comments + teleology (2026-07-09, commit 3d60321): process_comments + teleology_rows tables, routers, fetch-first services; review queue composed client-side from live services (stream approval via engagements API, teleology status, comment resolve). E2E-verified incl. Postgres write from Review page.
 - [x] .env wiring (2026-07-09): Bobby's key lives in .env (extracted from his .env.ex); python-dotenv loads repo-root .env in API; docker-compose env_file; .env* gitignored. **Key valid but account has NO CREDITS** — Anthropic 400 "credit balance too low"; LLM gaps auto-activate once credits purchased.
 - [x] Alembic migrations (2026-07-10): services/api/alembic.ini + migrations/ (env.py reads OTS_DATABASE_URL, targets SQLModel.metadata); initial revision fe20c1b639a4 covers all 5 tables. Startup (db.init_db → run_migrations) stamps head on pre-Alembic databases (tables exist, no alembic_version) then runs `upgrade head`. Verified both paths: fresh DB (schema + seed created via migration) and live DB (stamped, data intact). New revisions: `cd services/api && OTS_DATABASE_URL=... uv run --with alembic --with sqlmodel --with "psycopg[binary]" alembic revision --autogenerate -m "..."` — autogenerate against a scratch DB or the live DB depending on what you're diffing.
-- [ ] Postgres remaining: connectors state (mock-only, lowest value).
+- [ ] Postgres remaining: connectors state — API + Postgres live; web mock store removed (2026-07-12).
 - [x] Engagement delete endpoint (2026-07-12): `DELETE /api/v1/engagements/{id}` + web confirm dialog + E2E teardown.
 - [x] Live LLM gap analysis (2026-07-09, commit d6dbff4): services/api/gaps_router.py — heuristics always (missing fn tags + unmapped systems), Claude claude-opus-4-8 w/ adaptive thinking + JSON-schema output when credentials present (env ANTHROPIC_API_KEY or `ant auth` profile), graceful degrade. Web aiGapService fetch-first. Model override: OTS_GAP_MODEL env.
 - [x] OpenRouter exception fallback (2026-07-10): when the Claude call raises (no credits/model down/no creds), gaps_router retries once via OpenRouter chat completions (`openrouter/auto`; override w/ OTS_GAP_FALLBACK_MODEL; key = OPENROUTER_API_KEY in .env). Prompt-enforced JSON + lenient parse (auto-routed models vary; `openrouter/free` returned empty content in testing — don't default to it). E2E-verified: POST /api/v1/gaps/eng-globex-002/o2c/analyze → `"source": "heuristic+llm(openrouter)"` with 6 Claude-quality suggestions. Anthropic stays primary once credits are topped up (→ `"heuristic+llm"`).
 - [x] Audit trail (2026-07-10): append-only audit_events table (Alembic rev daa6408d5d07) written atomically (same session/commit) from every mutating router — engagement.created, stream.baseline_loaded, stream.approval_changed, process.xml_saved, process.element_tagged, comment.created/resolved, teleology.row_added/row_updated/status_changed. Actor from optional X-OTS-User-Id/-Name/-Role headers (demo consultant fallback; comments use payload author; SSO will supply real identity). Read side: GET /api/v1/audit/{engagement_id} (JSON, desc) + /export.csv (chronological). E2E-verified via curl: 4 mutations → 4 events w/ correct actors + CSV download.
-- [x] Watermarked PDF export (2026-07-10): GET /api/v1/engagements/{id}/export.pdf (services/api/export_router.py, reportlab) — engagement meta + participants, value-streams/approvals table, per-loaded-stream process snapshot (task/function/systems from BPMN + element_meta), teleology matrix w/ bullets; diagonal watermark on every page (?watermark=..., default "CONFIDENTIAL - DRAFT"), footer w/ timestamp + page number; each export writes an engagement.exported audit event. Verified visually for globex (process snapshot) and acme (teleology matrix). Gotcha: expunge ORM rows before the audit commit or they detach (DetachedInstanceError).
+- [x] Watermarked PDF export (2026-07-10): GET /api/v1/engagements/{id}/export.pdf (reportlab) — engagement meta, streams/approvals, process snapshot, teleology matrix; watermark + footer; audit-logged.
+- [x] PDF download in web UI (2026-07-12): engagement overview **Exports & audit** card → `engagementExportService.downloadPdf()`; `apiDownload` blob helper.
+- [x] Audit trail UI (2026-07-12): `/engagements/[id]/audit` — event table + CSV export; sidebar nav; `auditService`.
 - [x] Playwright E2E (2026-07-10): apps/web/e2e/consultant-flow.spec.ts + playwright.config.ts — full consultant flow against the real stack (create telecom engagement → load O2C → tag task w/ function+system → thesaurus map → teleology goal + submit → switch role to stakeholder → approve in review queue). Run: `cd apps/web && npm run test:e2e` (needs `docker compose up -d postgres fuseki`; web on :3100 + API on :8000 auto-started/reused via webServer). Gotchas: only one `next dev` per dir (stop other dev servers first); after picking a Base UI dropdown item, wait for `[data-base-ui-inert]` count 0 before clicking anything else (portal overlay intercepts pointer events); role is client-side state — switch roles after navigating, not before. Passed twice consecutively.
 - [x] SSO/OIDC — API side (2026-07-10): Keycloak 26 dev IdP in docker-compose (port 8081, realm "ots" auto-imported from infra/keycloak/ots-realm.json; users alex/alex = consultant, jordan/jordan = stakeholder; client ots-web public+PKCE+password-grant). services/api/auth.py verifies RS256 bearer tokens against the issuer JWKS (PyJWT); audit.get_actor prefers token identity (sub/name/realm-role) over X-OTS-* headers. Modes via OTS_AUTH_MODE: off (default, no issuer), optional (default w/ OTS_OIDC_ISSUER set — token wins, no token still works), required (mutations 401 without valid token). E2E-verified: jordan's Keycloak token → audit actor "Jordan Lee/stakeholder"; garbage token → 401; required mode → 401 w/o token, 200 w/ alex's token.
-- [x] SSO — web login flow (2026-07-11): OIDC code+PKCE in apps/web (`lib/auth/oidc.ts`, `/auth/callback`); `authHeaders()` sends Bearer token via `lib/api/backend.ts`; `RoleProvider` adopts session on mount; role switcher shows signed-in user + sign out; dev switcher + X-OTS-User-* fallback when unsigned. Keycloak realm: `http://localhost:8081/realms/ots`, client `ots-web`.
-- [ ] Optional polish: surface audit trail in the UI (done 2026-07-12); connectors persistence (demo-only, lowest value).
+- [x] SSO — web login flow (2026-07-11): OIDC code+PKCE in apps/web; Bearer on apiFetch; role from token; Keycloak realm `http://localhost:8081/realms/ots`, client `ots-web`.
+- [x] Connectors web service API-only (2026-07-12): removed `connector-store.ts` mock fallback; `simulateError` stays client-side demo toggle.
 
 ## Post-review fixes + Phase 2 kickoff (2026-07-11)
 
@@ -139,50 +141,48 @@ Design spec: `docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-de
 - [x] **Alembic** — revision `b3d1c04f9e21` adds `solution_options` + `initiatives` tables.
 - [x] **Engagement dashboard** — Consultant toolkit cards (Workshop / Alignment / Initiatives); teleology → "View alignment" CTA.
 
+- [x] **Draft process tags + ontology links** (2026-07-12): `draft-process-tags` (persisted `aiSuggestion` + accept/dismiss UI), `draft-ontology-links` (stateless proposals + Apply/Dismiss panel). OpenRouter-verified.
+
 **Next tasks, in recommended order:**
-1. **Phase 2 continuation** — next agents per spec §16: draft process-map customizations, draft ontology mappings; then agent runs on a schedule/trigger rather than a button. Reuse llm.py + draft-then-verify pattern.
-2. **Optional polish** — PDF download button in the web UI; engagement delete/archive endpoint (E2E runs accumulate "E2E Telecom …" engagements); surface audit trail in the UI.
-3. **Anthropic credits** — once topped up, gap analysis + drafting agents switch to Claude automatically (today both run via OpenRouter fallback).
-4. **Playwright E2E** — extend consultant-flow spec to cover alignment → bridge gaps → initiatives → workshop exit (optional).
+1. ~~**Agent triggers**~~ — done 2026-07-12: `agent-trigger-service` fires on baseline load + ontology graph ready (debounced 60s).
+2. **Anthropic credits** — gap/drafting agents switch to Claude automatically (today OpenRouter fallback).
+3. ~~**Playwright E2E**~~ — extended consultant-flow: P2P load → alignment → bridge gaps → initiatives → workshop (2026-07-12).
+4. ~~**Connectors mock cleanup**~~ — web `connector-service` API-only; `connector-store.ts` removed (2026-07-12).
 
-## RESUME HERE — Steps 0–4 complete (2026-07-12)
+## RESUME HERE — Agent triggers + E2E + connectors done (2026-07-12)
 
-**Status:** WIP `d1f0ef9` superseded. All four drafting-agent UI pieces + engagement
-delete are runtime-verified and E2E-green.
+**Status:** pending commit. Phases 0–4 + Phase 2 drafting stack + engagement delete + PDF/audit UI all shipped.
 
-### Done this session
-- **Step 0** — `draft-process-tags` + `draft-ontology-links` verified on live stack
-  (OpenRouter `source: "openrouter"`; `fuseki.search_thesaurus` returns `uri` key ✓;
-  re-tagged stream → `suggestions: []`, `source: "none"` ✓; audit events confirmed).
-- **Step 1** — Process workspace: `agentService.draftProcessTags`, `processService`
-  `applySuggestion`/`dismissSuggestion`, `FunctionTagPanel` accept/dismiss card,
-  "Draft tags with AI" button, `BpmnElementMeta.aiSuggestion` type.
-- **Step 2** — Ontology workspace: `AiLinkSuggestionsPanel` above ThesaurusPanel;
-  per-item Apply via `linkBpmnElement`/`mapConcept`, Dismiss clears local state.
-- **Step 3** — `DELETE /api/v1/engagements/{id}` (FK-first + `session.flush()` +
-  `engagement.deleted` audit + best-effort Fuseki clear); web delete w/ confirm dialog;
-  E2E teardown via `request.delete`; purged accumulated E2E engagements.
-- **Step 4** — `npx tsc --noEmit` clean; `npm run test:e2e` green. Playwright API
-  webServer fixed (repo-root `--app-dir`, readiness on `/api/v1/engagements`).
+### Shipped (cumulative through 2026-07-12)
+- Drafting agents (all draft-then-verify): teleology, process tags, ontology links,
+  bridge-gaps, initiatives — shared `llm.py` (Claude → OpenRouter).
+- **Agent triggers** — `onBaselineLoaded` → draft-process-tags; `onOntologyGraphReady` → draft-ontology-links (60s debounce; manual buttons remain).
+- Alignment heatmap, Workshop mode, web SSO, goal links, consultant toolkit.
+- Engagement delete (`DELETE` + confirm dialog + E2E teardown).
+- PDF download (overview **Exports & audit** card) + audit trail page (`/audit`) w/ CSV.
+- **E2E extension** — consultant-flow loads O2C+P2P, runs alignment/bridge/initiatives/workshop before review approve.
+- **Connectors** — web service API-only (no `connector-store` fallback).
 
-**Next tasks (unchanged priority):**
-1. ~~Optional polish — PDF download button in web UI; surface audit trail in UI.~~ ✅ 2026-07-12
-2. Anthropic credits — gap/drafting agents auto-switch to Claude once topped up.
-3. Extend E2E — alignment → bridge gaps → initiatives → workshop (optional).
-4. Phase 2 continuation — agent schedule/trigger rather than button-only (spec §16).
+**Next tasks (recommended order):**
+1. **Anthropic credits** — top up → `source: "claude"` on gap + drafting agents.
+2. **Polish** — agent trigger toasts, workshop E2E slide navigation, SSO-required E2E path.
 
 **How to run the stack locally:**
-- `docker compose up -d postgres fuseki keycloak` then from `services/api`: `uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel --with "psycopg[binary]" --with anthropic --with python-dotenv --with httpx --with alembic --with reportlab --with "pyjwt[crypto]" python -m uvicorn main:app --port 8000` (system pip is PEP-668 locked; or `docker compose up api`). Add `OTS_OIDC_ISSUER=http://localhost:8081/realms/ots` to enable SSO (optional mode; `OTS_AUTH_MODE=required` to enforce).
-- Web: `cd apps/web && npm run dev` (port 3000 is taken by another project's container — dev server auto-ports; API CORS already allows any localhost port)
-- Playwright: `cd apps/web && npm run test:e2e` (stops if another `next dev` is running in the same dir — kill it first).
-- Anthropic key + OpenRouter key live in root `.env` (gitignored, loaded via python-dotenv). Anthropic account had zero credits on 2026-07-10 → gap analysis uses the OpenRouter fallback.
-- MODA crawl cache (`services/ingest/cache/`, 293MB) is gitignored — in a fresh clone, re-run `uv run python services/ingest/crawl_moda.py` before re-parsing eTOM/SID.
+- `docker compose up -d postgres fuseki keycloak`
+- API (from repo root — `services/api` cwd fails silently with uv):  
+  `uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel --with "psycopg[binary]" --with anthropic --with python-dotenv --with httpx --with alembic --with reportlab --with "pyjwt[crypto]" python -m uvicorn main:app --app-dir services/api --port 8000`  
+  Env: `OTS_DATABASE_URL=postgresql+psycopg://ots:ots@localhost:5434/ots`, `FUSEKI_URL=http://localhost:3030`, baseline/thesaurus dirs under `data/`.
+- Web: `cd apps/web && npm run dev` (port 3000; CORS allows any localhost port).
+- Fuseki admin UI: http://localhost:3030 — login **admin** / **admin** if datasets list spins.
+- Playwright: `cd apps/web && npm run test:e2e` (one `next dev` per dir; API readiness on `/api/v1/engagements`).
 
 ## Session log
 
-- 2026-07-12 (evening): PDF download button + audit trail UI — engagement dashboard Exports card, `/engagements/[id]/audit` page with event table + CSV export; sidebar nav entry; `apiDownload` helper.
+- 2026-07-12 (night): Agent triggers (`agent-trigger-service` on baseline load + ontology ready), E2E extended (alignment → bridge → initiatives → workshop), connectors web API-only (`connector-store` removed).
 
-- 2026-07-12: Steps 0–4 complete — superseded WIP d1f0ef9. Verified draft-process-tags + draft-ontology-links agents (OpenRouter); shipped accept/dismiss UI (process tags) and AI link suggestions panel (ontology); DELETE engagement endpoint + card UI + E2E teardown; tsc + e2e green.
+- 2026-07-12 (evening, pushed `41d05a7`): PDF download + audit trail UI on engagement overview and `/audit` page.
+
+- 2026-07-12 (day): Steps 0–4 — draft-process-tags + draft-ontology-links UI, engagement delete, E2E green (`f213be5`).
 
 - 2026-07-12: WIP commit d1f0ef9 — API side of draft-process-tags (element_meta.aiSuggestion + PATCH clear support) and draft-ontology-links (stateless grounded proposals) agents written, syntax-checked, NOT verified. Web UI, verification, and engagement delete endpoint are next — detailed steps in RESUME HERE.
 

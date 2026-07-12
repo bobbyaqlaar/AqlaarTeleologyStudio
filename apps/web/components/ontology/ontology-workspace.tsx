@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { AlertCircle, ArrowRight, RefreshCw } from "lucide-react";
 import {
@@ -12,6 +12,7 @@ import {
   type ConceptProposal,
   type LinkProposal,
 } from "@/lib/api/agent-service";
+import { agentTriggerService } from "@/lib/api/agent-trigger-service";
 import { processService } from "@/lib/mock/services/process-service";
 import { teleologyService } from "@/lib/mock/services/teleology-service";
 import { StreamTabs } from "@/components/streams/stream-tabs";
@@ -69,6 +70,7 @@ export function OntologyWorkspace({
     ConceptProposal[]
   >([]);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const autoLinksTriggered = useRef(false);
 
   const loadData = useCallback(async (): Promise<void> => {
     setLoading(true);
@@ -102,6 +104,20 @@ export function OntologyWorkspace({
           null
         );
       });
+
+      if (canEdit && !autoLinksTriggered.current) {
+        autoLinksTriggered.current = true;
+        const trigger = await agentTriggerService.onOntologyGraphReady(
+          engagementId,
+          streamType,
+          graphData.classes.length,
+        );
+        if (trigger) {
+          setBpmnLinkSuggestions(trigger.bpmnLinks);
+          setConceptMappingSuggestions(trigger.conceptMappings);
+          setStatusMessage(trigger.message);
+        }
+      }
     } catch (err) {
       setApiOnline(false);
       setError(
@@ -112,7 +128,7 @@ export function OntologyWorkspace({
     } finally {
       setLoading(false);
     }
-  }, [engagementId, streamType, industry]);
+  }, [engagementId, streamType, industry, canEdit]);
 
   useEffect(() => {
     void loadData();
