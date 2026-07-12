@@ -14,7 +14,7 @@ OTS holds industry-standard process and ontology baselines, supports enterprise 
 
 ## Phase 1 — Current Build (v1)
 
-**Status (2026-07-12):** Phase 1 complete (UI A–E, Postgres, Fuseki, ingestion, connectors, audit, PDF, Playwright E2E). **Phase 2:** teleology / process-tag / ontology-link drafting agents with **event triggers** (baseline load + ontology graph ready), **alignment view**, **gap-bridge** + **initiative** agents, **Workshop Mode**, **web SSO**, engagement delete, **PDF download** + **audit trail** UI. Connectors web layer is API-only (no mock store fallback). See [docs/TODO-implementation-plan.md](docs/TODO-implementation-plan.md) and [2026-07-11 design spec](docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-design.md).
+**Status (2026-07-12):** Phase 1 complete. Phase 2 shipped: alignment, agents, workshop, SSO, agent triggers, extended E2E. **Documentation:** [Specs.md](docs/Specs.md) · [user_manual.md](docs/user_manual.md) · [DemoScript.md](docs/DemoScript.md).
 
 Services are fetch-first against FastAPI/Postgres/Fuseki with in-memory mock fallback, so `npm run dev` alone still works for UI-only exploration.
 
@@ -243,10 +243,20 @@ UI imports services, not fixtures directly. Swap to FastAPI/Postgres post-E with
 
 ## Long-term capabilities (post-v1)
 
-Most Phase 1 + Phase 2 core items are done. Remaining:
+- Connector creds in `.env` for live Salesforce/Jira preview
+- APQC↔eTOM candidate review in `mapping/alignments/apqc-etom.yaml`
+- SHACL validation in ingest pipeline
+- Industry standards crawl agent (quarterly refresh)
+- Optional BPMN customization drafting agent
 
-- Phase 2: agent schedule/trigger (not button-only); optional BPMN customization drafting agent
-- Anthropic credits — drafting/gap agents auto-switch from OpenRouter to Claude
-- Extend Playwright E2E: alignment → bridge gaps → initiatives → workshop (optional)
-- Connectors Postgres persistence (demo-only, lowest value)
-- Industry standards crawl agent (quarterly or on-demand refresh)
+See [docs/TODO-implementation-plan.md](docs/TODO-implementation-plan.md) for full history.
+
+## Documentation
+
+| Document | Audience |
+|----------|----------|
+| [docs/Specs.md](docs/Specs.md) | Architecture — layers, components, integration |
+| [docs/user_manual.md](docs/user_manual.md) | Consultants, stakeholders, admins — step-by-step |
+| [docs/DemoScript.md](docs/DemoScript.md) | Product demo recording script (E2E-validated) |
+| [docs/manual-test-script.md](docs/manual-test-script.md) | Hands-on QA checklist |
+| [docs/TODO-implementation-plan.md](docs/TODO-implementation-plan.md) | Implementation tracker |

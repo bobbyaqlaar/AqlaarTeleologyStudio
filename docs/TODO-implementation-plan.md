@@ -149,24 +149,13 @@ Design spec: `docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-de
 3. ~~**Playwright E2E**~~ — extended consultant-flow: P2P load → alignment → bridge gaps → initiatives → workshop (2026-07-12).
 4. ~~**Connectors mock cleanup**~~ — web `connector-service` API-only; `connector-store.ts` removed (2026-07-12).
 
-## RESUME HERE — Agent triggers + E2E + connectors done (2026-07-12)
+## RESUME HERE — Documentation pack shipped (2026-07-12)
 
-**Status:** `main` pending commit. OpenRouter primary; polish (banners, E2E) shipped.
+**Status:** `main` — [Specs.md](./Specs.md), [user_manual.md](./user_manual.md), [DemoScript.md](./DemoScript.md) + `e2e/demo-script.spec.ts` validate the recording flow.
 
-### Shipped (cumulative through 2026-07-12)
-- Drafting agents (all draft-then-verify): teleology, process tags, ontology links,
-  bridge-gaps, initiatives — shared `llm.py` (Claude → OpenRouter).
-- **Agent triggers** — `onBaselineLoaded` → draft-process-tags; `onOntologyGraphReady` → draft-ontology-links (60s debounce; manual buttons remain).
-- Alignment heatmap, Workshop mode, web SSO, goal links, consultant toolkit.
-- Engagement delete (`DELETE` + confirm dialog + E2E teardown).
-- PDF download (overview **Exports & audit** card) + audit trail page (`/audit`) w/ CSV.
-- **E2E extension** — consultant-flow loads O2C+P2P, runs alignment/bridge/initiatives/workshop before review approve.
-- **Connectors** — web service API-only (no `connector-store` fallback).
-
-**Next tasks (recommended order):**
-1. **Connector creds** — set `OTS_JIRA_*` / `OTS_SF_*` in `.env` for live Salesforce/Jira preview.
-2. **Polish** — richer agent-trigger notifications (done: banner), workshop deep E2E, SSO E2E (done).
-3. **Deferred** — APQC↔eTOM candidate review, SHACL validation, post-v1 vertical ontologies.
+**Next tasks:**
+1. Connector creds in `.env` for live Salesforce/Jira.
+2. APQC↔eTOM candidate review; SHACL; standards crawl agent.
 
 **How to run the stack locally:**
 - `docker compose up -d postgres fuseki keycloak`
@@ -179,9 +168,9 @@ Design spec: `docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-de
 
 ## Session log
 
-- 2026-07-12 (night): OpenRouter primary in `llm.py`; agent-trigger banners; workshop slide E2E; SSO login E2E (`sso-login.spec.ts`, skips if Keycloak down).
+- 2026-07-12 (docs): Specs.md, user_manual.md, DemoScript.md; demo-script E2E + shared demo-recording-flow.
 
-- 2026-07-12 (night): Agent triggers, E2E Phase 2 path, connectors API-only (`fccb248`).
+- 2026-07-12 (night): OpenRouter primary in `llm.py`; agent-trigger banners; workshop slide E2E; SSO login E2E (`sso-login.spec.ts`).
 
 - 2026-07-12 (evening, pushed `41d05a7`): PDF download + audit trail UI on engagement overview and `/audit` page.
 

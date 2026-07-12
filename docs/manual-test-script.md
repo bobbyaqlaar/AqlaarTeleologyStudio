@@ -1,8 +1,10 @@
 # OTS — Manual Test Script
 
 Step-by-step script to run the stack locally and verify every shipped
-feature by hand. Written 2026-07-10 (main @ `32d69f7`). All paths are
+feature by hand. Written 2026-07-12 (main @ latest). All paths are
 relative to the repo root.
+
+> **Documentation:** [Specs.md](./Specs.md) · [user_manual.md](./user_manual.md) · [DemoScript.md](./DemoScript.md) (recording script, E2E-validated)
 
 > **TL;DR run order:** docker infra → API → web app → walk the consultant
 > flow → check PDF/audit/gaps endpoints → (optional) SSO → automated E2E.
@@ -27,10 +29,13 @@ Keycloak needs ~30 s on first boot (it imports the `ots` realm). Sanity checks:
 ## 2. Start the API
 
 ```bash
-cd services/api
+cd /Users/mac/Documents/Bobby/Aqlaar/Apps/OTS
+OTS_DATABASE_URL=postgresql+psycopg://ots:ots@localhost:5434/ots \
+FUSEKI_URL=http://localhost:3030 \
+OTS_BASELINE_DIR=data/baselines OTS_THESAURUS_DIR=data/thesaurus \
 uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel --with "psycopg[binary]" \
   --with anthropic --with python-dotenv --with httpx --with alembic --with reportlab \
-  --with "pyjwt[crypto]" python -m uvicorn main:app --port 8000
+  --with "pyjwt[crypto]" python -m uvicorn main:app --app-dir services/api --port 8000
 ```
 
 - [ ] `curl http://localhost:8000/health` → `{"status":"ok","fuseki":true}`
@@ -128,24 +133,25 @@ Mirrors the automated Playwright E2E, so a manual pass covers the same ground.
 ```bash
 curl -s -X POST http://localhost:8000/api/v1/gaps/eng-globex-002/o2c/analyze | python3 -m json.tool
 ```
-- [ ] `"source": "heuristic+llm(openrouter)"` while the Anthropic account has
-      no credits; becomes `"heuristic+llm"` (Claude claude-opus-4-8 primary)
-      once topped up. Heuristic suggestions are always present either way.
+- [ ] `"source": "heuristic+llm"` (OpenRouter primary) or `"heuristic+llm(claude)"` if Claude fallback used. Heuristic suggestions always present.
 
 ---
 
-## 6. SSO — API side (optional)
+## 6. SSO — web + API (optional)
 
-Restart the API (step 2) with the issuer set:
+Keycloak must be running (`docker compose up -d keycloak`). Demo users: `alex/alex` (consultant), `jordan/jordan` (stakeholder).
 
-```bash
-OTS_OIDC_ISSUER=http://localhost:8081/realms/ots uv run ... # same command as step 2
-```
+### 6.1 Web login (PKCE)
 
-Demo users (realm `ots`): `alex/alex` (consultant), `jordan/jordan`
-(stakeholder). Keycloak admin console: `http://localhost:8081` (admin/admin).
+- [ ] Header role switcher → **Sign in with SSO** → Keycloak login → redirect back.
+- [ ] Header shows **Alex Morgan** (consultant) or **Jordan Lee** (stakeholder).
+- [ ] Token exchange uses `/api/auth/token` proxy (no browser CORS to Keycloak).
 
-- [ ] Get a token and make an authenticated mutation:
+Automated: `npm run test:e2e -- e2e/sso-login.spec.ts`
+
+### 6.2 API bearer token (optional)
+
+- [ ] Strict mode: restart API with `OTS_OIDC_ISSUER=http://localhost:8081/realms/ots OTS_AUTH_MODE=required` → tokenless mutations return **401**.
 
 ```bash
 TOKEN=$(curl -s -X POST http://localhost:8081/realms/ots/protocol/openid-connect/token \
@@ -157,15 +163,7 @@ curl -s -X PATCH http://localhost:8000/api/v1/engagements/eng-acme-001/streams/p
   -d '{"approvalStatus":"in_review"}'
 ```
 
-- [ ] Audit trail (`/api/v1/audit/eng-acme-001`) shows the actor as
-      **Jordan Lee / stakeholder** (identity from the Keycloak token).
-- [ ] A garbage token (`-H "Authorization: Bearer nope"`) → **401**.
-- [ ] Without a token the request still works (**optional** mode default).
-- [ ] Strict mode: restart with `OTS_AUTH_MODE=required` as well → tokenless
-      mutations now return **401**; token requests still **200**.
-
-The web login flow is not built yet — the browser app still uses the dev
-role-switcher (see `docs/TODO-implementation-plan.md` → RESUME HERE).
+- [ ] Audit trail shows actor **Jordan Lee / stakeholder**.
 
 ---
 
@@ -175,11 +173,11 @@ role-switcher (see `docs/TODO-implementation-plan.md` → RESUME HERE).
 cd apps/web && npm run test:e2e
 ```
 
-- Needs `docker compose up -d postgres fuseki` (web on :3100 and API on
-  :8000 are auto-started/reused by Playwright).
-- **Stop any manually running `npm run dev` first** — Next.js refuses two
-  dev servers from the same directory.
-- [ ] Expected: `1 passed` (~15–25 s).
+- Needs `docker compose up -d postgres fuseki` (+ `keycloak` for SSO tests).
+- **Stop any manually running `npm run dev` first.**
+- [ ] Expected: **4 passed** — `consultant-flow`, `demo-script`, 2× `sso-login` (~40–90 s total).
+
+Demo script only: `npm run test:e2e -- e2e/demo-script.spec.ts`
 
 ---
 
