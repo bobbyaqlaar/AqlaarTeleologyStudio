@@ -7,6 +7,11 @@ import {
   OntologyApiError,
   ontologyService,
 } from "@/lib/api/ontology-service";
+import {
+  agentService,
+  type ConceptProposal,
+  type LinkProposal,
+} from "@/lib/api/agent-service";
 import { processService } from "@/lib/mock/services/process-service";
 import { teleologyService } from "@/lib/mock/services/teleology-service";
 import { StreamTabs } from "@/components/streams/stream-tabs";
@@ -16,6 +21,7 @@ import { OwlClassPanel } from "@/components/ontology/owl-class-panel";
 import { BpmnLinkPanel } from "@/components/ontology/bpmn-link-panel";
 import { GoalLinkPanel } from "@/components/ontology/goal-link-panel";
 import { ThesaurusPanel } from "@/components/ontology/thesaurus-panel";
+import { AiLinkSuggestionsPanel } from "@/components/ontology/ai-link-suggestions-panel";
 import { FunctionUnitLegend } from "@/components/functions/function-unit-legend";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -55,6 +61,13 @@ export function OntologyWorkspace({
   const [apiOnline, setApiOnline] = useState(true);
   const [savingClass, setSavingClass] = useState(false);
   const [linking, setLinking] = useState(false);
+  const [draftingLinks, setDraftingLinks] = useState(false);
+  const [bpmnLinkSuggestions, setBpmnLinkSuggestions] = useState<LinkProposal[]>(
+    [],
+  );
+  const [conceptMappingSuggestions, setConceptMappingSuggestions] = useState<
+    ConceptProposal[]
+  >([]);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
 
   const loadData = useCallback(async (): Promise<void> => {
@@ -104,6 +117,118 @@ export function OntologyWorkspace({
   useEffect(() => {
     void loadData();
   }, [loadData]);
+
+  const refreshGraph = async (): Promise<void> => {
+    const graphData = await ontologyService.getGraph(engagementId, streamType);
+    setGraph(graphData);
+    setSelectedClass((current) => {
+      if (!current) {
+        return graphData.classes[0] ?? null;
+      }
+      return (
+        graphData.classes.find((item) => item.uri === current.uri) ??
+        graphData.classes[0] ??
+        null
+      );
+    });
+  };
+
+  const handleDraftLinksWithAi = async (): Promise<void> => {
+    if (!canEdit) {
+      return;
+    }
+    setDraftingLinks(true);
+    setStatusMessage(null);
+    try {
+      const result = await agentService.draftOntologyLinks(
+        engagementId,
+        streamType,
+      );
+      setBpmnLinkSuggestions(result.bpmnLinks);
+      setConceptMappingSuggestions(result.conceptMappings);
+      setStatusMessage(
+        `AI proposed ${result.bpmnLinks.length} step link(s) and ${result.conceptMappings.length} concept mapping(s) (source: ${result.source}).`,
+      );
+    } catch (error) {
+      setStatusMessage(
+        error instanceof Error
+          ? `Link drafting failed: ${error.message}`
+          : "Link drafting failed.",
+      );
+    }
+    setDraftingLinks(false);
+  };
+
+  const handleApplyBpmnLink = async (proposal: LinkProposal): Promise<void> => {
+    if (!canEdit) {
+      return;
+    }
+    setLinking(true);
+    try {
+      await ontologyService.linkBpmnElement(
+        engagementId,
+        streamType,
+        proposal.classUri,
+        proposal.taskId,
+      );
+      await refreshGraph();
+      setBpmnLinkSuggestions((current) =>
+        current.filter(
+          (item) =>
+            !(
+              item.classUri === proposal.classUri &&
+              item.taskId === proposal.taskId
+            ),
+        ),
+      );
+      setSelectedTaskId(proposal.taskId);
+      setStatusMessage(
+        `Linked ${proposal.taskName} to ${proposal.classLabel}.`,
+      );
+    } catch (err) {
+      setError(
+        err instanceof OntologyApiError ? err.message : "Link apply failed.",
+      );
+    } finally {
+      setLinking(false);
+    }
+  };
+
+  const handleApplyConceptMapping = async (
+    proposal: ConceptProposal,
+  ): Promise<void> => {
+    if (!canEdit) {
+      return;
+    }
+    setLinking(true);
+    try {
+      await ontologyService.mapConcept(
+        engagementId,
+        streamType,
+        proposal.classUri,
+        proposal.conceptUri,
+      );
+      await refreshGraph();
+      setConceptMappingSuggestions((current) =>
+        current.filter(
+          (item) =>
+            !(
+              item.classUri === proposal.classUri &&
+              item.conceptUri === proposal.conceptUri
+            ),
+        ),
+      );
+      setStatusMessage(
+        `Mapped ${proposal.classLabel} to ${proposal.conceptLabel}.`,
+      );
+    } catch (err) {
+      setError(
+        err instanceof OntologyApiError ? err.message : "Concept apply failed.",
+      );
+    } finally {
+      setLinking(false);
+    }
+  };
 
   const applyClassUpdate = (updated: OwlClass): void => {
     setGraph((current) =>
@@ -408,6 +533,40 @@ export function OntologyWorkspace({
         </div>
 
         <div className="min-h-[640px] space-y-4">
+          <AiLinkSuggestionsPanel
+            bpmnLinks={bpmnLinkSuggestions}
+            conceptMappings={conceptMappingSuggestions}
+            canEdit={canEdit}
+            drafting={draftingLinks}
+            applying={linking}
+            onDraft={() => void handleDraftLinksWithAi()}
+            onApplyBpmnLink={(proposal) => void handleApplyBpmnLink(proposal)}
+            onApplyConceptMapping={(proposal) =>
+              void handleApplyConceptMapping(proposal)
+            }
+            onDismissBpmnLink={(proposal) =>
+              setBpmnLinkSuggestions((current) =>
+                current.filter(
+                  (item) =>
+                    !(
+                      item.classUri === proposal.classUri &&
+                      item.taskId === proposal.taskId
+                    ),
+                ),
+              )
+            }
+            onDismissConceptMapping={(proposal) =>
+              setConceptMappingSuggestions((current) =>
+                current.filter(
+                  (item) =>
+                    !(
+                      item.classUri === proposal.classUri &&
+                      item.conceptUri === proposal.conceptUri
+                    ),
+                ),
+              )
+            }
+          />
           <ThesaurusPanel
             selectedClass={selectedClass}
             canEdit={canEdit}
