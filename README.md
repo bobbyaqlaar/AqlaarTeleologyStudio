@@ -179,7 +179,7 @@ OTS/
 cd apps/web && npm install && npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) — redirects to `/engagements`.
+Open [http://localhost:3001](http://localhost:3001) — redirects to `/engagements`.
 
 ### Full stack (ontology + Fuseki)
 
@@ -194,7 +194,7 @@ cd apps/web && npm run dev
 
 | Service | URL |
 |---------|-----|
-| Web | http://localhost:3000 |
+| Web | http://localhost:3001 |
 | FastAPI | http://localhost:8000 |
 | Fuseki | http://localhost:3030 |
 

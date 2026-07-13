@@ -51,9 +51,7 @@ cd apps/web
 npm run dev
 ```
 
-Port 3000 is usually taken by another project, so Next.js picks a free
-port — **read the URL from the terminal output** (e.g.
-`http://localhost:58805`) and open it in the browser.
+Port **3001** is the OTS default (`npm run dev` binds `-p 3001`). Port 3000 is used by AgenticFramework.
 
 ---
 

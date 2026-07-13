@@ -279,7 +279,7 @@ Dev users: `alex/alex` (consultant), `jordan/jordan` (stakeholder).
 |---------|---------|-----|
 | Infra | `docker compose up -d postgres fuseki keycloak` | — |
 | API | `uv run … uvicorn main:app --app-dir services/api --port 8000` | :8000 |
-| Web | `cd apps/web && npm run dev` | :3000 |
+| Web | `cd apps/web && npm run dev` | :3001 |
 | E2E | `cd apps/web && npm run test:e2e` | :3100 (auto) |
 
 **Demo seed:** `eng-acme-001` (Acme Corp, O2C loaded, review items pending).

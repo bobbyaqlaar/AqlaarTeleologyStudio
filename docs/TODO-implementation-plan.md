@@ -236,7 +236,7 @@ APQC parse is already in `cache/apqc.jsonl`; deeper subtrees are a `streams.yaml
 - API (from repo root — `services/api` cwd fails silently with uv):  
   `uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel --with "psycopg[binary]" --with anthropic --with python-dotenv --with httpx --with alembic --with reportlab --with "pyjwt[crypto]" python -m uvicorn main:app --app-dir services/api --port 8000`  
   Env: `OTS_DATABASE_URL=postgresql+psycopg://ots:ots@localhost:5434/ots`, `FUSEKI_URL=http://localhost:3030`, baseline/thesaurus dirs under `data/`.
-- Web: `cd apps/web && npm run dev` (port 3000; CORS allows any localhost port).
+- Web: `cd apps/web && npm run dev` (port **3001** — 3000 reserved for AgenticFramework; CORS allows any localhost port).
 - Fuseki admin UI: http://localhost:3030 — login **admin** / **admin** if datasets list spins.
 - Playwright: `cd apps/web && npm run test:e2e` (one `next dev` per dir; API readiness on `/api/v1/engagements`).
 

@@ -27,7 +27,7 @@ uv run --with fastapi --with "uvicorn[standard]" --with sqlmodel \
 cd apps/web && npm run dev
 ```
 
-- Browser: http://localhost:3000 — zoom 100%, dark mode (default), hide bookmarks bar.
+- Browser: http://localhost:3001 — zoom 100%, dark mode (default), hide bookmarks bar.
 - Close other tabs. Only one `next dev` instance.
 - Optional: sign in as **alex** via SSO for a polished header (“Alex Morgan”).
 

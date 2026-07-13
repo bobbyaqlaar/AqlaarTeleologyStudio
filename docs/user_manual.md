@@ -20,7 +20,7 @@ Wait ~30 seconds for Keycloak to import the `ots` realm.
 
 | Service | URL | Login |
 |---------|-----|-------|
-| Web app | http://localhost:3000 | — |
+| Web app | http://localhost:3001 | — |
 | API | http://localhost:8000/health | — |
 | Fuseki admin | http://localhost:3030 | admin / admin |
 | Keycloak admin | http://localhost:8081 | admin / admin |
@@ -49,7 +49,7 @@ Verify: `curl http://localhost:8000/health` → `{"status":"ok","fuseki":true}`.
 cd apps/web && npm install && npm run dev
 ```
 
-Open the URL printed in the terminal (usually http://localhost:3000).
+Open http://localhost:3001 (default; port 3000 is reserved for AgenticFramework).
 
 ### 1.4 LLM agents (admin)
 
