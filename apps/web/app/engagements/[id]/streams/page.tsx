@@ -53,7 +53,7 @@ export default async function StreamsPage({
           </p>
         </section>
         <StreamGrid engagement={engagement} />
-        <FunctionUnitLegend compact />
+        <FunctionUnitLegend compact units={engagement.functionUnits} />
       </div>
     </AppShell>
   );

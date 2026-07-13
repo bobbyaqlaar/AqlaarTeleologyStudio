@@ -1,0 +1,85 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:DevelopSourcingPlans_4_3_1 a owl:Class ;
+    rdfs:label "Develop sourcing plans"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:PurchaseProduct_4_3_2 ;
+    dcterms:source "APQC industry PCF 4.3.1 (PCF ID 10277)" ;
+    rdfs:subClassOf ots:SourceProducts_4_3 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:ManageCorporateCreditCards_9_6_3 a owl:Class ;
+    rdfs:label "Manage corporate credit cards"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 9.6.3 (PCF ID 20929)" ;
+    rdfs:subClassOf ots:ProcessAccountsPayableAndExpenseReimbursements_9_6 .
+
+ots:ManageDemand_4_3_5 a owl:Class ;
+    rdfs:label "Manage demand"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:ManageProductMasterData_4_3_6 ;
+    dcterms:source "APQC industry PCF 4.3.5 (PCF ID 16674)" ;
+    rdfs:subClassOf ots:SourceProducts_4_3 .
+
+ots:ManageProductMasterData_4_3_6 a owl:Class ;
+    rdfs:label "Manage product master data"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:ProcessAccountsPayableAp_9_6_1 ;
+    dcterms:source "APQC industry PCF 4.3.6 (PCF ID 10062)" ;
+    rdfs:subClassOf ots:SourceProducts_4_3 .
+
+ots:ManageSupplierPerformance_4_3_3 a owl:Class ;
+    rdfs:label "Manage supplier performance"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:SelectSuppliersAndDevelopMaintainContracts_4_3_4 ;
+    dcterms:source "APQC industry PCF 4.3.3 (PCF ID 16741)" ;
+    rdfs:subClassOf ots:SourceProducts_4_3 .
+
+ots:ProcessAccountsPayableAp_9_6_1 a owl:Class ;
+    rdfs:label "Process accounts payable (AP)"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ProcessExpenseReimbursements_9_6_2 ;
+    dcterms:source "APQC industry PCF 9.6.1 (PCF ID 10756)" ;
+    rdfs:subClassOf ots:ProcessAccountsPayableAndExpenseReimbursements_9_6 .
+
+ots:ProcessExpenseReimbursements_9_6_2 a owl:Class ;
+    rdfs:label "Process expense reimbursements"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageCorporateCreditCards_9_6_3 ;
+    dcterms:source "APQC industry PCF 9.6.2 (PCF ID 10757)" ;
+    rdfs:subClassOf ots:ProcessAccountsPayableAndExpenseReimbursements_9_6 .
+
+ots:PurchaseProduct_4_3_2 a owl:Class ;
+    rdfs:label "Purchase product"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:ManageSupplierPerformance_4_3_3 ;
+    dcterms:source "APQC industry PCF 4.3.2 (PCF ID 10279)" ;
+    rdfs:subClassOf ots:SourceProducts_4_3 .
+
+ots:SelectSuppliersAndDevelopMaintainContracts_4_3_4 a owl:Class ;
+    rdfs:label "Select suppliers and develop/maintain contracts"@en ;
+    ots:functionUnit "procurement_scm" ;
+    ots:precedes ots:ManageDemand_4_3_5 ;
+    dcterms:source "APQC industry PCF 4.3.4 (PCF ID 10278)" ;
+    rdfs:subClassOf ots:SourceProducts_4_3 .
+
+ots:ProcureToPay a owl:Class ;
+    rdfs:label "Procure to pay"@en .
+
+ots:ProcessAccountsPayableAndExpenseReimbursements_9_6 a owl:Class ;
+    rdfs:label "Process accounts payable and expense reimbursements"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 9.6 (PCF ID 10733)" ;
+    rdfs:subClassOf ots:ProcureToPay .
+
+ots:SourceProducts_4_3 a owl:Class ;
+    rdfs:label "Source products"@en ;
+    ots:functionUnit "procurement_scm" ;
+    dcterms:source "APQC industry PCF 4.3 (PCF ID 16672)" ;
+    rdfs:subClassOf ots:ProcureToPay .
+

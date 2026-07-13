@@ -1,0 +1,140 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:DevelopCategoryPlan_4_1_1 a owl:Class ;
+    rdfs:label "Develop category plan"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:DefineAssortmentPlan_4_1_2 ;
+    dcterms:source "APQC industry PCF 4.1.1 (PCF ID 16636)" ;
+    rdfs:subClassOf ots:DevelopProductPlan_4_1 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:DefineAssortmentPlan_4_1_2 a owl:Class ;
+    rdfs:label "Define assortment plan"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:DevelopAndManageSalesAndPricingPlan_4_1_3 ;
+    dcterms:source "APQC industry PCF 4.1.2 (PCF ID 16639)" ;
+    rdfs:subClassOf ots:DevelopProductPlan_4_1 .
+
+ots:DesignProducts_4_2_2 a owl:Class ;
+    rdfs:label "Design products"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ProcureMaterials_4_2_3 ;
+    dcterms:source "APQC industry PCF 4.2.2 (PCF ID 16657)" ;
+    rdfs:subClassOf ots:ManageProductDevelopmentLifecycle_4_2 .
+
+ots:DevelopAllocationPlan_4_1_4 a owl:Class ;
+    rdfs:label "Develop allocation plan"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ManageProductLifecycle_4_1_5 ;
+    dcterms:source "APQC industry PCF 4.1.4 (PCF ID 16645)" ;
+    rdfs:subClassOf ots:DevelopProductPlan_4_1 .
+
+ots:DevelopAndManageCustomerLoyaltyPrograms_3_2_6 a owl:Class ;
+    rdfs:label "Develop and manage customer loyalty programs"@en ;
+    ots:functionUnit "marketing" ;
+    dcterms:source "APQC industry PCF 3.2.6 (PCF ID 16632)" ;
+    rdfs:subClassOf ots:MarketToCustomers_3_2 .
+
+ots:DevelopAndManageMediaCampaigns_3_2_4 a owl:Class ;
+    rdfs:label "Develop and manage media campaigns"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:ManageProductMarketingContent_3_2_5 ;
+    dcterms:source "APQC industry PCF 3.2.4 (PCF ID 10150)" ;
+    rdfs:subClassOf ots:MarketToCustomers_3_2 .
+
+ots:DevelopAndManagePromotionalActivities_3_2_2 a owl:Class ;
+    rdfs:label "Develop and manage promotional activities"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:ManageSocialMedia_3_2_3 ;
+    dcterms:source "APQC industry PCF 3.2.2 (PCF ID 10152)" ;
+    rdfs:subClassOf ots:MarketToCustomers_3_2 .
+
+ots:DevelopAndManageSalesAndPricingPlan_4_1_3 a owl:Class ;
+    rdfs:label "Develop and manage sales and pricing plan"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:DevelopAllocationPlan_4_1_4 ;
+    dcterms:source "APQC industry PCF 4.1.3 (PCF ID 10129)" ;
+    rdfs:subClassOf ots:DevelopProductPlan_4_1 .
+
+ots:DevelopManufacturingOutsourcingStrategy_4_2_1 a owl:Class ;
+    rdfs:label "Develop manufacturing outsourcing strategy"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:DesignProducts_4_2_2 ;
+    dcterms:source "APQC industry PCF 4.2.1 (PCF ID 16652)" ;
+    rdfs:subClassOf ots:ManageProductDevelopmentLifecycle_4_2 .
+
+ots:ManageContractWithManufacturers_4_2_4 a owl:Class ;
+    rdfs:label "Manage contract with manufacturers"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ManageProduction_4_2_5 ;
+    dcterms:source "APQC industry PCF 4.2.4 (PCF ID 16662)" ;
+    rdfs:subClassOf ots:ManageProductDevelopmentLifecycle_4_2 .
+
+ots:ManageProductLifecycle_4_1_5 a owl:Class ;
+    rdfs:label "Manage product lifecycle"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:DevelopManufacturingOutsourcingStrategy_4_2_1 ;
+    dcterms:source "APQC industry PCF 4.1.5 (PCF ID 16649)" ;
+    rdfs:subClassOf ots:DevelopProductPlan_4_1 .
+
+ots:ManageProductMarketingContent_3_2_5 a owl:Class ;
+    rdfs:label "Manage product marketing content"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:DevelopAndManageCustomerLoyaltyPrograms_3_2_6 ;
+    dcterms:source "APQC industry PCF 3.2.5 (PCF ID 16629)" ;
+    rdfs:subClassOf ots:MarketToCustomers_3_2 .
+
+ots:ManageProduction_4_2_5 a owl:Class ;
+    rdfs:label "Manage production"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:PromoteAndManageBrands_3_2_1 ;
+    dcterms:source "APQC industry PCF 4.2.5 (PCF ID 16665)" ;
+    rdfs:subClassOf ots:ManageProductDevelopmentLifecycle_4_2 .
+
+ots:ManageSocialMedia_3_2_3 a owl:Class ;
+    rdfs:label "Manage social media"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:DevelopAndManageMediaCampaigns_3_2_4 ;
+    dcterms:source "APQC industry PCF 3.2.3 (PCF ID 16625)" ;
+    rdfs:subClassOf ots:MarketToCustomers_3_2 .
+
+ots:ProcureMaterials_4_2_3 a owl:Class ;
+    rdfs:label "Procure materials"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:ManageContractWithManufacturers_4_2_4 ;
+    dcterms:source "APQC industry PCF 4.2.3 (PCF ID 16658)" ;
+    rdfs:subClassOf ots:ManageProductDevelopmentLifecycle_4_2 .
+
+ots:PromoteAndManageBrands_3_2_1 a owl:Class ;
+    rdfs:label "Promote and manage brands"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:DevelopAndManagePromotionalActivities_3_2_2 ;
+    dcterms:source "APQC industry PCF 3.2.1 (PCF ID 16619)" ;
+    rdfs:subClassOf ots:MarketToCustomers_3_2 .
+
+ots:ConceptToMarket a owl:Class ;
+    rdfs:label "Concept to market"@en .
+
+ots:DevelopProductPlan_4_1 a owl:Class ;
+    rdfs:label "Develop product plan"@en ;
+    ots:functionUnit "products" ;
+    dcterms:source "APQC industry PCF 4.1 (PCF ID 16635)" ;
+    rdfs:subClassOf ots:ConceptToMarket .
+
+ots:ManageProductDevelopmentLifecycle_4_2 a owl:Class ;
+    rdfs:label "Manage product development lifecycle"@en ;
+    ots:functionUnit "products" ;
+    dcterms:source "APQC industry PCF 4.2 (PCF ID 16651)" ;
+    rdfs:subClassOf ots:ConceptToMarket .
+
+ots:MarketToCustomers_3_2 a owl:Class ;
+    rdfs:label "Market to customers"@en ;
+    ots:functionUnit "marketing" ;
+    dcterms:source "APQC industry PCF 3.2 (PCF ID 16618)" ;
+    rdfs:subClassOf ots:ConceptToMarket .
+

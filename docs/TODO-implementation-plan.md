@@ -153,9 +153,83 @@ Design spec: `docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-de
 
 **Status:** `main` — [Specs.md](./Specs.md), [user_manual.md](./user_manual.md), [DemoScript.md](./DemoScript.md) + `e2e/demo-script.spec.ts` validate the recording flow.
 
-**Next tasks:**
-1. Connector creds in `.env` for live Salesforce/Jira.
-2. APQC↔eTOM candidate review; SHACL; standards crawl agent.
+**Next tasks (reordered 2026-07-13 to prioritise the "generic across all industries" objective):**
+
+### P1 — Multi-industry genericity (delivers the core objective)
+
+The architecture is already industry-parameterised (engagement `industry` free-string column;
+catalog-driven baseline discovery in `fuseki_client.list_baselines`; per-industry `streams_{industry}.yaml`
+in ingest), but only 2 industries (generic APQC + telecom eTOM) were delivered. Progress below.
+
+1. **[x] DONE 2026-07-13 — Wire `emit` to industry PDF caches.** `services/ingest/cli.py`:
+   `_load_apqc_cache(industry)` now loads `cache/apqc_{industry}.jsonl` for self-contained industry PCFs
+   (retail, utilities, …); `generic`/`telecom` keep the cross-industry cache. Added
+   `mapping/streams_retail.yaml` + `mapping/streams_utilities.yaml` (prefixes pinned to each industry's own
+   PCF numbering — they differ from cross-industry). Emitted `data/baselines/{retail,utilities}/*.{ttl,bpmn}`
+   — all 5 streams each, `validate` OK, BPMN parse clean (0 warnings, correct function-unit lanes). Also
+   emits per-industry thesauri `data/thesaurus/apqc_{industry}.ttl`. **Bonus fix:** `apqc.ttl` was polluted
+   with ~3200 eTOM concepts (emit passed the combined element list to the SKOS emitter) — now emitted from
+   the APQC-only set (2016 concepts), so the "apqc" ontology search no longer returns eTOM processes.
+   Verified end-to-end on the live stack: `POST …/verify-retail-001/o2c/initialize?industry=retail` → 200
+   triples in Fuseki; retail O2C BPMN serves 27 tasks; `apqc_retail` thesaurus search returns retail terms.
+
+   **Follow-on [x] DONE 2026-07-13 — industry-standards agent (`services/ingest/industry_agent/`).** Rather
+   than hand-parse the other PDFs, built an agent (Bobby's ask: part of the repo, runs periodically to track
+   evolving standards). Pipeline per industry: parse PDF → cache → propose value-stream mapping (keyword
+   heuristics over the industry's own level-1/2 categories → **draft** `streams_{slug}.yaml`) → derive
+   profile (`data/profiles/{slug}.json`) → emit TTL+BPMN+thesaurus → validate. CLI `ots-industry-agent
+   list|check|sync` (`check` exits non-zero on drift for schedulers; `sync` is hash-idempotent via
+   `data/baselines/.industry_manifest.json`). Never clobbers human-curated mappings (files without the
+   `AGENT-GENERATED DRAFT` marker) or existing profiles; emits from the on-disk YAML so curated overrides win.
+   Ran across all 11 industry PDFs → **13 industries now have baselines** (generic + telecom + 11 APQC:
+   consumer_products/_electronics, downstream/upstream_petroleum, education, healthcare_provider,
+   health_insurance_payor, life_sciences, property_casualty_insurance, retail, utilities). All validate OK,
+   all BPMN parse with 0 warnings, API `/baselines` serves 13, web dropdown renders all 13. Fixed a latent
+   `bpmn.py` crash on empty streams (`lanes[0]` when a stream matched no subtree — now emits a minimal
+   Start→End). Excluded: telecom PDF (uses eTOM) + NACE (not an industry PCF). Mappings are drafts for
+   consultant review — Education's c2m/t2r matched nothing (bespoke terminology) and need manual subtrees;
+   optional LLM refinement via `llm.py` is a documented extension. See
+   `services/ingest/industry_agent/README.md` for periodic-run (cron/CI/routine) guidance.
+2. **[x] DONE 2026-07-13 — Web industry list is catalog-driven.** `Industry` widened to `string`
+   (`apps/web/lib/types/index.ts`); `industries.ts` adds friendly labels for retail/utilities + an
+   `industryLabel()` fallback that title-cases unknown slugs; `ontologyService.listBaselines()` added; the
+   create-engagement dialog fetches `GET /api/v1/ontology/baselines` on open and renders options from it,
+   falling back to the static list when the API is unreachable. `tsc` clean. Verified in the browser: the
+   dropdown lists all 4 industries; with the API up the order matches the catalog's sorted keys (distinct
+   from the static fallback order — proving the dynamic path drives it). New industries now need zero web
+   changes.
+3. **[x] DONE 2026-07-13 — Per-engagement configuration, industry-defaulted.** Decision (Bobby, 2026-07-13):
+   function units + value streams become **per-engagement config, seeded from an industry profile**.
+   - **Industry profiles** = source of truth in `data/profiles/{industry}.json` (+ `_default.json` fallback):
+     `{ label, functionUnits: [...], valueStreams: [{type,label}] }`. Function-unit **colors are compiled
+     Tailwind tokens** (`fn-sales`…`fn-networks` in globals.css), so units are a fixed **library**; a profile
+     selects an industry-appropriate **subset** (retail drops networks/production; telecom/utilities keep
+     networks). Genuinely new units = library growth (add token + code). `valueStreams[].type` is an open
+     string (extensible) — today all industries use o2c/p2p/c2m/h2r/t2r; the industry-standards agent (item 1
+     follow-on) can introduce new stream ids + baselines later.
+   - **Engagement config** resolved from the profile at create time and **stored on the engagement** (JSONB
+     `function_units` + `value_streams` columns) so evolving industry standards don't silently mutate existing
+     engagements; editable later. Value-stream rows seed from the profile's stream list (not the hardcoded 5).
+   - API: `services/api/profiles.py` loader + `GET /api/v1/profiles[/{industry}]`; engagement create resolves +
+     persists; `EngagementModel` exposes `functionUnits` + `valueStreams`. Old rows fall back to the profile on read.
+   - Web: engagement config drives which function units + value streams render (full library as fallback when no
+     engagement in scope).
+
+_Data-depth note (not a blocker): generic baselines are shallow (P2P only 11 classes). Full 2,017-element
+APQC parse is already in `cache/apqc.jsonl`; deeper subtrees are a `streams.yaml` mapping tweak, not new parsing._
+
+### P2 — Remaining plan items
+
+4. Connector creds in `.env` for live Salesforce/Jira.
+5. APQC↔eTOM candidate review; SHACL shapes (`services/ingest/shapes.ttl` — §1.6 never written); standards crawl agent.
+6. Agent scheduling/trigger rather than button-only (spec §16) — orthogonal to genericity.
+
+### Housekeeping — stale entries to reconcile
+
+- Plan line ~106 still lists "connectors state (mock-only, lowest value)" as remaining, but real
+  Postgres-backed Salesforce/Jira connectors shipped 2026-07-11 (`fd6f425`) and web went API-only 2026-07-12.
+- Legacy flat `data/baselines/*.ttl` files were meant to be deleted after the Phase 2 API migration
+  (plan line ~71) but are still present alongside `data/baselines/{generic,telecom}/`.
 
 **How to run the stack locally:**
 - `docker compose up -d postgres fuseki keycloak`
@@ -167,6 +241,12 @@ Design spec: `docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-de
 - Playwright: `cd apps/web && npm run test:e2e` (one `next dev` per dir; API readiness on `/api/v1/engagements`).
 
 ## Session log
+
+- 2026-07-13 (P1 item 3 + item-1 follow-on): (a) Per-engagement industry config — `data/profiles/*.json` source of truth, `services/api/profiles.py` + `/api/v1/profiles`, engagement JSONB `function_units`/`value_streams_config` seeded from profile at create (Alembic `c4e7a1b9d2f0`), old rows fall back to profile on read. Web: `Engagement.functionUnits`/`valueStreamConfig` types, `functionUnitsFor()` helper, function-tag picker + legend industry-scoped. Verified live: acme (generic) shows Production/no Networks; globex (telecom) shows Networks/no Production. (b) Industry-standards agent `services/ingest/industry_agent/` (`ots-industry-agent list|check|sync`) — parses the 11 industry PCF PDFs → draft mappings + profiles + baselines; 13 industries total now, all validate + BPMN-clean; API serves 13, dropdown renders 13. Fixed `bpmn.py` empty-stream crash. Manifest-based drift `check` for periodic runs (README documents cron/CI/routine). tsc clean.
+
+- 2026-07-13 (P1 items 1–2): Multi-industry genericity — ingest `emit` now loads `cache/apqc_{industry}.jsonl` for self-contained industry PCFs; added `streams_retail.yaml` + `streams_utilities.yaml` (prefixes pinned to each industry's own numbering); emitted retail + utilities baselines (TTL+BPMN, all validate OK, BPMN parse clean) + per-industry thesauri. Fixed pre-existing `apqc.ttl` eTOM pollution (5216→2018 concepts). Web: `Industry` type widened to `string`, `industryLabel()` helper, `ontologyService.listBaselines()`, create dialog now catalog-driven (fetch-first, static fallback). `tsc` clean. Verified live: API `/baselines` returns 4 industries + 6 thesauri; retail O2C loads 200 triples into Fuseki, BPMN serves 27 tasks, `apqc_retail` search returns retail concepts; browser dropdown renders all 4 dynamically. Item 3 (de-telecom generic surfaces) still open.
+
+- 2026-07-13 (review + replan): Reviewed codebase vs plan — Phase 1/4 done, Phase 2 underway, `tsc` clean, tree clean at `f213be5`. Verified genericity is architecturally present but only 2 industries delivered; identified 3 concrete blockers (ingest `emit` ignores `apqc_{industry}` caches; web `Industry` union + industries.ts hardcoded to 2; telecom leakage in "generic" function-unit/stream/thesaurus surfaces). Reordered RESUME HERE "Next tasks" to lead with P1 multi-industry work; logged 2 stale entries (connectors mock-only line, legacy flat baseline TTLs). No code changes.
 
 - 2026-07-12 (docs): Specs.md, user_manual.md, DemoScript.md; demo-script E2E + shared demo-recording-flow.
 

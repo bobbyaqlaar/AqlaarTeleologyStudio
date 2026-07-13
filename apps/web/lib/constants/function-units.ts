@@ -91,3 +91,20 @@ export const FUNCTION_UNITS: FunctionUnitMeta[] = [
 export const FUNCTION_UNIT_MAP = Object.fromEntries(
   FUNCTION_UNITS.map((unit) => [unit.id, unit]),
 ) as Record<FunctionalUnit, FunctionUnitMeta>;
+
+/**
+ * The function units active for an engagement — the industry-appropriate subset
+ * of the library declared by the engagement's profile. Falls back to the full
+ * library when no config is present (mock/UI-only mode, or legacy engagements).
+ * Order follows the engagement config when given, else the library order.
+ */
+export function functionUnitsFor(
+  units?: FunctionalUnit[] | null,
+): FunctionUnitMeta[] {
+  if (!units || units.length === 0) {
+    return FUNCTION_UNITS;
+  }
+  return units
+    .map((id) => FUNCTION_UNIT_MAP[id])
+    .filter((meta): meta is FunctionUnitMeta => Boolean(meta));
+}

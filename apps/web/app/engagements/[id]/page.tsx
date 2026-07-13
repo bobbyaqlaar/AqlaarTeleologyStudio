@@ -185,7 +185,7 @@ export default async function EngagementDashboardPage({
           engagementName={engagement.name}
         />
 
-        <FunctionUnitLegend compact />
+        <FunctionUnitLegend compact units={engagement.functionUnits} />
       </div>
     </AppShell>
   );

@@ -19,6 +19,7 @@ dependencies = [
 
 [project.scripts]
 ots-ingest = "services.ingest.cli:app"
+ots-industry-agent = "services.ingest.industry_agent.cli:app"
 
 [build-system]
 requires = ["hatchling"]

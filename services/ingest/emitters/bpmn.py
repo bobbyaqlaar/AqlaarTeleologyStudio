@@ -45,6 +45,10 @@ def emit(
         tasks.extend((element, subtree.function_unit) for element in selected)
 
     lanes = list(dict.fromkeys(unit for _, unit in tasks))
+    # A stream with no seeded steps (no framework subtree matched) still needs a
+    # valid, openable diagram: one default lane with just Start → End.
+    if not lanes:
+        lanes = ["operations"]
 
     definitions = ET.Element(
         f"{{{BPMN_NS}}}definitions",

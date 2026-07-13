@@ -1,0 +1,37 @@
+{
+  "label": "Healthcare Provider (APQC)",
+  "functionUnits": [
+    "sales",
+    "marketing",
+    "customer_care",
+    "finance",
+    "procurement_scm",
+    "production",
+    "operations",
+    "hr",
+    "products",
+    "it"
+  ],
+  "valueStreams": [
+    {
+      "type": "o2c",
+      "label": "Order to Cash"
+    },
+    {
+      "type": "p2p",
+      "label": "Procure to Pay"
+    },
+    {
+      "type": "c2m",
+      "label": "Concept to Market"
+    },
+    {
+      "type": "h2r",
+      "label": "Hire to Retire"
+    },
+    {
+      "type": "t2r",
+      "label": "Trouble to Resolve"
+    }
+  ]
+}

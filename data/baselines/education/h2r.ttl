@@ -1,0 +1,229 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:CreateAndDevelopEmployeeRequisitionsVacancyPosting_6_2_1 a owl:Class ;
+    rdfs:label "Create and develop employee requisitions/vacancy posting"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:RecruitSourceCandidates_6_2_2 ;
+    dcterms:source "APQC industry PCF 6.2.1 (PCF ID 10439)" ;
+    rdfs:subClassOf ots:RecruitSourceAndScreenSelectEmployees_6_2 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:AdministerPayroll_6_5_5 a owl:Class ;
+    rdfs:label "Administer payroll"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManagePromotionAndDemotionProcess_6_6_1 ;
+    dcterms:source "APQC industry PCF 6.5.5 (PCF ID 10497)" ;
+    rdfs:subClassOf ots:RewardAndRetainEmployees_6_5 .
+
+ots:DevelopAndImplementEmployeeReductionInForcePoliciesAndRegulations_6_6_5 a owl:Class ;
+    rdfs:label "Develop and implement employee reduction in force policies and regulations"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageDeploymentOfPersonnel_6_6_6 ;
+    dcterms:source "APQC industry PCF 6.6.5 (PCF ID 10516)" ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_6_6 .
+
+ots:DevelopAndManageEmployeeEngagementAndSatisfaction_6_5_2 a owl:Class ;
+    rdfs:label "Develop and manage employee engagement and satisfaction"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageAndAdministerBenefits_6_5_3 ;
+    dcterms:source "APQC industry PCF 6.5.2 (PCF ID 20508)" ;
+    rdfs:subClassOf ots:RewardAndRetainEmployees_6_5 .
+
+ots:DevelopAndManageRewardRecognitionAndIncentivePrograms_6_5_1 a owl:Class ;
+    rdfs:label "Develop and manage reward, recognition, and incentive programs"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:DevelopAndManageEmployeeEngagementAndSatisfaction_6_5_2 ;
+    dcterms:source "APQC industry PCF 6.5.1 (PCF ID 10494)" ;
+    rdfs:subClassOf ots:RewardAndRetainEmployees_6_5 .
+
+ots:DevelopAndTrainEmployees_6_3_4 a owl:Class ;
+    rdfs:label "Develop and train employees"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:DevelopAndManageRewardRecognitionAndIncentivePrograms_6_5_1 ;
+    dcterms:source "APQC industry PCF 6.3.4 (PCF ID 10473)" ;
+    rdfs:subClassOf ots:ManageEmployeeOnBoardingDevelopmentAndTraining_6_3 .
+
+ots:ManageAndAdministerBenefits_6_5_3 a owl:Class ;
+    rdfs:label "Manage and administer benefits"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageEmployeeAssistanceAndRetention_6_5_4 ;
+    dcterms:source "APQC industry PCF 6.5.3 (PCF ID 10495)" ;
+    rdfs:subClassOf ots:RewardAndRetainEmployees_6_5 .
+
+ots:ManageDeploymentOfPersonnel_6_6_6 a owl:Class ;
+    rdfs:label "Manage deployment of personnel"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:RelocateEmployeesAndManageAssignments_6_6_7 ;
+    dcterms:source "APQC industry PCF 6.6.6 (PCF ID 10517)" ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_6_6 .
+
+ots:ManageEmployeeAssistanceAndRetention_6_5_4 a owl:Class ;
+    rdfs:label "Manage employee assistance and retention"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:AdministerPayroll_6_5_5 ;
+    dcterms:source "APQC industry PCF 6.5.4 (PCF ID 10496)" ;
+    rdfs:subClassOf ots:RewardAndRetainEmployees_6_5 .
+
+ots:ManageEmployeeDevelopment_6_3_3 a owl:Class ;
+    rdfs:label "Manage employee development"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:DevelopAndTrainEmployees_6_3_4 ;
+    dcterms:source "APQC industry PCF 6.3.3 (PCF ID 10472)" ;
+    rdfs:subClassOf ots:ManageEmployeeOnBoardingDevelopmentAndTraining_6_3 .
+
+ots:ManageEmployeeOrientationAndAssignment_6_3_1 a owl:Class ;
+    rdfs:label "Manage employee orientation and assignment"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageEmployeePerformance_6_3_2 ;
+    dcterms:source "APQC industry PCF 6.3.1 (PCF ID 10469)" ;
+    rdfs:subClassOf ots:ManageEmployeeOnBoardingDevelopmentAndTraining_6_3 .
+
+ots:ManageEmployeePerformance_6_3_2 a owl:Class ;
+    rdfs:label "Manage employee performance"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageEmployeeDevelopment_6_3_3 ;
+    dcterms:source "APQC industry PCF 6.3.2 (PCF ID 10470)" ;
+    rdfs:subClassOf ots:ManageEmployeeOnBoardingDevelopmentAndTraining_6_3 .
+
+ots:ManageFormerEmployees_6_6_8 a owl:Class ;
+    rdfs:label "Manage former employees"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ReportTime_8_5_1 ;
+    dcterms:source "APQC industry PCF 6.6.8 (PCF ID 20515)" ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_6_6 .
+
+ots:ManageLeaveOfAbsenceSabbatical_6_6_4 a owl:Class ;
+    rdfs:label "Manage leave of absence, sabbatical"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:DevelopAndImplementEmployeeReductionInForcePoliciesAndRegulations_6_6_5 ;
+    dcterms:source "APQC industry PCF 6.6.4 (PCF ID 10515)" ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_6_6 .
+
+ots:ManageNewHireRehire_6_2_5 a owl:Class ;
+    rdfs:label "Manage new hire/rehire"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:TrackCandidates_6_2_6 ;
+    dcterms:source "APQC industry PCF 6.2.5 (PCF ID 10443)" ;
+    rdfs:subClassOf ots:RecruitSourceAndScreenSelectEmployees_6_2 .
+
+ots:ManagePay_8_5_2 a owl:Class ;
+    rdfs:label "Manage pay"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ProcessPayrollTaxes_8_5_3 ;
+    dcterms:source "APQC industry PCF 8.5.2 (PCF ID 10754)" ;
+    rdfs:subClassOf ots:ProcessPayroll_8_5 .
+
+ots:ManagePrePlacementVerification_6_2_4 a owl:Class ;
+    rdfs:label "Manage pre-placement verification"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageNewHireRehire_6_2_5 ;
+    dcterms:source "APQC industry PCF 6.2.4 (PCF ID 10444)" ;
+    rdfs:subClassOf ots:RecruitSourceAndScreenSelectEmployees_6_2 .
+
+ots:ManagePromotionAndDemotionProcess_6_6_1 a owl:Class ;
+    rdfs:label "Manage promotion and demotion process"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageSeparation_6_6_2 ;
+    dcterms:source "APQC industry PCF 6.6.1 (PCF ID 10512)" ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_6_6 .
+
+ots:ManageRetirement_6_6_3 a owl:Class ;
+    rdfs:label "Manage retirement"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageLeaveOfAbsenceSabbatical_6_6_4 ;
+    dcterms:source "APQC industry PCF 6.6.3 (PCF ID 10514)" ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_6_6 .
+
+ots:ManageSeparation_6_6_2 a owl:Class ;
+    rdfs:label "Manage separation"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageRetirement_6_6_3 ;
+    dcterms:source "APQC industry PCF 6.6.2 (PCF ID 10513)" ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_6_6 .
+
+ots:ManageSubstituteTeachingStaff_6_2_7 a owl:Class ;
+    rdfs:label "Manage substitute teaching staff"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageEmployeeOrientationAndAssignment_6_3_1 ;
+    dcterms:source "APQC industry PCF 6.2.7 (PCF ID 20498)" ;
+    rdfs:subClassOf ots:RecruitSourceAndScreenSelectEmployees_6_2 .
+
+ots:ProcessPayrollTaxes_8_5_3 a owl:Class ;
+    rdfs:label "Process payroll taxes"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 8.5.3 (PCF ID 10755)" ;
+    rdfs:subClassOf ots:ProcessPayroll_8_5 .
+
+ots:RecruitSourceCandidates_6_2_2 a owl:Class ;
+    rdfs:label "Recruit/Source candidates"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ScreenSelectCandidates_6_2_3 ;
+    dcterms:source "APQC industry PCF 6.2.2 (PCF ID 10440)" ;
+    rdfs:subClassOf ots:RecruitSourceAndScreenSelectEmployees_6_2 .
+
+ots:RelocateEmployeesAndManageAssignments_6_6_7 a owl:Class ;
+    rdfs:label "Relocate employees and manage assignments"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageFormerEmployees_6_6_8 ;
+    dcterms:source "APQC industry PCF 6.6.7 (PCF ID 17055)" ;
+    rdfs:subClassOf ots:RedeployAndRetireEmployees_6_6 .
+
+ots:ReportTime_8_5_1 a owl:Class ;
+    rdfs:label "Report time"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManagePay_8_5_2 ;
+    dcterms:source "APQC industry PCF 8.5.1 (PCF ID 10753)" ;
+    rdfs:subClassOf ots:ProcessPayroll_8_5 .
+
+ots:ScreenSelectCandidates_6_2_3 a owl:Class ;
+    rdfs:label "Screen/Select candidates"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManagePrePlacementVerification_6_2_4 ;
+    dcterms:source "APQC industry PCF 6.2.3 (PCF ID 20123)" ;
+    rdfs:subClassOf ots:RecruitSourceAndScreenSelectEmployees_6_2 .
+
+ots:TrackCandidates_6_2_6 a owl:Class ;
+    rdfs:label "Track candidates"@en ;
+    ots:functionUnit "hr" ;
+    ots:precedes ots:ManageSubstituteTeachingStaff_6_2_7 ;
+    dcterms:source "APQC industry PCF 6.2.6 (PCF ID 20497)" ;
+    rdfs:subClassOf ots:RecruitSourceAndScreenSelectEmployees_6_2 .
+
+ots:ProcessPayroll_8_5 a owl:Class ;
+    rdfs:label "Process payroll"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 8.5 (PCF ID 10732)" ;
+    rdfs:subClassOf ots:HireToRetire .
+
+ots:ManageEmployeeOnBoardingDevelopmentAndTraining_6_3 a owl:Class ;
+    rdfs:label "Manage employee on boarding, development, and training"@en ;
+    ots:functionUnit "hr" ;
+    dcterms:source "APQC industry PCF 6.3 (PCF ID 20599)" ;
+    rdfs:subClassOf ots:HireToRetire .
+
+ots:HireToRetire a owl:Class ;
+    rdfs:label "Hire to retire"@en .
+
+ots:RewardAndRetainEmployees_6_5 a owl:Class ;
+    rdfs:label "Reward and retain employees"@en ;
+    ots:functionUnit "hr" ;
+    dcterms:source "APQC industry PCF 6.5 (PCF ID 10412)" ;
+    rdfs:subClassOf ots:HireToRetire .
+
+ots:RecruitSourceAndScreenSelectEmployees_6_2 a owl:Class ;
+    rdfs:label "Recruit/Source and Screen/Select employees"@en ;
+    ots:functionUnit "hr" ;
+    dcterms:source "APQC industry PCF 6.2 (PCF ID 10410)" ;
+    rdfs:subClassOf ots:HireToRetire .
+
+ots:RedeployAndRetireEmployees_6_6 a owl:Class ;
+    rdfs:label "Redeploy and retire employees"@en ;
+    ots:functionUnit "hr" ;
+    dcterms:source "APQC industry PCF 6.6 (PCF ID 10413)" ;
+    rdfs:subClassOf ots:HireToRetire .
+

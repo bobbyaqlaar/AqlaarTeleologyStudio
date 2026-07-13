@@ -24,6 +24,7 @@ from db_models import (
     ValueStreamRow,
 )
 from fuseki_client import FusekiClient
+from profiles import load_profile
 
 router = APIRouter(prefix="/api/v1/engagements", tags=["engagements"])
 fuseki = FusekiClient()
@@ -39,6 +40,11 @@ class ValueStreamModel(BaseModel):
     approval_status: str = Field(alias="approvalStatus")
 
 
+class ValueStreamConfigModel(BaseModel):
+    type: str
+    label: str
+
+
 class EngagementModel(BaseModel):
     model_config = ConfigDict(populate_by_name=True, ser_json_by_alias=True)
 
@@ -50,6 +56,10 @@ class EngagementModel(BaseModel):
     industry: str
     participants: list[dict]
     value_streams: list[ValueStreamModel] = Field(alias="valueStreams")
+    # Per-engagement config (seeded from the industry profile at create time;
+    # falls back to the profile for rows that predate the feature).
+    function_units: list[str] = Field(alias="functionUnits")
+    value_stream_config: list[ValueStreamConfigModel] = Field(alias="valueStreamConfig")
     created_at: str = Field(alias="createdAt")
     updated_at: str = Field(alias="updatedAt")
 
@@ -70,6 +80,9 @@ class ApprovalRequest(BaseModel):
 
 
 def _to_model(row: EngagementRow, streams: list[ValueStreamRow]) -> EngagementModel:
+    profile = load_profile(row.industry)
+    function_units = row.function_units or profile["functionUnits"]
+    stream_config = row.value_streams_config or profile["valueStreams"]
     return EngagementModel(
         id=row.id,
         name=row.name,
@@ -87,6 +100,11 @@ def _to_model(row: EngagementRow, streams: list[ValueStreamRow]) -> EngagementMo
                 approval_status=s.approval_status,
             )
             for s in streams
+        ],
+        function_units=function_units,
+        value_stream_config=[
+            ValueStreamConfigModel(type=s["type"], label=s["label"])
+            for s in stream_config
         ],
         created_at=row.created_at,
         updated_at=row.updated_at,
@@ -124,6 +142,8 @@ def create_engagement(
     with get_session() as session:
         engagement_id = f"eng-{uuid.uuid4().hex[:8]}"
         timestamp = now_iso()
+        profile = load_profile(payload.industry)
+        stream_types = [s["type"] for s in profile["valueStreams"]] or STREAM_TYPES
         row = EngagementRow(
             id=engagement_id,
             name=payload.name,
@@ -138,6 +158,8 @@ def create_engagement(
                     "role": "consultant",
                 }
             ],
+            function_units=profile["functionUnits"],
+            value_streams_config=profile["valueStreams"],
             created_at=timestamp,
             updated_at=timestamp,
         )
@@ -149,7 +171,7 @@ def create_engagement(
                 type=stream_type,
                 baseline_id=f"baseline-{stream_type}",
             )
-            for stream_type in STREAM_TYPES
+            for stream_type in stream_types
         ]
         for stream in streams:
             session.add(stream)

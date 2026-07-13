@@ -48,15 +48,34 @@ def _load_stream_mappings(industry: str = "generic") -> dict[str, StreamMapping]
     }
 
 
-def _load_apqc_cache() -> list[ProcessElement]:
-    cache_file = CACHE / "apqc.jsonl"
-    if not cache_file.exists():
-        typer.echo("No cache — run `ots-ingest parse-apqc` first.", err=True)
-        raise typer.Exit(1)
+def _read_elements(path: Path) -> list[ProcessElement]:
     return [
         ProcessElement.model_validate_json(line)
-        for line in cache_file.read_text().splitlines()
+        for line in path.read_text().splitlines()
     ]
+
+
+def _load_apqc_cache(industry: str = "generic") -> list[ProcessElement]:
+    """Load the APQC cache feeding an industry's baselines.
+
+    Industries with a self-contained PCF (retail, utilities, …) parse into
+    ``cache/apqc_{industry}.jsonl`` and are used directly. ``generic`` uses the
+    cross-industry PCF; ``telecom`` also uses it (its baselines come from the
+    eTOM MODA cache plus APQC h2r), so it is not treated as self-contained here.
+    """
+    industry_cache = CACHE / f"apqc_{industry}.jsonl"
+    if industry not in ("generic", "telecom") and industry_cache.exists():
+        cache_file = industry_cache
+    else:
+        cache_file = CACHE / "apqc.jsonl"
+    if not cache_file.exists():
+        typer.echo(
+            f"No cache {cache_file.name} — run `ots-ingest parse-apqc` "
+            "or `parse-industry` first.",
+            err=True,
+        )
+        raise typer.Exit(1)
+    return _read_elements(cache_file)
 
 
 @app.command()
@@ -101,13 +120,11 @@ def emit(
     industry: str = typer.Option("generic", help="baseline industry folder"),
 ) -> None:
     """Emit TTL + BPMN baselines per stream, and the SKOS thesauri."""
-    elements = _load_apqc_cache()
+    apqc_elements = _load_apqc_cache(industry)
+    elements = list(apqc_elements)
     etom_cache = CACHE / "etom.jsonl"
     if etom_cache.exists():
-        elements = elements + [
-            ProcessElement.model_validate_json(line)
-            for line in etom_cache.read_text().splitlines()
-        ]
+        elements = elements + _read_elements(etom_cache)
     mappings = _load_stream_mappings(industry)
     targets = ALL_STREAMS if stream == "all" else [stream]
 
@@ -119,8 +136,14 @@ def emit(
         bpmn_emitter.emit(mapping, elements, bpmn_path)
         typer.echo(f"{key}: {ttl_path} + {bpmn_path}")
 
-    skos_path = THESAURUS / "apqc.ttl"
-    skos_emitter.emit("apqc", elements, skos_path)
+    # Process thesaurus from the APQC element set only — eTOM/SID get their own
+    # schemes below. Self-contained industries (retail, utilities, …) publish a
+    # per-industry scheme so their ontology search returns industry concepts.
+    thes_framework = (
+        f"apqc_{industry}" if industry not in ("generic", "telecom") else "apqc"
+    )
+    skos_path = THESAURUS / f"{thes_framework}.ttl"
+    skos_emitter.emit(thes_framework, apqc_elements, skos_path)
     typer.echo(f"thesaurus: {skos_path}")
 
     # TM Forum thesauri when the MODA caches exist

@@ -1,0 +1,93 @@
+# Consumer Products value stream mapping — AGENT-GENERATED DRAFT.
+# Produced by services/ingest/industry_agent from the APQC Consumer Products PCF.
+# Prefixes are pinned to this industry's own PCF numbering via keyword
+# heuristics — REVIEW before relying on the baselines in a live engagement.
+# (Remove this marker once reviewed to protect it from agent re-writes.)
+
+o2c:
+  label: Order to Cash
+  subtrees:
+  - framework: apqc
+    prefix: '3'
+    function_unit: sales
+    max_level: 3
+  - framework: apqc
+    prefix: '4'
+    function_unit: operations
+    max_level: 3
+  - framework: apqc
+    prefix: '9.2'
+    function_unit: finance
+    max_level: 3
+p2p:
+  label: Procure to Pay
+  subtrees:
+  - framework: apqc
+    prefix: '4.1'
+    function_unit: procurement_scm
+    max_level: 3
+  - framework: apqc
+    prefix: '4.2'
+    function_unit: procurement_scm
+    max_level: 3
+  - framework: apqc
+    prefix: '9.6'
+    function_unit: finance
+    max_level: 3
+c2m:
+  label: Concept to Market
+  subtrees:
+  - framework: apqc
+    prefix: '2'
+    function_unit: products
+    max_level: 3
+  - framework: apqc
+    prefix: '3.2'
+    function_unit: marketing
+    max_level: 3
+  - framework: apqc
+    prefix: '3.3'
+    function_unit: marketing
+    max_level: 3
+h2r:
+  label: Hire to Retire
+  subtrees:
+  - framework: apqc
+    prefix: '7.2'
+    function_unit: hr
+    max_level: 3
+  - framework: apqc
+    prefix: '7.3'
+    function_unit: hr
+    max_level: 3
+  - framework: apqc
+    prefix: '7.5'
+    function_unit: hr
+    max_level: 3
+  - framework: apqc
+    prefix: '7.6'
+    function_unit: hr
+    max_level: 3
+  - framework: apqc
+    prefix: '9.5'
+    function_unit: finance
+    max_level: 3
+t2r:
+  label: Trouble to Resolve
+  subtrees:
+  - framework: apqc
+    prefix: '5.3'
+    function_unit: customer_care
+    max_level: 3
+  - framework: apqc
+    prefix: '6.2'
+    function_unit: customer_care
+    max_level: 3
+  - framework: apqc
+    prefix: '6.3'
+    function_unit: customer_care
+    max_level: 3
+  - framework: apqc
+    prefix: '6.5'
+    function_unit: customer_care
+    max_level: 3

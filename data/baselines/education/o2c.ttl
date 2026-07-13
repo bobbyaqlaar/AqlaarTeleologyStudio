@@ -1,0 +1,119 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:DefineLogisticsStrategy_4_3_1 a owl:Class ;
+    rdfs:label "Define logistics strategy"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PlanAndManageInboundMaterialFlow_4_3_2 ;
+    dcterms:source "APQC industry PCF 4.3.1 (PCF ID 20419)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_3 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:DesignRoutesAndSchedules_4_4_1 a owl:Class ;
+    rdfs:label "Design routes and schedules"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PlanAndDeliverSpecialRoutesAndServicesToSupportInstructionalNeeds_4_4_2 ;
+    dcterms:source "APQC industry PCF 4.4.1 (PCF ID 20421)" ;
+    rdfs:subClassOf ots:ManageTransportationOfStudents_4_4 .
+
+ots:InvoiceCustomer_8_2_2 a owl:Class ;
+    rdfs:label "Invoice customer"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ProcessAccountsReceivableAr_8_2_3 ;
+    dcterms:source "APQC industry PCF 8.2.2 (PCF ID 10743)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_8_2 .
+
+ots:ManageAndProcessAdjustmentsDeductions_8_2_5 a owl:Class ;
+    rdfs:label "Manage and process adjustments/deductions"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 8.2.5 (PCF ID 10746)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_8_2 .
+
+ots:ManageAndProcessCollections_8_2_4 a owl:Class ;
+    rdfs:label "Manage and process collections"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessAdjustmentsDeductions_8_2_5 ;
+    dcterms:source "APQC industry PCF 8.2.4 (PCF ID 10745)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_8_2 .
+
+ots:ManageReturnsManageReverseLogistics_4_3_5 a owl:Class ;
+    rdfs:label "Manage returns; manage reverse logistics"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:DesignRoutesAndSchedules_4_4_1 ;
+    dcterms:source "APQC industry PCF 4.3.5 (PCF ID 10342)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_3 .
+
+ots:ManageVehicleAcquisitionMaintenanceAndReplacement_4_4_3 a owl:Class ;
+    rdfs:label "Manage vehicle acquisition, maintenance, and replacement"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ProcessTaxpayerAccounts_8_2_1 ;
+    dcterms:source "APQC industry PCF 4.4.3 (PCF ID 20432)" ;
+    rdfs:subClassOf ots:ManageTransportationOfStudents_4_4 .
+
+ots:OperateDeliveryOfMaterials_4_3_4 a owl:Class ;
+    rdfs:label "Operate delivery of materials"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageReturnsManageReverseLogistics_4_3_5 ;
+    dcterms:source "APQC industry PCF 4.3.4 (PCF ID 10341)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_3 .
+
+ots:OperateWarehousing_4_3_3 a owl:Class ;
+    rdfs:label "Operate warehousing"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:OperateDeliveryOfMaterials_4_3_4 ;
+    dcterms:source "APQC industry PCF 4.3.3 (PCF ID 10340)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_3 .
+
+ots:PlanAndDeliverSpecialRoutesAndServicesToSupportInstructionalNeeds_4_4_2 a owl:Class ;
+    rdfs:label "Plan and deliver special routes and services to support instructional needs"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageVehicleAcquisitionMaintenanceAndReplacement_4_4_3 ;
+    dcterms:source "APQC industry PCF 4.4.2 (PCF ID 20428)" ;
+    rdfs:subClassOf ots:ManageTransportationOfStudents_4_4 .
+
+ots:PlanAndManageInboundMaterialFlow_4_3_2 a owl:Class ;
+    rdfs:label "Plan and manage inbound material flow"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:OperateWarehousing_4_3_3 ;
+    dcterms:source "APQC industry PCF 4.3.2 (PCF ID 10339)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_3 .
+
+ots:ProcessAccountsReceivableAr_8_2_3 a owl:Class ;
+    rdfs:label "Process accounts receivable (AR)"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessCollections_8_2_4 ;
+    dcterms:source "APQC industry PCF 8.2.3 (PCF ID 10744)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_8_2 .
+
+ots:ProcessTaxpayerAccounts_8_2_1 a owl:Class ;
+    rdfs:label "Process taxpayer accounts"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:InvoiceCustomer_8_2_2 ;
+    dcterms:source "APQC industry PCF 8.2.1 (PCF ID 20522)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_8_2 .
+
+ots:ManageTransportationOfStudents_4_4 a owl:Class ;
+    rdfs:label "Manage transportation of students"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 4.4 (PCF ID 20420)" ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:OrderToCash a owl:Class ;
+    rdfs:label "Order to cash"@en .
+
+ots:ManageLogisticsAndWarehousing_4_3 a owl:Class ;
+    rdfs:label "Manage logistics and warehousing"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 4.3 (PCF ID 10219)" ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:PerformRevenueAccounting_8_2 a owl:Class ;
+    rdfs:label "Perform revenue accounting"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 8.2 (PCF ID 10729)" ;
+    rdfs:subClassOf ots:OrderToCash .
+

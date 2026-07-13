@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -22,7 +22,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { INDUSTRIES } from "@/lib/constants/industries";
+import { INDUSTRIES, industryLabel } from "@/lib/constants/industries";
+import { ontologyService } from "@/lib/api/ontology-service";
 import { engagementService } from "@/lib/mock/services/engagement-service";
 import type { Engagement, Industry } from "@/lib/types";
 import { useRouter } from "next/navigation";
@@ -41,7 +42,35 @@ export function CreateEngagementDialog({
   const [client, setClient] = useState("");
   const [description, setDescription] = useState("");
   const [industry, setIndustry] = useState<Industry>("generic");
+  const [industryOptions, setIndustryOptions] = useState<
+    Array<{ id: Industry; label: string }>
+  >(INDUSTRIES.map((item) => ({ id: item.id, label: item.label })));
   const [submitting, setSubmitting] = useState(false);
+
+  // Discover available industry baselines from the API when the dialog opens;
+  // fall back to the static list (UI-only mode) if the API is unreachable.
+  useEffect(() => {
+    if (!open) {
+      return;
+    }
+    let active = true;
+    void ontologyService
+      .listBaselines()
+      .then((catalog) => {
+        const slugs = Object.keys(catalog.industries);
+        if (active && slugs.length > 0) {
+          setIndustryOptions(
+            slugs.map((slug) => ({ id: slug, label: industryLabel(slug) })),
+          );
+        }
+      })
+      .catch(() => {
+        // keep the static fallback options
+      });
+    return () => {
+      active = false;
+    };
+  }, [open]);
 
   const handleSubmit = async (): Promise<void> => {
     if (!name.trim() || !client.trim()) {
@@ -111,7 +140,7 @@ export function CreateEngagementDialog({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                {INDUSTRIES.map((item) => (
+                {industryOptions.map((item) => (
                   <SelectItem key={item.id} value={item.id}>
                     {item.label}
                   </SelectItem>

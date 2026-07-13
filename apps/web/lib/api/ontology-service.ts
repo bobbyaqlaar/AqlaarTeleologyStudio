@@ -52,6 +52,14 @@ export const ontologyService = {
     return request("/health");
   },
 
+  /** Baseline catalog: industry slug → available stream types, plus thesauri. */
+  async listBaselines(): Promise<{
+    industries: Record<string, ValueStreamType[]>;
+    thesauri: string[];
+  }> {
+    return request("/api/v1/ontology/baselines");
+  },
+
   async initialize(
     engagementId: string,
     streamType: ValueStreamType,

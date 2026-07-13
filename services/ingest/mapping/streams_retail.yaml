@@ -1,0 +1,40 @@
+# Retail value stream mapping — APQC Retail PCF (K09368, v7.2.1).
+# Prefixes pin to the RETAIL hierarchy (its top-level numbering differs from the
+# cross-industry PCF: e.g. 4.0 Merchandise, 5.0 Deliver Products, 6.0 Deliver
+# Services). function_unit = default tag; consultants retag in workshops.
+# max_level 3 = Process level (BPMN tasks).
+
+o2c:
+  label: Order to Cash
+  subtrees:
+    - { framework: apqc, prefix: "2.1", function_unit: sales, max_level: 3 }        # Operate direct channels
+    - { framework: apqc, prefix: "5", function_unit: operations, max_level: 3 }      # Deliver Products (warehouse, transport, inventory, DSD)
+    - { framework: apqc, prefix: "9.2", function_unit: finance, max_level: 3 }       # Perform revenue accounting
+
+p2p:
+  label: Procure to Pay
+  subtrees:
+    - { framework: apqc, prefix: "4.3", function_unit: procurement_scm, max_level: 3 }  # Source products
+    - { framework: apqc, prefix: "9.6", function_unit: finance, max_level: 3 }          # Process accounts payable
+
+c2m:
+  label: Concept to Market
+  subtrees:
+    - { framework: apqc, prefix: "4.1", function_unit: products, max_level: 3 }     # Develop product plan
+    - { framework: apqc, prefix: "4.2", function_unit: products, max_level: 3 }     # Manage product development lifecycle
+    - { framework: apqc, prefix: "3.2", function_unit: marketing, max_level: 3 }    # Market to customers
+
+h2r:
+  label: Hire to Retire
+  subtrees:
+    - { framework: apqc, prefix: "7.2", function_unit: hr, max_level: 3 }   # Recruit, source, and select employees
+    - { framework: apqc, prefix: "7.3", function_unit: hr, max_level: 3 }   # On-boarding, development, and training
+    - { framework: apqc, prefix: "7.5", function_unit: hr, max_level: 3 }   # Reward and retain employees
+    - { framework: apqc, prefix: "7.6", function_unit: hr, max_level: 3 }   # Redeploy and retire employees
+    - { framework: apqc, prefix: "9.5", function_unit: finance, max_level: 3 }      # Process payroll
+
+t2r:
+  label: Trouble to Resolve
+  subtrees:
+    - { framework: apqc, prefix: "2.5", function_unit: customer_care, max_level: 3 } # Manage customer relationship
+    - { framework: apqc, prefix: "6.3", function_unit: customer_care, max_level: 3 } # Deliver service to customer

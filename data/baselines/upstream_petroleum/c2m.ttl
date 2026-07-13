@@ -1,0 +1,37 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:PerformDiscoveryResearch_2_2_1 a owl:Class ;
+    rdfs:label "Perform discovery research"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:GenerateNewProductServiceConcepts_2_2_2 ;
+    dcterms:source "APQC industry PCF 2.2.1 (PCF ID 10065)" ;
+    rdfs:subClassOf ots:GenerateAndDefineNewProductServiceIdeas_2_2 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:ConceptToMarket a owl:Class ;
+    rdfs:label "Concept to market"@en .
+
+ots:DefineProductServiceDevelopmentRequirements_2_2_3 a owl:Class ;
+    rdfs:label "Define product/service development requirements"@en ;
+    ots:functionUnit "products" ;
+    dcterms:source "APQC industry PCF 2.2.3 (PCF ID 19990)" ;
+    rdfs:subClassOf ots:GenerateAndDefineNewProductServiceIdeas_2_2 .
+
+ots:GenerateNewProductServiceConcepts_2_2_2 a owl:Class ;
+    rdfs:label "Generate new product/service concepts"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:DefineProductServiceDevelopmentRequirements_2_2_3 ;
+    dcterms:source "APQC industry PCF 2.2.2 (PCF ID 19669)" ;
+    rdfs:subClassOf ots:GenerateAndDefineNewProductServiceIdeas_2_2 .
+
+ots:GenerateAndDefineNewProductServiceIdeas_2_2 a owl:Class ;
+    rdfs:label "Generate and define new product/service ideas"@en ;
+    ots:functionUnit "products" ;
+    dcterms:source "APQC industry PCF 2.2 (PCF ID 19698)" ;
+    rdfs:subClassOf ots:ConceptToMarket .
+

@@ -1,0 +1,126 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:PerformDiscoveryResearch_2_2_1 a owl:Class ;
+    rdfs:label "Perform discovery research"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:GenerateNewProductServiceConcepts_2_2_2 ;
+    dcterms:source "APQC industry PCF 2.2.1 (PCF ID 10065)" ;
+    rdfs:subClassOf ots:GenerateAndDefineNewProductServiceIdeas_2_2 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:AnalyzeAndRespondToCustomerInsight_3_3_6 a owl:Class ;
+    rdfs:label "Analyze and respond to customer insight"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:DevelopAndManagePackagingStrategy_3_3_7 ;
+    dcterms:source "APQC industry PCF 3.3.6 (PCF ID 16613)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:DefineProductServiceDevelopmentRequirements_2_2_3 a owl:Class ;
+    rdfs:label "Define product/service development requirements"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:DesignAndPrototypeProductsAndServices_2_3_1 ;
+    dcterms:source "APQC industry PCF 2.2.3 (PCF ID 19990)" ;
+    rdfs:subClassOf ots:GenerateAndDefineNewProductServiceIdeas_2_2 .
+
+ots:DesignAndPrototypeProductsAndServices_2_3_1 a owl:Class ;
+    rdfs:label "Design and prototype products and services"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:TestMarketForNewOrRevisedProductsAndServices_2_3_2 ;
+    dcterms:source "APQC industry PCF 2.3.1 (PCF ID 19993)" ;
+    rdfs:subClassOf ots:DevelopProductsAndServices_2_3 .
+
+ots:DevelopAndManagePackagingStrategy_3_3_7 a owl:Class ;
+    rdfs:label "Develop and manage packaging strategy"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:ManageProductMarketingContent_3_3_8 ;
+    dcterms:source "APQC industry PCF 3.3.7 (PCF ID 10154)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:DevelopAndManagePricing_3_3_3 a owl:Class ;
+    rdfs:label "Develop and manage pricing"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:DevelopAndManagePromotionalActivities_3_3_4 ;
+    dcterms:source "APQC industry PCF 3.3.3 (PCF ID 20593)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:DevelopAndManagePromotionalActivities_3_3_4 a owl:Class ;
+    rdfs:label "Develop and manage promotional activities"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:TrackCustomerManagementMeasures_3_3_5 ;
+    dcterms:source "APQC industry PCF 3.3.4 (PCF ID 20010)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:EstablishGoalsObjectivesAndMetricsForProductsServicesByChannelSegment_3_3_1 a owl:Class ;
+    rdfs:label "Establish goals, objectives, and metrics for products/ services by channel/segment"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:EstablishMarketingBudgets_3_3_2 ;
+    dcterms:source "APQC industry PCF 3.3.1 (PCF ID 10148)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:EstablishMarketingBudgets_3_3_2 a owl:Class ;
+    rdfs:label "Establish marketing budgets"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:DevelopAndManagePricing_3_3_3 ;
+    dcterms:source "APQC industry PCF 3.3.2 (PCF ID 10149)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:GenerateNewProductServiceConcepts_2_2_2 a owl:Class ;
+    rdfs:label "Generate new product/service concepts"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:DefineProductServiceDevelopmentRequirements_2_2_3 ;
+    dcterms:source "APQC industry PCF 2.2.2 (PCF ID 19669)" ;
+    rdfs:subClassOf ots:GenerateAndDefineNewProductServiceIdeas_2_2 .
+
+ots:ManageProductMarketingContent_3_3_8 a owl:Class ;
+    rdfs:label "Manage product marketing content"@en ;
+    ots:functionUnit "marketing" ;
+    dcterms:source "APQC industry PCF 3.3.8 (PCF ID 16629)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:PrepareForProductionServiceDelivery_2_3_3 a owl:Class ;
+    rdfs:label "Prepare for production/service delivery"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:EstablishGoalsObjectivesAndMetricsForProductsServicesByChannelSegment_3_3_1 ;
+    dcterms:source "APQC industry PCF 2.3.3 (PCF ID 19997)" ;
+    rdfs:subClassOf ots:DevelopProductsAndServices_2_3 .
+
+ots:TestMarketForNewOrRevisedProductsAndServices_2_3_2 a owl:Class ;
+    rdfs:label "Test market for new or revised products and services"@en ;
+    ots:functionUnit "products" ;
+    ots:precedes ots:PrepareForProductionServiceDelivery_2_3_3 ;
+    dcterms:source "APQC industry PCF 2.3.2 (PCF ID 19996)" ;
+    rdfs:subClassOf ots:DevelopProductsAndServices_2_3 .
+
+ots:TrackCustomerManagementMeasures_3_3_5 a owl:Class ;
+    rdfs:label "Track customer management measures"@en ;
+    ots:functionUnit "marketing" ;
+    ots:precedes ots:AnalyzeAndRespondToCustomerInsight_3_3_6 ;
+    dcterms:source "APQC industry PCF 3.3.5 (PCF ID 10153)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:ConceptToMarket a owl:Class ;
+    rdfs:label "Concept to market"@en .
+
+ots:DevelopProductsAndServices_2_3 a owl:Class ;
+    rdfs:label "Develop products and services"@en ;
+    ots:functionUnit "products" ;
+    dcterms:source "APQC industry PCF 2.3 (PCF ID 10062)" ;
+    rdfs:subClassOf ots:ConceptToMarket .
+
+ots:GenerateAndDefineNewProductServiceIdeas_2_2 a owl:Class ;
+    rdfs:label "Generate and define new product/service ideas"@en ;
+    ots:functionUnit "products" ;
+    dcterms:source "APQC industry PCF 2.2 (PCF ID 19698)" ;
+    rdfs:subClassOf ots:ConceptToMarket .
+
+ots:DevelopAndManageMarketingPlans_3_3 a owl:Class ;
+    rdfs:label "Develop and manage marketing plans"@en ;
+    ots:functionUnit "marketing" ;
+    dcterms:source "APQC industry PCF 3.3 (PCF ID 20008)" ;
+    rdfs:subClassOf ots:ConceptToMarket .
+

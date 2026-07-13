@@ -1,0 +1,156 @@
+{
+  "consumer_electronics": {
+    "elementCount": 2021,
+    "hash": "a76a8cec3a0bf8af",
+    "label": "Consumer Electronics",
+    "problems": 0,
+    "source": "K07153_Consumer Electronics_v721_020619_April 2023.pdf",
+    "streamTasks": {
+      "c2m": 4,
+      "h2r": 5,
+      "o2c": 3,
+      "p2p": 3,
+      "t2r": 4
+    }
+  },
+  "consumer_products": {
+    "elementCount": 1991,
+    "hash": "a949899d21280aab",
+    "label": "Consumer Products",
+    "problems": 0,
+    "source": "Consumer Products_v722_March_2025.pdf",
+    "streamTasks": {
+      "c2m": 3,
+      "h2r": 5,
+      "o2c": 3,
+      "p2p": 3,
+      "t2r": 4
+    }
+  },
+  "downstream_petroleum": {
+    "elementCount": 2007,
+    "hash": "7ce0b432c86b303d",
+    "label": "Downstream Petroleum",
+    "problems": 0,
+    "source": "Downstream Petroleum_v722_March_2025.pdf",
+    "streamTasks": {
+      "c2m": 4,
+      "h2r": 5,
+      "o2c": 3,
+      "p2p": 3,
+      "t2r": 4
+    }
+  },
+  "education": {
+    "elementCount": 1467,
+    "hash": "e73a4f3c08440387",
+    "label": "Education",
+    "problems": 0,
+    "source": "K07131_Education_v721_021019_April 2023.pdf",
+    "streamTasks": {
+      "c2m": 0,
+      "h2r": 5,
+      "o2c": 3,
+      "p2p": 2,
+      "t2r": 0
+    }
+  },
+  "health_insurance_payor": {
+    "elementCount": 2141,
+    "hash": "224f455a651724f6",
+    "label": "Health Insurance Payor",
+    "problems": 0,
+    "source": "K07155_Health Insurance Payor_721_021319_April 2023.pdf",
+    "streamTasks": {
+      "c2m": 4,
+      "h2r": 6,
+      "o2c": 3,
+      "p2p": 3,
+      "t2r": 5
+    }
+  },
+  "healthcare_provider": {
+    "elementCount": 1985,
+    "hash": "57fbbfedf8d76d12",
+    "label": "Healthcare Provider",
+    "problems": 0,
+    "source": "K07154_Healthcare Provider_v721_021319_April 2023.pdf",
+    "streamTasks": {
+      "c2m": 3,
+      "h2r": 5,
+      "o2c": 3,
+      "p2p": 3,
+      "t2r": 4
+    }
+  },
+  "life_sciences": {
+    "elementCount": 1948,
+    "hash": "dba27e1f97f3820b",
+    "label": "Life Sciences",
+    "problems": 0,
+    "source": "Life Sciences_v722_March_2025.pdf",
+    "streamTasks": {
+      "c2m": 4,
+      "h2r": 5,
+      "o2c": 3,
+      "p2p": 3,
+      "t2r": 4
+    }
+  },
+  "property_casualty_insurance": {
+    "elementCount": 1996,
+    "hash": "5338f1200cb94f3c",
+    "label": "Property & Casualty Insurance",
+    "problems": 0,
+    "source": "Property and Casualty Insurance_v722_March_2025.pdf",
+    "streamTasks": {
+      "c2m": 4,
+      "h2r": 5,
+      "o2c": 3,
+      "p2p": 2,
+      "t2r": 5
+    }
+  },
+  "retail": {
+    "elementCount": 1708,
+    "hash": "11e84e65342b428b",
+    "label": "Retail",
+    "problems": 0,
+    "source": "K09368_Retail Process_v721_011519_April 2023.pdf",
+    "streamTasks": {
+      "c2m": 3,
+      "h2r": 5,
+      "o2c": 3,
+      "p2p": 2,
+      "t2r": 2
+    }
+  },
+  "upstream_petroleum": {
+    "elementCount": 1806,
+    "hash": "f0d233217b5d3998",
+    "label": "Upstream Petroleum",
+    "problems": 0,
+    "source": "Upstream Petroleum_v722_March_2025.pdf",
+    "streamTasks": {
+      "c2m": 1,
+      "h2r": 5,
+      "o2c": 2,
+      "p2p": 3,
+      "t2r": 4
+    }
+  },
+  "utilities": {
+    "elementCount": 2069,
+    "hash": "17f5f2bed35245e6",
+    "label": "Utilities",
+    "problems": 0,
+    "source": "Utilities Process_v722_March_2025.pdf",
+    "streamTasks": {
+      "c2m": 3,
+      "h2r": 5,
+      "o2c": 4,
+      "p2p": 2,
+      "t2r": 4
+    }
+  }
+}

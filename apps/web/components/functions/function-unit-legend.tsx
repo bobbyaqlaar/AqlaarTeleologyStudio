@@ -1,15 +1,20 @@
-import { FUNCTION_UNITS } from "@/lib/constants/function-units";
+import { functionUnitsFor } from "@/lib/constants/function-units";
+import type { FunctionalUnit } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface FunctionUnitLegendProps {
   compact?: boolean;
   className?: string;
+  // When given, show only this engagement's function units; else the full library.
+  units?: FunctionalUnit[];
 }
 
 export function FunctionUnitLegend({
   compact = false,
   className,
+  units,
 }: FunctionUnitLegendProps): React.ReactNode {
+  const shown = functionUnitsFor(units);
   return (
     <div
       className={cn(
@@ -26,7 +31,7 @@ export function FunctionUnitLegend({
           compact ? "grid-cols-2 lg:grid-cols-5" : "grid-cols-2 md:grid-cols-3 xl:grid-cols-5",
         )}
       >
-        {FUNCTION_UNITS.map((unit) => (
+        {shown.map((unit) => (
           <div key={unit.id} className="flex items-center gap-2 text-xs">
             <span
               className={cn("size-2.5 shrink-0 rounded-full", unit.dotClass)}

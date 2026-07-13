@@ -1,0 +1,241 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:DevelopAndManageOnlineExperience_2_1_1 a owl:Class ;
+    rdfs:label "Develop and manage online experience"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ProvideCustomerSelfService_2_1_2 ;
+    dcterms:source "APQC industry PCF 2.1.1 (PCF ID 16479)" ;
+    rdfs:subClassOf ots:OperateDirectChannels_2_1 .
+
+ots:ManageDirectToStoreDelivery_5_4 a owl:Class ;
+    rdfs:label "Manage direct-to-store-delivery"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 5.4 (PCF ID 16745)" ;
+    rdfs:subClassOf ots:DeliverProducts_5_0 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:AnalyzePerformancePageEtc_2_1_5 a owl:Class ;
+    rdfs:label "Analyze performance (page, etc.)"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageCustomerProductReviews_2_1_6 ;
+    dcterms:source "APQC industry PCF 2.1.5 (PCF ID 16497)" ;
+    rdfs:subClassOf ots:OperateDirectChannels_2_1 .
+
+ots:BalanceEnterpriseInventory_5_3_2 a owl:Class ;
+    rdfs:label "Balance enterprise inventory"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ReplenishFulfillmentCenters_5_3_3 ;
+    dcterms:source "APQC industry PCF 5.3.2 (PCF ID 16731)" ;
+    rdfs:subClassOf ots:ManageEnterpriseInventory_5_3 .
+
+ots:DefineDistributionPlan_5_2_1 a owl:Class ;
+    rdfs:label "Define distribution plan"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PlanTransportationNetwork_5_2_2 ;
+    dcterms:source "APQC industry PCF 5.2.1 (PCF ID 16706)" ;
+    rdfs:subClassOf ots:ManageTransportationAndLogistics_5_2 .
+
+ots:DevelopAndManageCatalog_2_1_4 a owl:Class ;
+    rdfs:label "Develop and manage catalog"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:AnalyzePerformancePageEtc_2_1_5 ;
+    dcterms:source "APQC industry PCF 2.1.4 (PCF ID 16492)" ;
+    rdfs:subClassOf ots:OperateDirectChannels_2_1 .
+
+ots:InvoiceCustomer_9_2_2 a owl:Class ;
+    rdfs:label "Invoice customer"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ProcessAccountsReceivableAr_9_2_3 ;
+    dcterms:source "APQC industry PCF 9.2.2 (PCF ID 10743)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ManageAndProcessAdjustmentsDeductions_9_2_5 a owl:Class ;
+    rdfs:label "Manage and process adjustments/deductions"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 9.2.5 (PCF ID 10746)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ManageAndProcessCollections_9_2_4 a owl:Class ;
+    rdfs:label "Manage and process collections"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessAdjustmentsDeductions_9_2_5 ;
+    dcterms:source "APQC industry PCF 9.2.4 (PCF ID 10745)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ManageCustomerProductReviews_2_1_6 a owl:Class ;
+    rdfs:label "Manage customer product reviews"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:PlanWarehouseLayoutAndOperations_5_1_1 ;
+    dcterms:source "APQC industry PCF 2.1.6 (PCF ID 16502)" ;
+    rdfs:subClassOf ots:OperateDirectChannels_2_1 .
+
+ots:ManageImportsExports_5_2_4 a owl:Class ;
+    rdfs:label "Manage imports/exports"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:OperateOutboundTransportation_5_2_5 ;
+    dcterms:source "APQC industry PCF 5.2.4 (PCF ID 16718)" ;
+    rdfs:subClassOf ots:ManageTransportationAndLogistics_5_2 .
+
+ots:ManageInventory_5_1_2 a owl:Class ;
+    rdfs:label "Manage inventory"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageLoadingDocksAndYard_5_1_3 ;
+    dcterms:source "APQC industry PCF 5.1.2 (PCF ID 16683)" ;
+    rdfs:subClassOf ots:OperateWarehouse_5_1 .
+
+ots:ManageLoadingDocksAndYard_5_1_3 a owl:Class ;
+    rdfs:label "Manage loading docks and yard"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PickPackAndShip_5_1_4 ;
+    dcterms:source "APQC industry PCF 5.1.3 (PCF ID 16689)" ;
+    rdfs:subClassOf ots:OperateWarehouse_5_1 .
+
+ots:ManageReturns_5_1_6 a owl:Class ;
+    rdfs:label "Manage returns"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:TransferProductCrossDock_5_1_7 ;
+    dcterms:source "APQC industry PCF 5.1.6 (PCF ID 16704)" ;
+    rdfs:subClassOf ots:OperateWarehouse_5_1 .
+
+ots:ManageShoppingCart_2_1_3 a owl:Class ;
+    rdfs:label "Manage shopping cart"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DevelopAndManageCatalog_2_1_4 ;
+    dcterms:source "APQC industry PCF 2.1.3 (PCF ID 16487)" ;
+    rdfs:subClassOf ots:OperateDirectChannels_2_1 .
+
+ots:OperateOutboundTransportation_5_2_5 a owl:Class ;
+    rdfs:label "Operate outbound transportation"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:TrackCarrierPerformance_5_2_6 ;
+    dcterms:source "APQC industry PCF 5.2.5 (PCF ID 16723)" ;
+    rdfs:subClassOf ots:ManageTransportationAndLogistics_5_2 .
+
+ots:PickPackAndShip_5_1_4 a owl:Class ;
+    rdfs:label "Pick, pack, and ship"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PlanAndManageWorkforce_5_1_5 ;
+    dcterms:source "APQC industry PCF 5.1.4 (PCF ID 10356)" ;
+    rdfs:subClassOf ots:OperateWarehouse_5_1 .
+
+ots:PlanAndManageInboundProductFlow_5_2_3 a owl:Class ;
+    rdfs:label "Plan and manage inbound product flow"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageImportsExports_5_2_4 ;
+    dcterms:source "APQC industry PCF 5.2.3 (PCF ID 16717)" ;
+    rdfs:subClassOf ots:ManageTransportationAndLogistics_5_2 .
+
+ots:PlanAndManageWorkforce_5_1_5 a owl:Class ;
+    rdfs:label "Plan and manage workforce"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageReturns_5_1_6 ;
+    dcterms:source "APQC industry PCF 5.1.5 (PCF ID 16698)" ;
+    rdfs:subClassOf ots:OperateWarehouse_5_1 .
+
+ots:PlanTransportationNetwork_5_2_2 a owl:Class ;
+    rdfs:label "Plan transportation network"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PlanAndManageInboundProductFlow_5_2_3 ;
+    dcterms:source "APQC industry PCF 5.2.2 (PCF ID 16712)" ;
+    rdfs:subClassOf ots:ManageTransportationAndLogistics_5_2 .
+
+ots:PlanWarehouseLayoutAndOperations_5_1_1 a owl:Class ;
+    rdfs:label "Plan warehouse layout and operations"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageInventory_5_1_2 ;
+    dcterms:source "APQC industry PCF 5.1.1 (PCF ID 16681)" ;
+    rdfs:subClassOf ots:OperateWarehouse_5_1 .
+
+ots:ProcessAccountsReceivableAr_9_2_3 a owl:Class ;
+    rdfs:label "Process accounts receivable (AR)"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessCollections_9_2_4 ;
+    dcterms:source "APQC industry PCF 9.2.3 (PCF ID 10744)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ProcessCustomerCredit_9_2_1 a owl:Class ;
+    rdfs:label "Process customer credit"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:InvoiceCustomer_9_2_2 ;
+    dcterms:source "APQC industry PCF 9.2.1 (PCF ID 10742)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ProvideCustomerSelfService_2_1_2 a owl:Class ;
+    rdfs:label "Provide customer self-service"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageShoppingCart_2_1_3 ;
+    dcterms:source "APQC industry PCF 2.1.2 (PCF ID 16483)" ;
+    rdfs:subClassOf ots:OperateDirectChannels_2_1 .
+
+ots:ReplenishFulfillmentCenters_5_3_3 a owl:Class ;
+    rdfs:label "Replenish fulfillment centers"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ProcessCustomerCredit_9_2_1 ;
+    dcterms:source "APQC industry PCF 5.3.3 (PCF ID 16737)" ;
+    rdfs:subClassOf ots:ManageEnterpriseInventory_5_3 .
+
+ots:ReplenishRetailStores_5_3_1 a owl:Class ;
+    rdfs:label "Replenish retail stores"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:BalanceEnterpriseInventory_5_3_2 ;
+    dcterms:source "APQC industry PCF 5.3.1 (PCF ID 16727)" ;
+    rdfs:subClassOf ots:ManageEnterpriseInventory_5_3 .
+
+ots:TrackCarrierPerformance_5_2_6 a owl:Class ;
+    rdfs:label "Track carrier performance"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ReplenishRetailStores_5_3_1 ;
+    dcterms:source "APQC industry PCF 5.2.6 (PCF ID 10361)" ;
+    rdfs:subClassOf ots:ManageTransportationAndLogistics_5_2 .
+
+ots:TransferProductCrossDock_5_1_7 a owl:Class ;
+    rdfs:label "Transfer product cross-dock"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:DefineDistributionPlan_5_2_1 ;
+    dcterms:source "APQC industry PCF 5.1.7 (PCF ID 16744)" ;
+    rdfs:subClassOf ots:OperateWarehouse_5_1 .
+
+ots:ManageEnterpriseInventory_5_3 a owl:Class ;
+    rdfs:label "Manage enterprise inventory"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 5.3 (PCF ID 16726)" ;
+    rdfs:subClassOf ots:DeliverProducts_5_0 .
+
+ots:OrderToCash a owl:Class ;
+    rdfs:label "Order to cash"@en .
+
+ots:DeliverProducts_5_0 a owl:Class ;
+    rdfs:label "Deliver Products"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 5.0" ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:PerformRevenueAccounting_9_2 a owl:Class ;
+    rdfs:label "Perform revenue accounting"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 9.2 (PCF ID 10729)" ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:ManageTransportationAndLogistics_5_2 a owl:Class ;
+    rdfs:label "Manage transportation and logistics"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 5.2 (PCF ID 16705)" ;
+    rdfs:subClassOf ots:DeliverProducts_5_0 .
+
+ots:OperateDirectChannels_2_1 a owl:Class ;
+    rdfs:label "Operate direct channels"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "APQC industry PCF 2.1 (PCF ID 16478)" ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:OperateWarehouse_5_1 a owl:Class ;
+    rdfs:label "Operate warehouse"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 5.1 (PCF ID 16680)" ;
+    rdfs:subClassOf ots:DeliverProducts_5_0 .
+

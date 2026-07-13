@@ -57,6 +57,7 @@ export default async function ProcessPage({
         streamType={streamType}
         loadedStreams={loadedStreams}
         industry={engagement.industry}
+        functionUnits={engagement.functionUnits}
       />
     </AppShell>
   );

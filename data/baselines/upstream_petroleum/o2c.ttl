@@ -1,0 +1,99 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:DefineLogisticsStrategy_4_6_1 a owl:Class ;
+    rdfs:label "Define logistics strategy"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PlanAndManageInboundMaterialFlow_4_6_2 ;
+    dcterms:source "APQC industry PCF 4.6.1 (PCF ID 10338)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_6 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:InvoiceCustomer_9_2_3 a owl:Class ;
+    rdfs:label "Invoice customer"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ProcessAccountsReceivableAr_9_2_4 ;
+    dcterms:source "APQC industry PCF 9.2.3 (PCF ID 10743)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ManageAndProcessAdjustmentsDeductions_9_2_6 a owl:Class ;
+    rdfs:label "Manage and process adjustments/deductions"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 9.2.6 (PCF ID 10746)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ManageAndProcessCollections_9_2_5 a owl:Class ;
+    rdfs:label "Manage and process collections"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessAdjustmentsDeductions_9_2_6 ;
+    dcterms:source "APQC industry PCF 9.2.5 (PCF ID 10745)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:OperateAndOptimizeOutboundTransportation_4_6_4 a owl:Class ;
+    rdfs:label "Operate and optimize outbound transportation"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:SubmitRegulatoryReportsForMaterialsUsedAndLogistics_4_6_5 ;
+    dcterms:source "APQC industry PCF 4.6.4 (PCF ID 10341)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_6 .
+
+ots:OperateWarehousing_4_6_3 a owl:Class ;
+    rdfs:label "Operate warehousing"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:OperateAndOptimizeOutboundTransportation_4_6_4 ;
+    dcterms:source "APQC industry PCF 4.6.3 (PCF ID 10340)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_6 .
+
+ots:PerformHydrocarbonAccounting_9_2_1 a owl:Class ;
+    rdfs:label "Perform hydrocarbon accounting"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ProcessCustomerCredit_9_2_2 ;
+    dcterms:source "APQC industry PCF 9.2.1 (PCF ID 10742)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:PlanAndManageInboundMaterialFlow_4_6_2 a owl:Class ;
+    rdfs:label "Plan and manage inbound material flow"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:OperateWarehousing_4_6_3 ;
+    dcterms:source "APQC industry PCF 4.6.2 (PCF ID 20936)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_6 .
+
+ots:ProcessAccountsReceivableAr_9_2_4 a owl:Class ;
+    rdfs:label "Process accounts receivable (AR)"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessCollections_9_2_5 ;
+    dcterms:source "APQC industry PCF 9.2.4 (PCF ID 10744)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ProcessCustomerCredit_9_2_2 a owl:Class ;
+    rdfs:label "Process customer credit"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:InvoiceCustomer_9_2_3 ;
+    dcterms:source "APQC industry PCF 9.2.2 (PCF ID 10742)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:SubmitRegulatoryReportsForMaterialsUsedAndLogistics_4_6_5 a owl:Class ;
+    rdfs:label "Submit regulatory reports for materials used and logistics"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PerformHydrocarbonAccounting_9_2_1 ;
+    dcterms:source "APQC industry PCF 4.6.5 (PCF ID 19460)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_6 .
+
+ots:OrderToCash a owl:Class ;
+    rdfs:label "Order to cash"@en .
+
+ots:ManageLogisticsAndWarehousing_4_6 a owl:Class ;
+    rdfs:label "Manage logistics and warehousing"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 4.6 (PCF ID 10219)" ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:PerformRevenueAccounting_9_2 a owl:Class ;
+    rdfs:label "Perform revenue accounting"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 9.2 (PCF ID 10729)" ;
+    rdfs:subClassOf ots:OrderToCash .
+

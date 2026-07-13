@@ -42,7 +42,17 @@ export interface ValueStream {
   approvalStatus: ApprovalStatus;
 }
 
-export type Industry = "generic" | "telecom";
+// Per-engagement value-stream config from the industry profile: the stream
+// `type` (open string, extensible) plus its industry-appropriate label.
+export interface ValueStreamConfig {
+  type: string;
+  label: string;
+}
+
+// Industry baseline slug. Open-ended: the set of available industries is
+// discovered at runtime from GET /api/v1/ontology/baselines (any folder under
+// data/baselines/ with stream TTLs). "generic" and "telecom" are always present.
+export type Industry = string;
 
 export interface Engagement {
   id: string;
@@ -53,6 +63,11 @@ export interface Engagement {
   industry: Industry;
   participants: Participant[];
   valueStreams: ValueStream[];
+  // Per-engagement config resolved from the industry profile (API-backed). Optional
+  // so mock/UI-only construction still typechecks; consumers fall back to the full
+  // function-unit library / default value-stream order when absent.
+  functionUnits?: FunctionalUnit[];
+  valueStreamConfig?: ValueStreamConfig[];
   createdAt: string;
   updatedAt: string;
 }

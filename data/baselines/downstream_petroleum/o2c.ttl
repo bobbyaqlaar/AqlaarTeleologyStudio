@@ -1,0 +1,570 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:PerformCustomerAndMarketIntelligenceAnalysis_3_1_1 a owl:Class ;
+    rdfs:label "Perform customer and market intelligence analysis"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:EvaluateAndPrioritizeMarketOpportunities_3_1_2 ;
+    dcterms:source "APQC industry PCF 3.1.1 (PCF ID 10106)" ;
+    rdfs:subClassOf ots:UnderstandMarketsCustomersAndCapabilities_3_1 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:AnalyzeAndManageChannelPerformance_3_2_4 a owl:Class ;
+    rdfs:label "Analyze and manage channel performance"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DevelopMarketingCommunicationStrategy_3_2_5 ;
+    dcterms:source "APQC industry PCF 3.2.4 (PCF ID 20006)" ;
+    rdfs:subClassOf ots:DevelopMarketingStrategy_3_2 .
+
+ots:AnalyzeAndRespondToCustomerInsight_3_3_6 a owl:Class ;
+    rdfs:label "Analyze and respond to customer insight"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DevelopAndManagePackagingStrategy_3_3_7 ;
+    dcterms:source "APQC industry PCF 3.3.6 (PCF ID 16613)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:CalculateTradingProfitAndLossMarkToMarket_3_7_3 a owl:Class ;
+    rdfs:label "Calculate trading profit and loss (mark to market)"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageCarbonCertificatePositionAndProfitAndLoss_3_7_4 ;
+    dcterms:source "APQC industry PCF 3.7.3 (PCF ID 19535)" ;
+    rdfs:subClassOf ots:ManageCommodityPositions_3_7 .
+
+ots:CreateAndManageMasterProductionSchedule_4_1_5 a owl:Class ;
+    rdfs:label "Create and manage master production schedule"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PlanDistributionRequirements_4_1_6 ;
+    dcterms:source "APQC industry PCF 4.1.5 (PCF ID 10224)" ;
+    rdfs:subClassOf ots:PlanForAndAlignSupplyChainResources_4_1 .
+
+ots:CreateMaterialsPlan_4_1_4 a owl:Class ;
+    rdfs:label "Create materials plan"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:CreateAndManageMasterProductionSchedule_4_1_5 ;
+    dcterms:source "APQC industry PCF 4.1.4 (PCF ID 10223)" ;
+    rdfs:subClassOf ots:PlanForAndAlignSupplyChainResources_4_1 .
+
+ots:DefineAndManageChannelStrategy_3_2_3 a owl:Class ;
+    rdfs:label "Define and manage channel strategy"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:AnalyzeAndManageChannelPerformance_3_2_4 ;
+    dcterms:source "APQC industry PCF 3.2.3 (PCF ID 20000)" ;
+    rdfs:subClassOf ots:DevelopMarketingStrategy_3_2 .
+
+ots:DefineOfferingAndCustomerValueProposition_3_2_1 a owl:Class ;
+    rdfs:label "Define offering and customer value proposition"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DefinePricingStrategy_3_2_2 ;
+    dcterms:source "APQC industry PCF 3.2.1 (PCF ID 11168)" ;
+    rdfs:subClassOf ots:DevelopMarketingStrategy_3_2 .
+
+ots:DefinePricingStrategy_3_2_2 a owl:Class ;
+    rdfs:label "Define pricing strategy"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DefineAndManageChannelStrategy_3_2_3 ;
+    dcterms:source "APQC industry PCF 3.2.2 (PCF ID 10123)" ;
+    rdfs:subClassOf ots:DevelopMarketingStrategy_3_2 .
+
+ots:DesignAndManageCustomerLoyaltyProgram_3_2_6 a owl:Class ;
+    rdfs:label "Design and manage customer loyalty program"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:EstablishGoalsObjectivesAndMetricsForProductsServicesByChannelSegment_3_3_1 ;
+    dcterms:source "APQC industry PCF 3.2.6 (PCF ID 18924)" ;
+    rdfs:subClassOf ots:DevelopMarketingStrategy_3_2 .
+
+ots:DevelopAndManagePackagingStrategy_3_3_7 a owl:Class ;
+    rdfs:label "Develop and manage packaging strategy"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageProductMarketingContent_3_3_8 ;
+    dcterms:source "APQC industry PCF 3.3.7 (PCF ID 10154)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:DevelopAndManagePricing_3_3_3 a owl:Class ;
+    rdfs:label "Develop and manage pricing"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DevelopAndManagePromotionalActivities_3_3_4 ;
+    dcterms:source "APQC industry PCF 3.3.3 (PCF ID 20593)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:DevelopAndManagePromotionalActivities_3_3_4 a owl:Class ;
+    rdfs:label "Develop and manage promotional activities"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:TrackCustomerManagementMeasures_3_3_5 ;
+    dcterms:source "APQC industry PCF 3.3.4 (PCF ID 20010)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:DevelopAndManageSalesProposalsBidsAndQuotes_3_5_4 a owl:Class ;
+    rdfs:label "Develop and manage sales proposals, bids, and quotes"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageSalesOrders_3_5_5 ;
+    dcterms:source "APQC industry PCF 3.5.4 (PCF ID 11779)" ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:DevelopMarketingCommunicationStrategy_3_2_5 a owl:Class ;
+    rdfs:label "Develop marketing communication strategy"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DesignAndManageCustomerLoyaltyProgram_3_2_6 ;
+    dcterms:source "APQC industry PCF 3.2.5 (PCF ID 16848)" ;
+    rdfs:subClassOf ots:DevelopMarketingStrategy_3_2 .
+
+ots:DevelopOverallTradingStrategyAndMeasurementApproach_3_6_1 a owl:Class ;
+    rdfs:label "Develop overall trading strategy and measurement approach"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:EvaluateTradingOpportunities_3_6_2 ;
+    dcterms:source "APQC industry PCF 3.6.1 (PCF ID 19520)" ;
+    rdfs:subClassOf ots:TradeCommodityProducts_3_6 .
+
+ots:DevelopQualityStandardsAndProcedures_4_1_10 a owl:Class ;
+    rdfs:label "Develop quality standards and procedures"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ProvideSourcingGovernanceAndPerformCategoryManagement_4_2_1 ;
+    dcterms:source "APQC industry PCF 4.1.10 (PCF ID 10368)" ;
+    rdfs:subClassOf ots:PlanForAndAlignSupplyChainResources_4_1 .
+
+ots:DevelopSalesForecast_3_4_1 a owl:Class ;
+    rdfs:label "Develop sales forecast"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DevelopSalesPartnerAllianceRelationships_3_4_2 ;
+    dcterms:source "APQC industry PCF 3.4.1 (PCF ID 10129)" ;
+    rdfs:subClassOf ots:DevelopSalesStrategy_3_4 .
+
+ots:DevelopSalesPartnerAllianceRelationships_3_4_2 a owl:Class ;
+    rdfs:label "Develop sales partner/alliance relationships"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:EstablishOverallSalesBudgets_3_4_3 ;
+    dcterms:source "APQC industry PCF 3.4.2 (PCF ID 10130)" ;
+    rdfs:subClassOf ots:DevelopSalesStrategy_3_4 .
+
+ots:DevelopSourcingAndCategoryManagementStrategies_4_2_2 a owl:Class ;
+    rdfs:label "Develop sourcing and category management strategies"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:SelectSuppliersAndDevelopMaintainContracts_4_2_3 ;
+    dcterms:source "APQC industry PCF 4.2.2 (PCF ID 20973)" ;
+    rdfs:subClassOf ots:ProcureMaterialsAndServices_4_2 .
+
+ots:EstablishCustomerManagementMeasures_3_4_5 a owl:Class ;
+    rdfs:label "Establish customer management measures"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageLeadsOpportunities_3_5_1 ;
+    dcterms:source "APQC industry PCF 3.4.5 (PCF ID 10133)" ;
+    rdfs:subClassOf ots:DevelopSalesStrategy_3_4 .
+
+ots:EstablishDistributionPlanningConstraints_4_1_8 a owl:Class ;
+    rdfs:label "Establish distribution planning constraints"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ReviewDistributionPlanningPolicies_4_1_9 ;
+    dcterms:source "APQC industry PCF 4.1.8 (PCF ID 10226)" ;
+    rdfs:subClassOf ots:PlanForAndAlignSupplyChainResources_4_1 .
+
+ots:EstablishGoalsObjectivesAndMetricsForProductsServicesByChannelSegment_3_3_1 a owl:Class ;
+    rdfs:label "Establish goals, objectives, and metrics for products/ services by channel/segment"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:EstablishMarketingBudgets_3_3_2 ;
+    dcterms:source "APQC industry PCF 3.3.1 (PCF ID 10148)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:EstablishMarketingBudgets_3_3_2 a owl:Class ;
+    rdfs:label "Establish marketing budgets"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DevelopAndManagePricing_3_3_3 ;
+    dcterms:source "APQC industry PCF 3.3.2 (PCF ID 10149)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:EstablishOverallSalesBudgets_3_4_3 a owl:Class ;
+    rdfs:label "Establish overall sales budgets"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:EstablishSalesGoalsAndMeasures_3_4_4 ;
+    dcterms:source "APQC industry PCF 3.4.3 (PCF ID 10131)" ;
+    rdfs:subClassOf ots:DevelopSalesStrategy_3_4 .
+
+ots:EstablishSalesGoalsAndMeasures_3_4_4 a owl:Class ;
+    rdfs:label "Establish sales goals and measures"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:EstablishCustomerManagementMeasures_3_4_5 ;
+    dcterms:source "APQC industry PCF 3.4.4 (PCF ID 10132)" ;
+    rdfs:subClassOf ots:DevelopSalesStrategy_3_4 .
+
+ots:EvaluateAndPrioritizeMarketOpportunities_3_1_2 a owl:Class ;
+    rdfs:label "Evaluate and prioritize market opportunities"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DefineOfferingAndCustomerValueProposition_3_2_1 ;
+    dcterms:source "APQC industry PCF 3.1.2 (PCF ID 10107)" ;
+    rdfs:subClassOf ots:UnderstandMarketsCustomersAndCapabilities_3_1 .
+
+ots:EvaluateCommodityValues_4_1_7 a owl:Class ;
+    rdfs:label "Evaluate commodity values"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:EstablishDistributionPlanningConstraints_4_1_8 ;
+    dcterms:source "APQC industry PCF 4.1.7 (PCF ID 12903)" ;
+    rdfs:subClassOf ots:PlanForAndAlignSupplyChainResources_4_1 .
+
+ots:EvaluateSupplyNetwork_4_1_3 a owl:Class ;
+    rdfs:label "Evaluate supply network"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:CreateMaterialsPlan_4_1_4 ;
+    dcterms:source "APQC industry PCF 4.1.3 (PCF ID 12899)" ;
+    rdfs:subClassOf ots:PlanForAndAlignSupplyChainResources_4_1 .
+
+ots:EvaluateTradingOpportunities_3_6_2 a owl:Class ;
+    rdfs:label "Evaluate trading opportunities"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ExecuteSpotPurchasesSalesAndBuySells_3_6_3 ;
+    dcterms:source "APQC industry PCF 3.6.2 (PCF ID 19527)" ;
+    rdfs:subClassOf ots:TradeCommodityProducts_3_6 .
+
+ots:ExecutePaperDeals_3_6_5 a owl:Class ;
+    rdfs:label "Execute paper deals"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageVolumetricPosition_3_7_1 ;
+    dcterms:source "APQC industry PCF 3.6.5 (PCF ID 12915)" ;
+    rdfs:subClassOf ots:TradeCommodityProducts_3_6 .
+
+ots:ExecuteSpotPurchasesSalesAndBuySells_3_6_3 a owl:Class ;
+    rdfs:label "Execute spot purchases, sales and buy/sells"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:SellByProducts_3_6_4 ;
+    dcterms:source "APQC industry PCF 3.6.3 (PCF ID 12913)" ;
+    rdfs:subClassOf ots:TradeCommodityProducts_3_6 .
+
+ots:InvoiceCustomer_9_2_2 a owl:Class ;
+    rdfs:label "Invoice customer"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ProcessAccountsReceivableAr_9_2_3 ;
+    dcterms:source "APQC industry PCF 9.2.2 (PCF ID 10743)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:MaintainProductionRecordsAndManageLotTraceability_4_3_4 a owl:Class ;
+    rdfs:label "Maintain production records and manage lot traceability"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PerformQualityAssurance_4_3_5 ;
+    dcterms:source "APQC industry PCF 4.3.4 (PCF ID 10370)" ;
+    rdfs:subClassOf ots:ProduceAssembleTestProduct_4_3 .
+
+ots:ManageAndProcessAdjustmentsDeductions_9_2_5 a owl:Class ;
+    rdfs:label "Manage and process adjustments/deductions"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 9.2.5 (PCF ID 10746)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ManageAndProcessCollections_9_2_4 a owl:Class ;
+    rdfs:label "Manage and process collections"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessAdjustmentsDeductions_9_2_5 ;
+    dcterms:source "APQC industry PCF 9.2.4 (PCF ID 10745)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ManageBulkInventories_4_4_5 a owl:Class ;
+    rdfs:label "Manage bulk inventories"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageCommercialAndRetailInventories_4_4_6 ;
+    dcterms:source "APQC industry PCF 4.4.5 (PCF ID 12941)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:ManageBulkTransportation_4_4_2 a owl:Class ;
+    rdfs:label "Manage bulk transportation"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PlanAndManageInboundMaterialFlow_4_4_3 ;
+    dcterms:source "APQC industry PCF 4.4.2 (PCF ID 12923)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:ManageCarbonCertificatePositionAndProfitAndLoss_3_7_4 a owl:Class ;
+    rdfs:label "Manage carbon (certificate) position and profit and loss"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ReviewSupplyProductionDistributionAndMaterialsStrategies_4_1_1 ;
+    dcterms:source "APQC industry PCF 3.7.4 (PCF ID 19541)" ;
+    rdfs:subClassOf ots:ManageCommodityPositions_3_7 .
+
+ots:ManageCommercialAndRetailInventories_4_4_6 a owl:Class ;
+    rdfs:label "Manage commercial and retail inventories"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:OperateOutboundTransportation_4_4_7 ;
+    dcterms:source "APQC industry PCF 4.4.6 (PCF ID 12947)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:ManageCustomersAndAccounts_3_5_2 a owl:Class ;
+    rdfs:label "Manage customers and accounts"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageWholesaleRackAccounts_3_5_3 ;
+    dcterms:source "APQC industry PCF 3.5.2 (PCF ID 10183)" ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:ManageDemandForProducts_4_1_2 a owl:Class ;
+    rdfs:label "Manage demand for products"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:EvaluateSupplyNetwork_4_1_3 ;
+    dcterms:source "APQC industry PCF 4.1.2 (PCF ID 10222)" ;
+    rdfs:subClassOf ots:PlanForAndAlignSupplyChainResources_4_1 .
+
+ots:ManageLeadsOpportunities_3_5_1 a owl:Class ;
+    rdfs:label "Manage leads/opportunities"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageCustomersAndAccounts_3_5_2 ;
+    dcterms:source "APQC industry PCF 3.5.1 (PCF ID 20594)" ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:ManageProductMarketingContent_3_3_8 a owl:Class ;
+    rdfs:label "Manage product marketing content"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DevelopSalesForecast_3_4_1 ;
+    dcterms:source "APQC industry PCF 3.3.8 (PCF ID 16629)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:ManageSalesOrders_3_5_5 a owl:Class ;
+    rdfs:label "Manage sales orders"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ManageSalesPartnersAndAlliances_3_5_6 ;
+    dcterms:source "APQC industry PCF 3.5.5 (PCF ID 10185)" ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:ManageSalesPartnersAndAlliances_3_5_6 a owl:Class ;
+    rdfs:label "Manage sales partners and alliances"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DevelopOverallTradingStrategyAndMeasurementApproach_3_6_1 ;
+    dcterms:source "APQC industry PCF 3.5.6 (PCF ID 10187)" ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:ManageSuppliers_4_2_5 a owl:Class ;
+    rdfs:label "Manage suppliers"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ScheduleProduction_4_3_1 ;
+    dcterms:source "APQC industry PCF 4.2.5 (PCF ID 10280)" ;
+    rdfs:subClassOf ots:ProcureMaterialsAndServices_4_2 .
+
+ots:ManageVolumetricPosition_3_7_1 a owl:Class ;
+    rdfs:label "Manage volumetric position"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:MonitorAgainstSupplyPlan_3_7_2 ;
+    dcterms:source "APQC industry PCF 3.7.1 (PCF ID 12954)" ;
+    rdfs:subClassOf ots:ManageCommodityPositions_3_7 .
+
+ots:ManageWholesaleRackAccounts_3_5_3 a owl:Class ;
+    rdfs:label "Manage wholesale/rack accounts"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:DevelopAndManageSalesProposalsBidsAndQuotes_3_5_4 ;
+    dcterms:source "APQC industry PCF 3.5.3 (PCF ID 12894)" ;
+    rdfs:subClassOf ots:DevelopAndManageSalesPlans_3_5 .
+
+ots:MonitorAgainstSupplyPlan_3_7_2 a owl:Class ;
+    rdfs:label "Monitor against supply plan"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:CalculateTradingProfitAndLossMarkToMarket_3_7_3 ;
+    dcterms:source "APQC industry PCF 3.7.2 (PCF ID 12958)" ;
+    rdfs:subClassOf ots:ManageCommodityPositions_3_7 .
+
+ots:OperateOutboundTransportation_4_4_7 a owl:Class ;
+    rdfs:label "Operate outbound transportation"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ProcessCustomerCredit_9_2_1 ;
+    dcterms:source "APQC industry PCF 4.4.7 (PCF ID 10341)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:OperateWarehousing_4_4_4 a owl:Class ;
+    rdfs:label "Operate warehousing"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageBulkInventories_4_4_5 ;
+    dcterms:source "APQC industry PCF 4.4.4 (PCF ID 10340)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:OrderMaterialsAndServices_4_2_4 a owl:Class ;
+    rdfs:label "Order materials and services"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageSuppliers_4_2_5 ;
+    dcterms:source "APQC industry PCF 4.2.4 (PCF ID 10279)" ;
+    rdfs:subClassOf ots:ProcureMaterialsAndServices_4_2 .
+
+ots:PerformQualityAssurance_4_3_5 a owl:Class ;
+    rdfs:label "Perform quality assurance"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ProvideLogisticsGovernance_4_4_1 ;
+    dcterms:source "APQC industry PCF 4.3.5 (PCF ID 12919)" ;
+    rdfs:subClassOf ots:ProduceAssembleTestProduct_4_3 .
+
+ots:PerformQualityTesting_4_3_3 a owl:Class ;
+    rdfs:label "Perform quality testing"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:MaintainProductionRecordsAndManageLotTraceability_4_3_4 ;
+    dcterms:source "APQC industry PCF 4.3.3 (PCF ID 10369)" ;
+    rdfs:subClassOf ots:ProduceAssembleTestProduct_4_3 .
+
+ots:PlanAndManageInboundMaterialFlow_4_4_3 a owl:Class ;
+    rdfs:label "Plan and manage inbound material flow"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:OperateWarehousing_4_4_4 ;
+    dcterms:source "APQC industry PCF 4.4.3 (PCF ID 20936)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:PlanDistributionRequirements_4_1_6 a owl:Class ;
+    rdfs:label "Plan distribution requirements"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:EvaluateCommodityValues_4_1_7 ;
+    dcterms:source "APQC industry PCF 4.1.6 (PCF ID 17042)" ;
+    rdfs:subClassOf ots:PlanForAndAlignSupplyChainResources_4_1 .
+
+ots:ProcessAccountsReceivableAr_9_2_3 a owl:Class ;
+    rdfs:label "Process accounts receivable (AR)"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:ManageAndProcessCollections_9_2_4 ;
+    dcterms:source "APQC industry PCF 9.2.3 (PCF ID 10744)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ProcessCustomerCredit_9_2_1 a owl:Class ;
+    rdfs:label "Process customer credit"@en ;
+    ots:functionUnit "finance" ;
+    ots:precedes ots:InvoiceCustomer_9_2_2 ;
+    dcterms:source "APQC industry PCF 9.2.1 (PCF ID 10742)" ;
+    rdfs:subClassOf ots:PerformRevenueAccounting_9_2 .
+
+ots:ProduceAssembleProduct_4_3_2 a owl:Class ;
+    rdfs:label "Produce/Assemble product"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:PerformQualityTesting_4_3_3 ;
+    dcterms:source "APQC industry PCF 4.3.2 (PCF ID 10304)" ;
+    rdfs:subClassOf ots:ProduceAssembleTestProduct_4_3 .
+
+ots:ProvideLogisticsGovernance_4_4_1 a owl:Class ;
+    rdfs:label "Provide logistics governance"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageBulkTransportation_4_4_2 ;
+    dcterms:source "APQC industry PCF 4.4.1 (PCF ID 10338)" ;
+    rdfs:subClassOf ots:ManageLogisticsAndWarehousing_4_4 .
+
+ots:ProvideSourcingGovernanceAndPerformCategoryManagement_4_2_1 a owl:Class ;
+    rdfs:label "Provide sourcing governance and perform category management"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:DevelopSourcingAndCategoryManagementStrategies_4_2_2 ;
+    dcterms:source "APQC industry PCF 4.2.1 (PCF ID 10277)" ;
+    rdfs:subClassOf ots:ProcureMaterialsAndServices_4_2 .
+
+ots:ReviewDistributionPlanningPolicies_4_1_9 a owl:Class ;
+    rdfs:label "Review distribution planning policies"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:DevelopQualityStandardsAndProcedures_4_1_10 ;
+    dcterms:source "APQC industry PCF 4.1.9 (PCF ID 10227)" ;
+    rdfs:subClassOf ots:PlanForAndAlignSupplyChainResources_4_1 .
+
+ots:ReviewSupplyProductionDistributionAndMaterialsStrategies_4_1_1 a owl:Class ;
+    rdfs:label "Review supply, production, distribution and materials strategies"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ManageDemandForProducts_4_1_2 ;
+    dcterms:source "APQC industry PCF 4.1.1 (PCF ID 19550)" ;
+    rdfs:subClassOf ots:PlanForAndAlignSupplyChainResources_4_1 .
+
+ots:ScheduleProduction_4_3_1 a owl:Class ;
+    rdfs:label "Schedule production"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:ProduceAssembleProduct_4_3_2 ;
+    dcterms:source "APQC industry PCF 4.3.1 (PCF ID 10303)" ;
+    rdfs:subClassOf ots:ProduceAssembleTestProduct_4_3 .
+
+ots:SelectSuppliersAndDevelopMaintainContracts_4_2_3 a owl:Class ;
+    rdfs:label "Select suppliers and develop/maintain contracts"@en ;
+    ots:functionUnit "operations" ;
+    ots:precedes ots:OrderMaterialsAndServices_4_2_4 ;
+    dcterms:source "APQC industry PCF 4.2.3 (PCF ID 10278)" ;
+    rdfs:subClassOf ots:ProcureMaterialsAndServices_4_2 .
+
+ots:SellByProducts_3_6_4 a owl:Class ;
+    rdfs:label "Sell by-products"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:ExecutePaperDeals_3_6_5 ;
+    dcterms:source "APQC industry PCF 3.6.4 (PCF ID 12914)" ;
+    rdfs:subClassOf ots:TradeCommodityProducts_3_6 .
+
+ots:TrackCustomerManagementMeasures_3_3_5 a owl:Class ;
+    rdfs:label "Track customer management measures"@en ;
+    ots:functionUnit "sales" ;
+    ots:precedes ots:AnalyzeAndRespondToCustomerInsight_3_3_6 ;
+    dcterms:source "APQC industry PCF 3.3.5 (PCF ID 10153)" ;
+    rdfs:subClassOf ots:DevelopAndManageMarketingPlans_3_3 .
+
+ots:UnderstandMarketsCustomersAndCapabilities_3_1 a owl:Class ;
+    rdfs:label "Understand markets, customers, and capabilities"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "APQC industry PCF 3.1 (PCF ID 10101)" ;
+    rdfs:subClassOf ots:MarketAndSellProductsAndServices_3_0 .
+
+ots:OrderToCash a owl:Class ;
+    rdfs:label "Order to cash"@en .
+
+ots:DeliverPhysicalProducts_4_0 a owl:Class ;
+    rdfs:label "Deliver Physical Products"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 4.0" ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:ManageCommodityPositions_3_7 a owl:Class ;
+    rdfs:label "Manage commodity positions"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "APQC industry PCF 3.7 (PCF ID 12953)" ;
+    rdfs:subClassOf ots:MarketAndSellProductsAndServices_3_0 .
+
+ots:DevelopSalesStrategy_3_4 a owl:Class ;
+    rdfs:label "Develop sales strategy"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "APQC industry PCF 3.4 (PCF ID 10103)" ;
+    rdfs:subClassOf ots:MarketAndSellProductsAndServices_3_0 .
+
+ots:PerformRevenueAccounting_9_2 a owl:Class ;
+    rdfs:label "Perform revenue accounting"@en ;
+    ots:functionUnit "finance" ;
+    dcterms:source "APQC industry PCF 9.2 (PCF ID 10729)" ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:ProcureMaterialsAndServices_4_2 a owl:Class ;
+    rdfs:label "Procure materials and services"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 4.2 (PCF ID 10216)" ;
+    rdfs:subClassOf ots:DeliverPhysicalProducts_4_0 .
+
+ots:ProduceAssembleTestProduct_4_3 a owl:Class ;
+    rdfs:label "Produce/Assemble/Test product"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 4.3 (PCF ID 10217)" ;
+    rdfs:subClassOf ots:DeliverPhysicalProducts_4_0 .
+
+ots:TradeCommodityProducts_3_6 a owl:Class ;
+    rdfs:label "Trade commodity products"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "APQC industry PCF 3.6 (PCF ID 12908)" ;
+    rdfs:subClassOf ots:MarketAndSellProductsAndServices_3_0 .
+
+ots:DevelopAndManageSalesPlans_3_5 a owl:Class ;
+    rdfs:label "Develop and manage sales plans"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "APQC industry PCF 3.5 (PCF ID 10105)" ;
+    rdfs:subClassOf ots:MarketAndSellProductsAndServices_3_0 .
+
+ots:DevelopMarketingStrategy_3_2 a owl:Class ;
+    rdfs:label "Develop marketing strategy"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "APQC industry PCF 3.2 (PCF ID 10102)" ;
+    rdfs:subClassOf ots:MarketAndSellProductsAndServices_3_0 .
+
+ots:ManageLogisticsAndWarehousing_4_4 a owl:Class ;
+    rdfs:label "Manage logistics and warehousing"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 4.4 (PCF ID 10219)" ;
+    rdfs:subClassOf ots:DeliverPhysicalProducts_4_0 .
+
+ots:MarketAndSellProductsAndServices_3_0 a owl:Class ;
+    rdfs:label "Market and Sell Products and Services"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "APQC industry PCF 3.0" ;
+    rdfs:subClassOf ots:OrderToCash .
+
+ots:DevelopAndManageMarketingPlans_3_3 a owl:Class ;
+    rdfs:label "Develop and manage marketing plans"@en ;
+    ots:functionUnit "sales" ;
+    dcterms:source "APQC industry PCF 3.3 (PCF ID 20008)" ;
+    rdfs:subClassOf ots:MarketAndSellProductsAndServices_3_0 .
+
+ots:PlanForAndAlignSupplyChainResources_4_1 a owl:Class ;
+    rdfs:label "Plan for and align supply chain resources"@en ;
+    ots:functionUnit "operations" ;
+    dcterms:source "APQC industry PCF 4.1 (PCF ID 10215)" ;
+    rdfs:subClassOf ots:DeliverPhysicalProducts_4_0 .
+

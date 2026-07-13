@@ -15,6 +15,12 @@ class EngagementRow(SQLModel, table=True):
     industry: str = "generic"
     status: str = "draft"
     participants: list = Field(default_factory=list, sa_column=Column(JSONB))
+    # Per-engagement configuration, seeded from the industry profile at create
+    # time (see services/api/profiles.py). function_units = ordered subset of the
+    # function-unit library; value_streams = [{type, label}]. Empty on rows that
+    # predate this feature — the API falls back to the profile on read.
+    function_units: list = Field(default_factory=list, sa_column=Column(JSONB))
+    value_streams_config: list = Field(default_factory=list, sa_column=Column(JSONB))
     created_at: str
     updated_at: str
 

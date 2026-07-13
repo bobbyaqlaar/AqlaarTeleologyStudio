@@ -57,6 +57,7 @@ interface ProcessWorkspaceProps {
   streamType: ValueStreamType;
   loadedStreams: ValueStreamType[];
   industry?: string;
+  functionUnits?: FunctionalUnit[];
 }
 
 export function ProcessWorkspace({
@@ -64,6 +65,7 @@ export function ProcessWorkspace({
   streamType,
   loadedStreams,
   industry = "generic",
+  functionUnits,
 }: ProcessWorkspaceProps): React.ReactNode {
   const { canEdit } = useRole();
   const editorRef = useRef<BpmnEditorHandle>(null);
@@ -353,6 +355,7 @@ export function ProcessWorkspace({
             elementName={selectedName}
             elementType={selectedType}
             functionUnit={selectedFunctionUnit}
+            availableUnits={functionUnits}
             aiSuggestion={selectedAiSuggestion}
             canEdit={canEdit}
             onAssign={(unit) => void handleAssignFunction(unit)}
@@ -409,7 +412,7 @@ export function ProcessWorkspace({
             />
           </div>
 
-          <FunctionUnitLegend compact />
+          <FunctionUnitLegend compact units={functionUnits} />
         </div>
       </div>
     </div>

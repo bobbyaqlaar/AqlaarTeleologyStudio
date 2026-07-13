@@ -1,0 +1,160 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:InitiateServiceDelivery_5_3_1 a owl:Class ;
+    rdfs:label "Initiate service delivery"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ExecuteServiceDelivery_5_3_2 ;
+    dcterms:source "APQC industry PCF 5.3.1 (PCF ID 20059)" ;
+    rdfs:subClassOf ots:DeliverServiceToCustomer_5_3 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:CompleteServiceDelivery_5_3_3 a owl:Class ;
+    rdfs:label "Complete service delivery"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:PlanAndManageCustomerServiceWorkForce_6_2_1 ;
+    dcterms:source "APQC industry PCF 5.3.3 (PCF ID 20077)" ;
+    rdfs:subClassOf ots:DeliverServiceToCustomer_5_3 .
+
+ots:EvaluateAndManageWarrantyPerformance_6_5_4 a owl:Class ;
+    rdfs:label "Evaluate and manage warranty performance"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:EvaluateRecallPerformance_6_5_5 ;
+    dcterms:source "APQC industry PCF 6.5.4 (PCF ID 12672)" ;
+    rdfs:subClassOf ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 .
+
+ots:EvaluateRecallPerformance_6_5_5 a owl:Class ;
+    rdfs:label "Evaluate recall performance"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC industry PCF 6.5.5 (PCF ID 20121)" ;
+    rdfs:subClassOf ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 .
+
+ots:ExecuteServiceDelivery_5_3_2 a owl:Class ;
+    rdfs:label "Execute service delivery"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:CompleteServiceDelivery_5_3_3 ;
+    dcterms:source "APQC industry PCF 5.3.2 (PCF ID 20069)" ;
+    rdfs:subClassOf ots:DeliverServiceToCustomer_5_3 .
+
+ots:ManageCustomerComplaints_6_2_4 a owl:Class ;
+    rdfs:label "Manage customer complaints"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ProcessReturns_6_2_5 ;
+    dcterms:source "APQC industry PCF 6.2.4 (PCF ID 10389)" ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:ManageCustomerServiceKnowledge_6_2_3 a owl:Class ;
+    rdfs:label "Manage customer service knowledge"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ManageCustomerComplaints_6_2_4 ;
+    dcterms:source "APQC industry PCF 6.2.3 (PCF ID 16923)" ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:ManageCustomerServiceProblemsRequestsAndInquiries_6_2_2 a owl:Class ;
+    rdfs:label "Manage customer service problems, requests, and inquiries"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ManageCustomerServiceKnowledge_6_2_3 ;
+    dcterms:source "APQC industry PCF 6.2.2 (PCF ID 10388)" ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:ManageSupplierRecovery_6_3_3 a owl:Class ;
+    rdfs:label "Manage supplier recovery"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ServiceProducts_6_3_4 ;
+    dcterms:source "APQC industry PCF 6.3.3 (PCF ID 20106)" ;
+    rdfs:subClassOf ots:ServiceProductsAfterSales_6_3 .
+
+ots:MeasureCustomerSatisfactionWithCustomerComplaintHandlingAndResolution_6_5_2 a owl:Class ;
+    rdfs:label "Measure customer satisfaction with customer- complaint handling and resolution"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:MeasureCustomerSatisfactionWithProductsAndServices_6_5_3 ;
+    dcterms:source "APQC industry PCF 6.5.2 (PCF ID 10402)" ;
+    rdfs:subClassOf ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 .
+
+ots:MeasureCustomerSatisfactionWithCustomerProblemsRequestsAndInquiriesHandling_6_5_1 a owl:Class ;
+    rdfs:label "Measure customer satisfaction with customer problems, requests, and inquiries handling"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:MeasureCustomerSatisfactionWithCustomerComplaintHandlingAndResolution_6_5_2 ;
+    dcterms:source "APQC industry PCF 6.5.1 (PCF ID 10401)" ;
+    rdfs:subClassOf ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 .
+
+ots:MeasureCustomerSatisfactionWithProductsAndServices_6_5_3 a owl:Class ;
+    rdfs:label "Measure customer satisfaction with products and services"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:EvaluateAndManageWarrantyPerformance_6_5_4 ;
+    dcterms:source "APQC industry PCF 6.5.3 (PCF ID 10403)" ;
+    rdfs:subClassOf ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 .
+
+ots:PlanAndManageCustomerServiceWorkForce_6_2_1 a owl:Class ;
+    rdfs:label "Plan and manage customer service work force"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ManageCustomerServiceProblemsRequestsAndInquiries_6_2_2 ;
+    dcterms:source "APQC industry PCF 6.2.1 (PCF ID 10387)" ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:ProcessReturns_6_2_5 a owl:Class ;
+    rdfs:label "Process returns"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ReportIncidentsAndRisksToRegulatoryBodies_6_2_6 ;
+    dcterms:source "APQC industry PCF 6.2.5 (PCF ID 20094)" ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:ProcessWarrantyClaims_6_3_2 a owl:Class ;
+    rdfs:label "Process warranty claims"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ManageSupplierRecovery_6_3_3 ;
+    dcterms:source "APQC industry PCF 6.3.2 (PCF ID 12669)" ;
+    rdfs:subClassOf ots:ServiceProductsAfterSales_6_3 .
+
+ots:RegisterProducts_6_3_1 a owl:Class ;
+    rdfs:label "Register products"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ProcessWarrantyClaims_6_3_2 ;
+    dcterms:source "APQC industry PCF 6.3.1 (PCF ID 20605)" ;
+    rdfs:subClassOf ots:ServiceProductsAfterSales_6_3 .
+
+ots:ReportIncidentsAndRisksToRegulatoryBodies_6_2_6 a owl:Class ;
+    rdfs:label "Report incidents and risks to regulatory bodies"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:RegisterProducts_6_3_1 ;
+    dcterms:source "APQC industry PCF 6.2.6 (PCF ID 12840)" ;
+    rdfs:subClassOf ots:PlanAndManageCustomerServiceContacts_6_2 .
+
+ots:ServiceProducts_6_3_4 a owl:Class ;
+    rdfs:label "Service products"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:MeasureCustomerSatisfactionWithCustomerProblemsRequestsAndInquiriesHandling_6_5_1 ;
+    dcterms:source "APQC industry PCF 6.3.4 (PCF ID 10218)" ;
+    rdfs:subClassOf ots:ServiceProductsAfterSales_6_3 .
+
+ots:DeliverServiceToCustomer_5_3 a owl:Class ;
+    rdfs:label "Deliver service to customer"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC industry PCF 5.3 (PCF ID 20058)" ;
+    rdfs:subClassOf ots:TroubleToResolve .
+
+ots:ServiceProductsAfterSales_6_3 a owl:Class ;
+    rdfs:label "Service products after sales"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC industry PCF 6.3 (PCF ID 12658)" ;
+    rdfs:subClassOf ots:TroubleToResolve .
+
+ots:TroubleToResolve a owl:Class ;
+    rdfs:label "Trouble to resolve"@en .
+
+ots:EvaluateCustomerServiceOperationsAndCustomerSatisfaction_6_5 a owl:Class ;
+    rdfs:label "Evaluate customer service operations and customer satisfaction"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC industry PCF 6.5 (PCF ID 20595)" ;
+    rdfs:subClassOf ots:TroubleToResolve .
+
+ots:PlanAndManageCustomerServiceContacts_6_2 a owl:Class ;
+    rdfs:label "Plan and manage customer service contacts"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC industry PCF 6.2 (PCF ID 10379)" ;
+    rdfs:subClassOf ots:TroubleToResolve .
+

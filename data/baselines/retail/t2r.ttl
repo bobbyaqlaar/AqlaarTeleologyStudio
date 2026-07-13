@@ -1,0 +1,64 @@
+@prefix dcterms: <http://purl.org/dc/terms/> .
+@prefix ots: <http://ots.local/ontology/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+ots:DefineCustomerRelationshipPoliciesAndProcedures_2_5_1 a owl:Class ;
+    rdfs:label "Define customer relationship policies and procedures"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:MeasureAndEvaluateCustomerSatisfaction_2_5_2 ;
+    dcterms:source "APQC industry PCF 2.5.1 (PCF ID 16603)" ;
+    rdfs:subClassOf ots:ManageCustomerRelationship_2_5 .
+
+ots:precedes a owl:ObjectProperty ;
+    rdfs:label "precedes"@en .
+
+ots:CompleteServiceDelivery_6_3_3 a owl:Class ;
+    rdfs:label "Complete service delivery"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC industry PCF 6.3.3 (PCF ID 20077)" ;
+    rdfs:subClassOf ots:DeliverServiceToCustomer_6_3 .
+
+ots:ExecuteServiceDelivery_6_3_2 a owl:Class ;
+    rdfs:label "Execute service delivery"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:CompleteServiceDelivery_6_3_3 ;
+    dcterms:source "APQC industry PCF 6.3.2 (PCF ID 20069)" ;
+    rdfs:subClassOf ots:DeliverServiceToCustomer_6_3 .
+
+ots:InitiateServiceDelivery_6_3_1 a owl:Class ;
+    rdfs:label "Initiate service delivery"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:ExecuteServiceDelivery_6_3_2 ;
+    dcterms:source "APQC industry PCF 6.3.1 (PCF ID 20059)" ;
+    rdfs:subClassOf ots:DeliverServiceToCustomer_6_3 .
+
+ots:MaintainCustomerMasterData_2_5_3 a owl:Class ;
+    rdfs:label "Maintain customer master data"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:InitiateServiceDelivery_6_3_1 ;
+    dcterms:source "APQC industry PCF 2.5.3 (PCF ID 16597)" ;
+    rdfs:subClassOf ots:ManageCustomerRelationship_2_5 .
+
+ots:MeasureAndEvaluateCustomerSatisfaction_2_5_2 a owl:Class ;
+    rdfs:label "Measure and evaluate customer satisfaction"@en ;
+    ots:functionUnit "customer_care" ;
+    ots:precedes ots:MaintainCustomerMasterData_2_5_3 ;
+    dcterms:source "APQC industry PCF 2.5.2 (PCF ID 16595)" ;
+    rdfs:subClassOf ots:ManageCustomerRelationship_2_5 .
+
+ots:TroubleToResolve a owl:Class ;
+    rdfs:label "Trouble to resolve"@en .
+
+ots:DeliverServiceToCustomer_6_3 a owl:Class ;
+    rdfs:label "Deliver service to customer"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC industry PCF 6.3 (PCF ID 20058)" ;
+    rdfs:subClassOf ots:TroubleToResolve .
+
+ots:ManageCustomerRelationship_2_5 a owl:Class ;
+    rdfs:label "Manage customer relationship"@en ;
+    ots:functionUnit "customer_care" ;
+    dcterms:source "APQC industry PCF 2.5 (PCF ID 16588)" ;
+    rdfs:subClassOf ots:TroubleToResolve .
+

@@ -1,7 +1,7 @@
 "use client";
 
 import { Sparkles } from "lucide-react";
-import { FUNCTION_UNIT_MAP, FUNCTION_UNITS } from "@/lib/constants/function-units";
+import { FUNCTION_UNIT_MAP, functionUnitsFor } from "@/lib/constants/function-units";
 import { SYSTEM_MAP } from "@/lib/constants/systems";
 import type { AiTagSuggestion, FunctionalUnit } from "@/lib/types";
 import { cn } from "@/lib/utils";
@@ -21,6 +21,7 @@ interface FunctionTagPanelProps {
   elementName: string | null;
   elementType: string | null;
   functionUnit?: FunctionalUnit;
+  availableUnits?: FunctionalUnit[];
   aiSuggestion?: AiTagSuggestion | null;
   canEdit: boolean;
   onAssign: (functionUnit: FunctionalUnit | undefined) => void;
@@ -33,12 +34,14 @@ export function FunctionTagPanel({
   elementName,
   elementType,
   functionUnit,
+  availableUnits,
   aiSuggestion,
   canEdit,
   onAssign,
   onAcceptSuggestion,
   onDismissSuggestion,
 }: FunctionTagPanelProps): React.ReactNode {
+  const unitOptions = functionUnitsFor(availableUnits);
   if (!elementId) {
     return (
       <div className="rounded-lg border border-dashed border-border p-4 text-sm text-muted-foreground">
@@ -118,7 +121,7 @@ export function FunctionTagPanel({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="unset">Not assigned</SelectItem>
-                {FUNCTION_UNITS.map((unit) => (
+                {unitOptions.map((unit) => (
                   <SelectItem key={unit.id} value={unit.id}>
                     {unit.label}
                   </SelectItem>
