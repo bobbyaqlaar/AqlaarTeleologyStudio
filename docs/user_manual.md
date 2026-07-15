@@ -76,16 +76,19 @@ In the web header, open the role switcher → **Sign in with SSO**. Unsigned ses
 
 ### 1.6 Ingestion pipeline (admin)
 
-Regenerate baselines after updating `ReferenceDocs/`:
+Regenerate the generic (APQC) and telecom (eTOM) baselines after updating `ReferenceDocs/`:
 
 ```bash
 uv run ots-ingest parse-apqc
 uv run ots-ingest parse-moda
+uv run ots-ingest emit --industry generic --stream all
 uv run ots-ingest emit --industry telecom --stream all
 uv run ots-ingest validate
 ```
 
-Output lands in `data/baselines/` and `data/thesaurus/`.
+Output lands in `data/baselines/{industry}/` and `data/thesaurus/`. For the 11 APQC
+**industry** baselines (retail, utilities, healthcare, …), use the industry-standards
+agent instead — see §12.5. Both paths share the same deterministic, validated pipeline.
 
 ---
 
@@ -344,6 +347,38 @@ Requires `docker compose up -d postgres fuseki` (+ `keycloak` for SSO tests). St
 | Fuseki UI spins | Log in admin/admin at :3030 |
 | SSO “Failed to fetch” | Use web token proxy (`/api/auth/token`) — already built in |
 | Initiatives 409 | Load ≥2 stream baselines |
+| New industry not in the create dialog | Run `ots-industry-agent sync` (§12.5); the create dialog reads the live baseline catalog |
+
+### 12.5 Keeping reference business processes up to date
+
+The **industry-standards agent** keeps the shared reference process baselines aligned
+with their source APQC industry PCF standards. Run it whenever a refreshed PCF PDF is
+added under `ReferenceDocs/Industries/`, or on a schedule.
+
+```bash
+uv run ots-industry-agent list                 # industries the agent recognises
+uv run ots-industry-agent check                # drift report (no writes); exits non-zero on change
+uv run ots-industry-agent sync --all           # re-emit changed industries (idempotent)
+uv run ots-industry-agent sync --industry retail --force   # force one industry
+```
+
+What a sync does per industry: parse the PDF → propose a value-stream mapping
+(draft `mapping/streams_{slug}.yaml`) → derive the engagement profile
+(`data/profiles/{slug}.json`) → emit TTL + BPMN + thesaurus → validate.
+
+- **Review the drafts.** Mappings are keyword-heuristic *drafts*. Open the generated
+  `streams_{slug}.yaml`, adjust the subtree prefixes/function units if needed, and **remove
+  the `AGENT-GENERATED DRAFT` marker comment** to protect your reviewed version from future
+  agent runs (the agent never overwrites a marker-less file, and emits from the on-disk YAML).
+- **Idempotent.** `sync` skips industries whose source PDF is unchanged (content hash in
+  `data/baselines/.industry_manifest.json`) unless `--force`.
+- **Schedule it.** `check` exits non-zero when any industry is new/changed, so a cron job,
+  CI workflow (open a PR on drift), or Claude Code routine can trigger a `sync` automatically.
+  See `services/ingest/industry_agent/README.md` for cron/CI/routine examples.
+- **Excluded:** telecom (uses the TM Forum eTOM baselines) and NACE (not an industry PCF).
+
+New industries appear in the engagement **create dialog** automatically — it reads the live
+baseline catalog (`GET /api/v1/ontology/baselines`), so no web change is needed.
 
 ---
 

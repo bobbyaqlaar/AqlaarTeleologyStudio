@@ -1,6 +1,6 @@
 # Ontology-Teleology Studio — Architecture Specification
 
-**Version:** 2026-07-12 · **Repo:** [AqlaarTeleologyStudio](https://github.com/bobbyaqlaar/AqlaarTeleologyStudio)
+**Version:** 2026-07-15 · **Repo:** [AqlaarTeleologyStudio](https://github.com/bobbyaqlaar/AqlaarTeleologyStudio)
 
 This document describes how OTS is structured across functional and non-functional layers, which components exist, and how they integrate to deliver consultant workshops, discovery analysis, and transformation design.
 
@@ -12,13 +12,16 @@ OTS is a consultant platform for enterprise digital transformation. It holds ind
 
 **In scope (shipped):**
 
-- Five value streams: O2C, P2P, C2M, H2R, T2R
-- Industry baselines: generic (APQC PCF) and telecom (TM Forum eTOM)
+- Value streams per engagement, seeded from the industry profile (default O2C, P2P, C2M, H2R, T2R)
+- **13 industry baselines**: generic (APQC cross-industry PCF), telecom (TM Forum eTOM), and 11 APQC industry PCFs (retail, utilities, consumer products/electronics, up/downstream petroleum, education, healthcare provider, health insurance payor, life sciences, property & casualty insurance)
+- **Per-engagement configuration** from industry profiles: the industry-appropriate function-unit subset + value streams (`data/profiles/*.json`)
+- **Actor–Method process model** (optional per stream): steps as typed method invocations owned by actors, dataflow-validated against ontology types, BPMN generated from the steps
 - Postgres persistence, Fuseki semantic store, OpenRouter-primary LLM agents
+- **Industry-standards agent** that keeps the reference baselines in sync with the source PCF standards (see §5.1)
 - Alignment scoring, gap-bridge options, cross-stream initiatives, workshop presenter
 - Audit trail, PDF export, OIDC SSO (Keycloak dev realm)
 
-**Out of scope (post-v1):** autonomous unsupervised agents, quarterly standards crawl, SHACL enforcement in production, vertical ontologies beyond telecom seed.
+**Out of scope (post-v1):** autonomous unsupervised agents, live web crawl of standards bodies (the industry-standards agent syncs from locally-held PCF PDFs), SHACL enforcement in production, hand-authored vertical ontologies beyond the seeded frameworks.
 
 ---
 
@@ -109,8 +112,10 @@ OTS is a consultant platform for enterprise digital transformation. It holds ind
 
 | Router | Prefix | Integrates with |
 |--------|--------|-----------------|
-| `engagements_router` | `/api/v1/engagements` | Postgres; triggers Fuseki init on baseline load |
+| `engagements_router` | `/api/v1/engagements` | Postgres; per-engagement config from `profiles.py`; triggers Fuseki init on baseline load |
+| `profiles_router` | `/api/v1/profiles` | Industry profiles (function units + value streams) from `data/profiles/*.json` |
 | `process_router` | `/api/v1/process` | Postgres BPMN + element meta |
+| `process_model_router` | `/api/v1/process-model` | Actor–method model: actors, methods, typed params, steps, globals, dataflow validation, generated BPMN |
 | `ontology_router` | `/api/v1/ontology` | Fuseki SPARQL; baseline TTL from disk |
 | `teleology_router` | `/api/v1/teleology` | Postgres matrix |
 | `comments_router` | `/api/v1/comments` | Postgres threads |
@@ -129,13 +134,19 @@ Deterministic pipeline from `ReferenceDocs/` to emitted artefacts:
 ```
 parse-apqc / parse-moda / parse-industry
         → cache (JSONL)
-        → emit --industry generic|telecom --stream o2c|…|all
+        → emit --industry <slug> --stream o2c|…|all
         → data/baselines/{industry}/{stream}.{ttl,bpmn}
-        → data/thesaurus/{apqc,etom,sid}.ttl
+        → data/thesaurus/{apqc,apqc_{industry},etom,sid}.ttl
         → validate (acyclic precedes, labels, function units)
 ```
 
-Human-editable maps: `mapping/streams.yaml`, `mapping/alignments/apqc-etom.yaml`.
+Human-editable maps: `mapping/streams.yaml`, `mapping/streams_{industry}.yaml`,
+`mapping/alignments/apqc-etom.yaml`. `emit --industry <slug>` loads that industry's
+own PCF cache (`cache/apqc_{slug}.jsonl`) and its `streams_{slug}.yaml` (prefixes
+pinned to that industry's numbering), and also emits a per-industry SKOS thesaurus.
+
+**Industry-standards agent** (`services/ingest/industry_agent`, CLI `ots-industry-agent`)
+wraps this pipeline to keep the reference baselines current — see §5.1.
 
 ### 3.4 Infrastructure (`docker-compose.yml`, `infra/`)
 
@@ -193,9 +204,47 @@ Agents and workshop wrap-up consume the same report.
 
 ---
 
-## 5. Agent and LLM integration
+## 5. Agents
 
-All agents share `services/api/llm.py`:
+OTS has two classes of agent:
+
+- **§5.1 Reference-data agents** — offline/batch jobs that keep the *shared* reference
+  business-process baselines current with the source standards. Deterministic (no LLM
+  required); run on a schedule or in CI.
+- **§5.2 Engagement drafting agents** — LLM-backed endpoints that draft *engagement-specific*
+  artefacts for a consultant to verify. Triggered in-app.
+
+### 5.1 Reference-data agent — keeping business processes current
+
+The **industry-standards agent** (`services/ingest/industry_agent`, CLI
+`ots-industry-agent`, see `services/ingest/industry_agent/README.md`) keeps the
+per-industry baselines in `data/baselines/{industry}/` aligned with their APQC
+industry PCF source documents in `ReferenceDocs/Industries/`. When a standards body
+publishes a new PCF version (a refreshed PDF dropped into `ReferenceDocs/`), the agent
+detects the change and regenerates that industry's process baselines.
+
+**Pipeline per industry:** parse PDF → `ProcessElement` cache → propose a value-stream →
+PCF-subtree mapping (keyword heuristics over the industry's own level-1/2 categories → a
+*draft* `streams_{slug}.yaml`) → derive the engagement profile (`data/profiles/{slug}.json`:
+function-unit subset + value streams) → emit OWL TTL + BPMN + SKOS thesaurus → validate.
+
+| Aspect | Behaviour |
+|--------|-----------|
+| **Commands** | `ots-industry-agent list \| check \| sync [--industry <slug>] [--all] [--force]` |
+| **Drift detection** | `check` compares each source PDF's content hash against `data/baselines/.industry_manifest.json`; exits non-zero when any industry is new/changed (so a scheduler can gate a sync) |
+| **Idempotency** | `sync` skips industries whose PDF hash is unchanged and whose outputs exist, unless `--force` |
+| **Human-curated overrides** | never overwrites a `streams_{slug}.yaml` lacking the `AGENT-GENERATED DRAFT` marker, nor an existing profile; emits from the on-disk YAML so curated mappings win |
+| **Periodic operation** | cron / CI (open-PR-on-drift) / a Claude Code routine — all keyed off the `check` exit code (README documents each) |
+| **Output** | 13 industries currently kept in sync; every baseline validates, every BPMN parses clean |
+| **Reviewability** | mappings are drafts for consultant review; `telecom` (uses eTOM) and `NACE` (not an industry PCF) are excluded |
+
+The generic (APQC cross-industry) and telecom (TM Forum eTOM) baselines are refreshed
+through the same `services/ingest` pipeline (`ots-ingest emit`) whose parsers the agent
+reuses, so all reference data flows through one deterministic, validated path.
+
+### 5.2 Engagement drafting agents (LLM)
+
+All drafting agents share `services/api/llm.py`:
 
 1. **Primary:** OpenRouter (`OPENROUTER_API_KEY`, model `OTS_LLM_MODEL` default `openrouter/auto`)
 2. **Fallback:** Anthropic Claude (`ANTHROPIC_API_KEY`, `OTS_LLM_FALLBACK_MODEL`)
@@ -311,3 +360,5 @@ Dev users: `alex/alex` (consultant), `jordan/jordan` (stakeholder).
 | [TODO-implementation-plan.md](./TODO-implementation-plan.md) | Implementation history and backlog |
 | [superpowers/specs/2026-06-11-ots-phase1-design.md](./superpowers/specs/2026-06-11-ots-phase1-design.md) | Phase 1 UX and workflow spec |
 | [superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-design.md](./superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-design.md) | Phase 2 alignment and workshop spec |
+| [superpowers/specs/2026-07-13-actor-method-process-model-design.md](./superpowers/specs/2026-07-13-actor-method-process-model-design.md) | Actor–method process model (typed steps + dataflow validation) |
+| [../services/ingest/industry_agent/README.md](../services/ingest/industry_agent/README.md) | Industry-standards agent — keeping reference baselines current |
