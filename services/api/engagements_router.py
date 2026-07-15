@@ -13,12 +13,17 @@ from sqlmodel import select
 from audit import Actor, ActorDep, record_audit
 from db import STREAM_TYPES, get_session, now_iso
 from db_models import (
+    ActorRow,
     CommentRow,
     ConnectorConnectionRow,
     ConnectorMappingRow,
     EngagementRow,
     InitiativeRow,
+    MethodParamRow,
+    MethodRow,
+    ProcessGlobalRow,
     ProcessStateRow,
+    ProcessStepRow,
     SolutionOptionRow,
     TeleologyRowDB,
     ValueStreamRow,
@@ -407,6 +412,36 @@ async def delete_engagement(
             )
         ).all():
             session.delete(stream)
+
+        # Actor–method process model (steps + globals, then engagement-scoped
+        # methods/params/actors; catalog rows have NULL engagement_id and stay).
+        for step in session.exec(
+            select(ProcessStepRow).where(
+                ProcessStepRow.engagement_id == engagement_id
+            )
+        ).all():
+            session.delete(step)
+        for glob in session.exec(
+            select(ProcessGlobalRow).where(
+                ProcessGlobalRow.engagement_id == engagement_id
+            )
+        ).all():
+            session.delete(glob)
+        eng_methods = session.exec(
+            select(MethodRow).where(MethodRow.engagement_id == engagement_id)
+        ).all()
+        for method in eng_methods:
+            for param in session.exec(
+                select(MethodParamRow).where(
+                    MethodParamRow.method_id == method.id
+                )
+            ).all():
+                session.delete(param)
+            session.delete(method)
+        for actor in session.exec(
+            select(ActorRow).where(ActorRow.engagement_id == engagement_id)
+        ).all():
+            session.delete(actor)
 
         session.flush()
         session.delete(row)

@@ -300,6 +300,12 @@ export function ProcessWorkspace({
               Save process
             </Button>
             <Link
+              href={`/engagements/${engagementId}/streams/${streamType}/process-model`}
+              className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
+            >
+              Process model (steps)
+            </Link>
+            <Link
               href={`/engagements/${engagementId}/streams/${streamType}/ontology`}
               className={cn(buttonVariants({ variant: "outline", size: "sm" }))}
             >

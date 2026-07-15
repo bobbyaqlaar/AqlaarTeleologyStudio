@@ -22,6 +22,7 @@ from fuseki_client import FusekiClient
 from gaps_router import router as gaps_router
 from models import HealthResponse
 from ontology_router import router as ontology_router
+from process_model_router import router as process_model_router
 from process_router import router as process_router
 from profiles_router import router as profiles_router
 from solutions_router import router as solutions_router
@@ -69,6 +70,7 @@ app.include_router(agents_router)
 app.include_router(alignment_router)
 app.include_router(solutions_router)
 app.include_router(profiles_router)
+app.include_router(process_model_router)
 
 
 @app.get("/health", response_model=HealthResponse)

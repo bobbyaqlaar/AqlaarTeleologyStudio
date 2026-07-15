@@ -167,3 +167,87 @@ class TeleologyRowDB(SQLModel, table=True):
     org_ambitions: dict = Field(default_factory=dict, sa_column=Column(JSONB))
     approval_status: str = "draft"
     updated_at: str
+
+
+# --- Actor–Method process model (see docs/superpowers/specs/
+# 2026-07-13-actor-method-process-model-design.md) ---
+
+
+class ActorRow(SQLModel, table=True):
+    """An actor that owns methods. engagement_id NULL = shared catalog actor.
+    function_unit is required — every actor is tagged to one of the 11 units."""
+
+    __tablename__ = "actors"
+
+    id: str = Field(primary_key=True)
+    engagement_id: str | None = Field(
+        default=None, foreign_key="engagements.id", index=True
+    )
+    name: str
+    kind: str = "role"  # role | system | person | organization
+    function_unit: str  # one of the 11 function units (required tag)
+    description: str | None = None
+    created_at: str
+
+
+class MethodRow(SQLModel, table=True):
+    """A function/method owned by an actor. Its parameters live in method_params."""
+
+    __tablename__ = "methods"
+
+    id: str = Field(primary_key=True)
+    actor_id: str = Field(foreign_key="actors.id", index=True)
+    engagement_id: str | None = Field(
+        default=None, foreign_key="engagements.id", index=True
+    )
+    name: str
+    description: str | None = None
+    created_at: str
+
+
+class MethodParamRow(SQLModel, table=True):
+    """A typed input/output parameter of a method. concept_uri = ontology type."""
+
+    __tablename__ = "method_params"
+
+    id: str = Field(primary_key=True)
+    method_id: str = Field(foreign_key="methods.id", index=True)
+    direction: str  # input | output
+    name: str  # variable name
+    concept_uri: str  # ontology class / thesaurus concept = the type
+    concept_label: str | None = None
+    required: bool = True
+    seq: int = 0
+
+
+class ProcessStepRow(SQLModel, table=True):
+    """One ordered method invocation in a process (engagement + stream).
+
+    input_bindings maps each input param name → the process variable feeding it.
+    output_bindings maps each output param name → the variable it produces
+    (defaults to the param name)."""
+
+    __tablename__ = "process_steps"
+
+    id: str = Field(primary_key=True)
+    engagement_id: str = Field(foreign_key="engagements.id", index=True)
+    stream_type: str = Field(index=True)
+    method_id: str = Field(foreign_key="methods.id")
+    seq: int = 0
+    input_bindings: dict = Field(default_factory=dict, sa_column=Column(JSONB))
+    output_bindings: dict = Field(default_factory=dict, sa_column=Column(JSONB))
+    label: str | None = None
+
+
+class ProcessGlobalRow(SQLModel, table=True):
+    """An initialised typed variable in a process's variable space."""
+
+    __tablename__ = "process_globals"
+
+    id: str = Field(primary_key=True)
+    engagement_id: str = Field(foreign_key="engagements.id", index=True)
+    stream_type: str = Field(index=True)
+    name: str
+    concept_uri: str
+    concept_label: str | None = None
+    initial_value: str | None = None

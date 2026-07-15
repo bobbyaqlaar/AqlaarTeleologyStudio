@@ -49,6 +49,80 @@ export interface ValueStreamConfig {
   label: string;
 }
 
+// --- Actor–Method process model (see docs/superpowers/specs/
+// 2026-07-13-actor-method-process-model-design.md) ---
+
+export interface ProcessMethodParam {
+  direction: "input" | "output";
+  name: string;
+  conceptUri: string;
+  conceptLabel?: string | null;
+  required: boolean;
+  seq: number;
+}
+
+export interface ProcessActor {
+  id: string;
+  engagementId?: string | null;
+  name: string;
+  kind: string;
+  functionUnit: FunctionalUnit;
+  description?: string | null;
+}
+
+export interface ProcessMethod {
+  id: string;
+  actorId: string;
+  engagementId?: string | null;
+  name: string;
+  description?: string | null;
+  params: ProcessMethodParam[];
+}
+
+export interface ProcessStep {
+  id: string;
+  engagementId: string;
+  streamType: string;
+  methodId: string;
+  seq: number;
+  inputBindings: Record<string, string>;
+  outputBindings: Record<string, string>;
+  label?: string | null;
+  method?: ProcessMethod | null;
+}
+
+export interface ProcessGlobal {
+  id: string;
+  engagementId: string;
+  streamType: string;
+  name: string;
+  conceptUri: string;
+  conceptLabel?: string | null;
+  initialValue?: string | null;
+}
+
+export interface ProcessProblem {
+  stepId: string;
+  seq: number;
+  method: string;
+  input?: string | null;
+  output?: string | null;
+  boundTo?: string | null;
+  expected?: string;
+  expectedLabel?: string | null;
+  compatible?: string[];
+  kind: string;
+  severity?: "error" | "warning";
+  message: string;
+  suggestions: string[];
+}
+
+export interface ProcessModel {
+  steps: ProcessStep[];
+  globals: ProcessGlobal[];
+  problems: ProcessProblem[];
+}
+
 // Industry baseline slug. Open-ended: the set of available industries is
 // discovered at runtime from GET /api/v1/ontology/baselines (any folder under
 // data/baselines/ with stream TTLs). "generic" and "telecom" are always present.

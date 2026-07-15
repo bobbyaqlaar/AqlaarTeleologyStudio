@@ -209,6 +209,35 @@ class FusekiClient:
             )
         return concepts
 
+    async def ancestor_map(self, concept_uris: list[str]) -> dict[str, set[str]]:
+        """For each concept URI, its transitive supertypes across all graphs
+        (rdfs:subClassOf+ for OWL classes, skos:broader+ for thesaurus concepts).
+
+        Used by process-model validation so a variable typed by a subclass
+        satisfies an input expecting the superclass. Best-effort: returns {} on
+        any error, and skips non-http URIs (which cannot be in Fuseki)."""
+        uris = [u for u in dict.fromkeys(concept_uris) if u.startswith("http")]
+        if not uris:
+            return {}
+        values = " ".join(f"<{u}>" for u in uris)
+        query = f"""
+        PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+        PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+        SELECT ?c ?super WHERE {{
+          VALUES ?c {{ {values} }}
+          GRAPH ?g {{ ?c (rdfs:subClassOf|skos:broader)+ ?super }}
+        }}
+        """
+        try:
+            result = await self.query(query)
+        except Exception:
+            return {}
+        ancestors: dict[str, set[str]] = {}
+        for binding in result.get("results", {}).get("bindings", []):
+            child = binding["c"]["value"]
+            ancestors.setdefault(child, set()).add(binding["super"]["value"])
+        return ancestors
+
     async def set_concept_mapping(
         self,
         graph_uri: str,
