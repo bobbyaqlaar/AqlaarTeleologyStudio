@@ -4,7 +4,7 @@ Step-by-step script to run the stack locally and verify every shipped
 feature by hand. Written 2026-07-12 (main @ latest). All paths are
 relative to the repo root.
 
-> **Documentation:** [Specs.md](./Specs.md) · [user_manual.md](./user_manual.md) · [DemoScript.md](./DemoScript.md) (recording script, E2E-validated)
+> **Documentation:** [SPECS.md](./SPECS.md) · [UserManual.md](./UserManual.md) · [OPERATIONS.md](./OPERATIONS.md) · [DemoScript.md](./DemoScript.md)
 
 > **TL;DR run order:** docker infra → API → web app → walk the consultant
 > flow → check PDF/audit/gaps endpoints → (optional) SSO → automated E2E.

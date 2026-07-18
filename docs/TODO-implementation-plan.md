@@ -151,7 +151,7 @@ Design spec: `docs/superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-de
 
 ## RESUME HERE — Documentation pack shipped (2026-07-12)
 
-**Status:** `main` — [Specs.md](./Specs.md), [user_manual.md](./user_manual.md), [DemoScript.md](./DemoScript.md) + `e2e/demo-script.spec.ts` validate the recording flow.
+**Status:** Formal docs live in [SPECS.md](./SPECS.md), [UserManual.md](./UserManual.md), [OPERATIONS.md](./OPERATIONS.md), [PRODUCT_BACKLOG.md](./PRODUCT_BACKLOG.md), [PRODUCT_ARCHIVE.md](./PRODUCT_ARCHIVE.md). This file is a **legacy session log** — open work = PRODUCT_BACKLOG; done work = PRODUCT_ARCHIVE.
 
 **Next tasks (reordered 2026-07-13 to prioritise the "generic across all industries" objective):**
 
@@ -241,6 +241,8 @@ APQC parse is already in `cache/apqc.jsonl`; deeper subtrees are a `streams.yaml
 - Playwright: `cd apps/web && npm run test:e2e` (one `next dev` per dir; API readiness on `/api/v1/engagements`).
 
 ## Session log
+
+- 2026-07-18 (docs structure): Formal set — `SPECS.md`, `UserManual.md`, `OPERATIONS.md`, `PRODUCT_BACKLOG.md`, `PRODUCT_ARCHIVE.md` (+ `docs/README.md` index). Open work → backlog; completed → archive. This plan file demoted to legacy session log.
 
 - 2026-07-15 (docs refresh): Updated README.md, docs/Specs.md, docs/user_manual.md for the current state — 13 industries + per-engagement industry profiles, actor–method process model. Added dedicated **Agents** sections distinguishing (1) the reference-data **industry-standards agent** that keeps the shared business-process baselines current from evolving APQC PCF standards (CLI, drift-check, idempotency, periodic scheduling, curated-override protection) and (2) the in-app LLM drafting agents. README "post-v1" list corrected (standards agent shipped); Specs §5 restructured (§5.1 reference-data / §5.2 drafting), §3.3 ingestion + routers table + related-docs updated; user_manual §1.6 + new §12.5 "Keeping reference business processes up to date".
 

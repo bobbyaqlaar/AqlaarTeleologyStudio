@@ -397,6 +397,9 @@ baseline catalog (`GET /api/v1/ontology/baselines`), so no web change is needed.
 
 ## 14. Related documents
 
-- [Specs.md](./Specs.md) — architecture and integration
+- [SPECS.md](./SPECS.md) — formal architecture specification
+- [OPERATIONS.md](./OPERATIONS.md) — lifecycle operations (start, maintain, verify)
+- [PRODUCT_BACKLOG.md](./PRODUCT_BACKLOG.md) — open work
+- [PRODUCT_ARCHIVE.md](./PRODUCT_ARCHIVE.md) — completed backlog
 - [DemoScript.md](./DemoScript.md) — recorded demo walkthrough
 - [manual-test-script.md](./manual-test-script.md) — hands-on QA checklist

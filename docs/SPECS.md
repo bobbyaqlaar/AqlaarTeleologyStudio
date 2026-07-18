@@ -1,6 +1,7 @@
 # Ontology-Teleology Studio — Architecture Specification
 
-**Version:** 2026-07-15 · **Repo:** [AqlaarTeleologyStudio](https://github.com/bobbyaqlaar/AqlaarTeleologyStudio)
+**Version:** 2026-07-18 · **Repo:** [AqlaarTeleologyStudio](https://github.com/bobbyaqlaar/AqlaarTeleologyStudio)  
+**Role:** Formal product/architecture specification (companion to [README.md](../README.md) introduction).
 
 This document describes how OTS is structured across functional and non-functional layers, which components exist, and how they integrate to deliver consultant workshops, discovery analysis, and transformation design.
 
@@ -355,10 +356,14 @@ Dev users: `alex/alex` (consultant), `jordan/jordan` (stakeholder).
 
 | Document | Purpose |
 |----------|---------|
-| [user_manual.md](./user_manual.md) | Step-by-step usage for consultants and admins |
+| [../README.md](../README.md) | Product introduction |
+| [UserManual.md](./UserManual.md) | Day-to-day usage and command reference |
+| [OPERATIONS.md](./OPERATIONS.md) | Lifecycle procedures (provision → retire) |
+| [PRODUCT_BACKLOG.md](./PRODUCT_BACKLOG.md) | Open product backlog |
+| [PRODUCT_ARCHIVE.md](./PRODUCT_ARCHIVE.md) | Completed backlog items |
 | [DemoScript.md](./DemoScript.md) | Recording script for demos; validated by E2E |
-| [TODO-implementation-plan.md](./TODO-implementation-plan.md) | Implementation history and backlog |
+| [TODO-implementation-plan.md](./TODO-implementation-plan.md) | Legacy session log / implementation history |
 | [superpowers/specs/2026-06-11-ots-phase1-design.md](./superpowers/specs/2026-06-11-ots-phase1-design.md) | Phase 1 UX and workflow spec |
 | [superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-design.md](./superpowers/specs/2026-07-11-workshop-alignment-gap-bridge-design.md) | Phase 2 alignment and workshop spec |
-| [superpowers/specs/2026-07-13-actor-method-process-model-design.md](./superpowers/specs/2026-07-13-actor-method-process-model-design.md) | Actor–method process model (typed steps + dataflow validation) |
-| [../services/ingest/industry_agent/README.md](../services/ingest/industry_agent/README.md) | Industry-standards agent — keeping reference baselines current |
+| [superpowers/specs/2026-07-13-actor-method-process-model-design.md](./superpowers/specs/2026-07-13-actor-method-process-model-design.md) | Actor–method process model |
+| [../services/ingest/industry_agent/README.md](../services/ingest/industry_agent/README.md) | Industry-standards agent |

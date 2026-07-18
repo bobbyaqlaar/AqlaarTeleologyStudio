@@ -14,7 +14,7 @@ OTS holds industry-standard process and ontology baselines, supports enterprise 
 
 ## Phase 1 — Current Build (v1)
 
-**Status (2026-07-12):** Phase 1 complete. Phase 2 shipped: alignment, agents, workshop, SSO, agent triggers, extended E2E. **Documentation:** [Specs.md](docs/Specs.md) · [user_manual.md](docs/user_manual.md) · [DemoScript.md](docs/DemoScript.md).
+**Status (2026-07-18):** Phase 1–2 shipped (alignment, agents, workshop, SSO, multi-industry profiles, actor–method process model). **Docs:** [SPECS.md](docs/SPECS.md) · [UserManual.md](docs/UserManual.md) · [OPERATIONS.md](docs/OPERATIONS.md) · [PRODUCT_BACKLOG.md](docs/PRODUCT_BACKLOG.md) · [PRODUCT_ARCHIVE.md](docs/PRODUCT_ARCHIVE.md).
 
 Services are fetch-first against FastAPI/Postgres/Fuseki with in-memory mock fallback, so `npm run dev` alone still works for UI-only exploration.
 
@@ -186,7 +186,7 @@ In-app, LLM-backed agents draft engagement-specific artefacts for a consultant t
 (`services/api/agents_router.py` + `gaps_router.py`, via `llm.py`): gap analysis, draft
 process tags, draft ontology links, draft teleology, bridge-gaps solution options, and
 cross-stream initiatives. OpenRouter primary, Claude fallback, heuristics for gap analysis
-when no key is set. Every run is audit-logged (`agent.*` events). See [docs/Specs.md §5](docs/Specs.md).
+when no key is set. Every run is audit-logged (`agent.*` events). See [docs/SPECS.md §5](docs/SPECS.md).
 
 ---
 
@@ -280,27 +280,19 @@ UI imports services, not fixtures directly. Swap to FastAPI/Postgres post-E with
 
 ---
 
-## Long-term capabilities (post-v1)
-
-- Connector creds in `.env` for live Salesforce/Jira preview
-- APQC↔eTOM candidate review in `mapping/alignments/apqc-etom.yaml`
-- SHACL validation in ingest pipeline
-- LLM refinement pass over the industry-standards agent's draft stream mappings
-- Optional BPMN customization drafting agent
-
-_Shipped since v1: multi-industry baselines (13 industries) + per-engagement industry
-profiles; the [industry-standards agent](#agents) that keeps reference processes current;
-the [actor–method process model](docs/superpowers/specs/2026-07-13-actor-method-process-model-design.md)
-(typed steps + dataflow validation)._
-
-See [docs/TODO-implementation-plan.md](docs/TODO-implementation-plan.md) for full history.
-
 ## Documentation
 
-| Document | Audience |
-|----------|----------|
-| [docs/Specs.md](docs/Specs.md) | Architecture — layers, components, integration |
-| [docs/user_manual.md](docs/user_manual.md) | Consultants, stakeholders, admins — step-by-step |
-| [docs/DemoScript.md](docs/DemoScript.md) | Product demo recording script (E2E-validated) |
+| Document | Role |
+|----------|------|
+| [README.md](README.md) | **Introduction** — vision, workflow overview, quick start |
+| [docs/SPECS.md](docs/SPECS.md) | **Formal specification** — architecture, layers, integration |
+| [docs/UserManual.md](docs/UserManual.md) | **User manual** — day-to-day usage + command reference |
+| [docs/OPERATIONS.md](docs/OPERATIONS.md) | **Operations** — provision → bootstrap → operate → maintain → verify → retire |
+| [docs/PRODUCT_BACKLOG.md](docs/PRODUCT_BACKLOG.md) | **Open backlog** — remaining product items |
+| [docs/PRODUCT_ARCHIVE.md](docs/PRODUCT_ARCHIVE.md) | **Archive** — completed backlog items |
+| [docs/DemoScript.md](docs/DemoScript.md) | Demo recording script (E2E-validated) |
 | [docs/manual-test-script.md](docs/manual-test-script.md) | Hands-on QA checklist |
-| [docs/TODO-implementation-plan.md](docs/TODO-implementation-plan.md) | Implementation tracker |
+
+**Backlog rule:** When an item is finished, move it from [PRODUCT_BACKLOG.md](docs/PRODUCT_BACKLOG.md) → [PRODUCT_ARCHIVE.md](docs/PRODUCT_ARCHIVE.md).
+
+Open work and post-v1 ideas: [docs/PRODUCT_BACKLOG.md](docs/PRODUCT_BACKLOG.md). Session history: [docs/TODO-implementation-plan.md](docs/TODO-implementation-plan.md).

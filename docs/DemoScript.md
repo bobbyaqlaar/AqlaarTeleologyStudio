@@ -4,7 +4,7 @@
 
 **Validated by:** `apps/web/e2e/demo-script.spec.ts` (mirrors this script against the live stack).
 
-**Before recording:** Complete [User Manual §1](./user_manual.md#1-starting-the-system-admin). Stack must show `health` OK and `OPENROUTER_API_KEY` set for AI moments.
+**Before recording:** Complete [UserManual §1](./UserManual.md#1-starting-the-system-admin). Stack must show `health` OK and `OPENROUTER_API_KEY` set for AI moments.
 
 ---
 
@@ -261,5 +261,6 @@ Use for a shorter 4-minute demo; skip Scenes 2–3 (create/load) and open Acme d
 
 ## Related documents
 
-- [Specs.md](./Specs.md) — architecture
-- [user_manual.md](./user_manual.md) — full usage guide
+- [SPECS.md](./SPECS.md) — architecture
+- [UserManual.md](./UserManual.md) — full usage guide
+- [OPERATIONS.md](./OPERATIONS.md) — stack lifecycle
